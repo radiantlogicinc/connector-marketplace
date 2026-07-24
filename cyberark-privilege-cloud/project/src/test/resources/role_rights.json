@@ -1,0 +1,77 @@
+{
+  "success": true,
+  "Result": {
+    "IsAggregate": false,
+    "Count": 1,
+    "Columns": [
+      {
+        "Name": "Description",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "Description",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 12,
+        "Format": null,
+        "Width": 10,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      },
+      {
+        "Name": "Scope",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "Scope",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 12,
+        "Format": null,
+        "Width": 0,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      },
+      {
+        "Name": "Path",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "Path",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 12,
+        "Format": null,
+        "Width": 0,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      }
+    ],
+    "FullCount": 1,
+    "Results": [
+      {
+        "Entities": [
+          {
+            "Type": "??",
+            "Key": "??",
+            "IsForeignKey": false
+          }
+        ],
+        "Row": {
+          "Description": "Admin permissions for Risk Management machine identities dashboards",
+          "Scope": "",
+          "Path": "ServiceRight/RMMIADM",
+          "ServiceName": "Risk Management"
+        }
+      }
+    ],
+    "ReturnID": ""
+  },
+  "Message": null,
+  "MessageID": null,
+  "Exception": null,
+  "ErrorID": null,
+  "ErrorCode": null,
+  "IsSoftError": false,
+  "InnerExceptions": null
+}

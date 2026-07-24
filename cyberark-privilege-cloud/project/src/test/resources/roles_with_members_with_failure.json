@@ -1,0 +1,75 @@
+{
+  "success": false,
+  "Result": {
+    "IsAggregate": false,
+    "Count": 0,
+    "Columns": [
+      {
+        "Name": "Id",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "Id",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 12,
+        "Format": null,
+        "Width": 67,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      },
+      {
+        "Name": "Name",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "Name",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 12,
+        "Format": null,
+        "Width": 68,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      },
+      {
+        "Name": "Description",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "Description",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 12,
+        "Format": null,
+        "Width": 179,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      },
+      {
+        "Name": "Members",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "Members",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 12,
+        "Format": null,
+        "Width": 207,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      }
+    ],
+    "FullCount": 0,
+    "Results": null,
+    "ReturnID": ""
+  },
+  "Message": null,
+  "MessageID": null,
+  "Exception": null,
+  "ErrorID": null,
+  "ErrorCode": null,
+  "IsSoftError": false,
+  "InnerExceptions": null
+}

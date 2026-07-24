@@ -1,0 +1,27 @@
+{
+  "value": [
+    {
+      "categoryModificationTime": 1764680085,
+      "platformId": "Firewall1",
+      "safeName": "another_test_safe",
+      "id": "16_3",
+      "name": "cust_acc-Name1",
+      "address": "1.1.1.1",
+      "userName": "test_user_44",
+      "secretType": "password",
+      "platformAccountProperties": {
+        "SicCertFile": "siccert",
+        "Port": "1200",
+        "ClientDN": "clientid",
+        "ServerDN": "server"
+      },
+      "secretManagement": {
+        "automaticManagementEnabled": true,
+        "lastModifiedTime": 1764680085
+      },
+      "createdTime": 1764680085
+    }
+  ],
+  "count": 2,
+  "nextLink": "API/Accounts?offset=1&limit=1&sort=name"
+}

@@ -1,0 +1,25 @@
+{
+  "categoryModificationTime": 1764680342,
+  "platformId": "WinDomain",
+  "safeName": "another_test_safe",
+  "id": "16_4",
+  "name": "s2",
+  "address": "1.1.1.1",
+  "userName": "s2",
+  "secretType": "password",
+  "platformAccountProperties": {
+    "LogonDomain": "logon",
+    "UserDN": "userdn",
+    "Port": "1200"
+  },
+  "secretManagement": {
+    "automaticManagementEnabled": true,
+    "lastModifiedTime": 1764680341
+  },
+  "remoteMachinesAccess": {
+    "remoteMachines": "rmc,rmc2",
+    "accessRestrictedToRemoteMachines": false
+  },
+  "createdTime": 1764680341,
+  "deletionTime": 1765277441
+}

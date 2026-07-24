@@ -1,0 +1,42 @@
+{
+  "value": [
+    {
+      "safeUrlId": "test_safe",
+      "safeName": "test_safe",
+      "safeNumber": 15,
+      "memberId": "db751c9e-54c0-4ca4-8309-f56ba310795b",
+      "memberName": "alex.t@cyberark.cloud.39470",
+      "memberType": "User",
+      "membershipExpirationDate": null,
+      "isExpiredMembershipEnable": false,
+      "isPredefinedUser": false,
+      "isReadOnly": true,
+      "permissions": {
+        "useAccounts": true,
+        "retrieveAccounts": true,
+        "listAccounts": true,
+        "addAccounts": true,
+        "updateAccountContent": true,
+        "updateAccountProperties": true,
+        "initiateCPMAccountManagementOperations": true,
+        "specifyNextAccountContent": true,
+        "renameAccounts": true,
+        "deleteAccounts": true,
+        "unlockAccounts": true,
+        "manageSafe": true,
+        "manageSafeMembers": true,
+        "backupSafe": true,
+        "viewAuditLog": true,
+        "viewSafeMembers": true,
+        "accessWithoutConfirmation": true,
+        "createFolders": true,
+        "deleteFolders": true,
+        "moveAccountsAndFolders": true,
+        "requestsAuthorizationLevel1": true,
+        "requestsAuthorizationLevel2": false
+      }
+    }
+  ],
+  "count": 2,
+  "nextLink": "API/Safes/test_safe/Members?offset=1&limit=1&useCache=False"
+}

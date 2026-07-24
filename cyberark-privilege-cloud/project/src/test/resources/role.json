@@ -1,0 +1,212 @@
+{
+  "success": true,
+  "Result": {
+    "IsAggregate": false,
+    "Count": 1,
+    "Columns": [
+      {
+        "Name": "ID",
+        "IsHidden": false,
+        "DDName": "_ID",
+        "Title": "ID",
+        "DDTitle": "ID",
+        "Description": "Row Identifier (primary key)",
+        "Type": 12,
+        "Format": null,
+        "Width": 0,
+        "TableKey": "Primary",
+        "ForeignKey": null,
+        "TableName": "Role"
+      },
+      {
+        "Name": "Description",
+        "IsHidden": false,
+        "DDName": "Description",
+        "Title": "Description",
+        "DDTitle": "Description",
+        "Description": null,
+        "Type": 12,
+        "Format": null,
+        "Width": 0,
+        "TableKey": "NotAKey",
+        "ForeignKey": null,
+        "TableName": "Role"
+      },
+      {
+        "Name": "RoleType",
+        "IsHidden": false,
+        "DDName": "RoleType",
+        "Title": "Type",
+        "DDTitle": "Type",
+        "Description": null,
+        "Type": 12,
+        "Format": null,
+        "Width": 0,
+        "TableKey": "NotAKey",
+        "ForeignKey": null,
+        "TableName": "Role"
+      },
+      {
+        "Name": "ReadOnly",
+        "IsHidden": false,
+        "DDName": "ReadOnly",
+        "Title": "Is read only",
+        "DDTitle": "Is read only",
+        "Description": null,
+        "Type": 1,
+        "Format": null,
+        "Width": 0,
+        "TableKey": "NotAKey",
+        "ForeignKey": null,
+        "TableName": "Role"
+      },
+      {
+        "Name": "IsHidden",
+        "IsHidden": false,
+        "DDName": "IsHidden",
+        "Title": "Is hidden",
+        "DDTitle": "Is hidden",
+        "Description": null,
+        "Type": 1,
+        "Format": null,
+        "Width": 0,
+        "TableKey": "NotAKey",
+        "ForeignKey": null,
+        "TableName": "Role"
+      },
+      {
+        "Name": "Name",
+        "IsHidden": false,
+        "DDName": "Name",
+        "Title": "Name",
+        "DDTitle": "Name",
+        "Description": null,
+        "Type": 12,
+        "Format": null,
+        "Width": 0,
+        "TableKey": "NotAKey",
+        "ForeignKey": null,
+        "TableName": "Role"
+      },
+      {
+        "Name": "DirectoryServiceUuid",
+        "IsHidden": false,
+        "DDName": "DirectoryServiceUuid",
+        "Title": "DirectoryServiceUuid",
+        "DDTitle": "DirectoryServiceUuid",
+        "Description": null,
+        "Type": 12,
+        "Format": null,
+        "Width": 0,
+        "TableKey": "NotAKey",
+        "ForeignKey": null,
+        "TableName": "Role"
+      },
+      {
+        "Name": "OriginalSourceDs",
+        "IsHidden": false,
+        "DDName": "OriginalSourceDs",
+        "Title": "OriginalSourceDs",
+        "DDTitle": "OriginalSourceDs",
+        "Description": "Original Source Directory Service Instance Name before migration.",
+        "Type": 12,
+        "Format": null,
+        "Width": 0,
+        "TableKey": "NotAKey",
+        "ForeignKey": null,
+        "TableName": "Role"
+      },
+      {
+        "Name": "OriginalDirectoryServiceName",
+        "IsHidden": false,
+        "DDName": "OriginalDirectoryServiceName",
+        "Title": "OriginalDirectoryServiceName",
+        "DDTitle": "OriginalDirectoryServiceName",
+        "Description": "Original Source Directory Service Name",
+        "Type": 12,
+        "Format": null,
+        "Width": 0,
+        "TableKey": "NotAKey",
+        "ForeignKey": null,
+        "TableName": "Role"
+      },
+      {
+        "Name": "OriginalDsGroup",
+        "IsHidden": false,
+        "DDName": "OriginalDsGroup",
+        "Title": "OriginalDsGroup",
+        "DDTitle": "OriginalDsGroup",
+        "Description": "Original Directory Service Group Name before migration.",
+        "Type": 12,
+        "Format": null,
+        "Width": 0,
+        "TableKey": "NotAKey",
+        "ForeignKey": null,
+        "TableName": "Role"
+      },
+      {
+        "Name": "OrgId",
+        "IsHidden": false,
+        "DDName": "OrgId",
+        "Title": "OrgId",
+        "DDTitle": "OrgId",
+        "Description": null,
+        "Type": 12,
+        "Format": null,
+        "Width": 0,
+        "TableKey": "NotAKey",
+        "ForeignKey": null,
+        "TableName": "Role"
+      },
+      {
+        "Name": "OrgPath",
+        "IsHidden": false,
+        "DDName": "OrgPath",
+        "Title": "Organization",
+        "DDTitle": "Organization",
+        "Description": null,
+        "Type": 12,
+        "Format": null,
+        "Width": 0,
+        "TableKey": "NotAKey",
+        "ForeignKey": null,
+        "TableName": "Role"
+      }
+    ],
+    "FullCount": 1,
+    "Results": [
+      {
+        "Entities": [
+          {
+            "Type": "Role",
+            "Key": "be3c524a_1e5e_489b_b10a_69a9ebbfbc58",
+            "IsForeignKey": false
+          }
+        ],
+        "Row": {
+          "_TableName": "roles",
+          "OriginalDirectoryServiceName": null,
+          "OriginalDsGroup": null,
+          "Name": "Advanced TDR Monitoring",
+          "ID": "be3c524a_1e5e_489b_b10a_69a9ebbfbc58",
+          "OrgPath": null,
+          "OriginalSourceDs": null,
+          "Description": "This role gives advanced monitoring rights to TDR Space.",
+          "IsHidden": null,
+          "RoleType": "PrincipalList",
+          "OrgId": null,
+          "ReadOnly": false,
+          "DirectoryServiceUuid": "09B9A9B0-6CE8-465F-AB03-65766D33B05E"
+        }
+      }
+    ],
+    "ReturnID": ""
+  },
+  "Message": null,
+  "MessageID": null,
+  "Exception": null,
+  "ErrorID": null,
+  "ErrorCode": null,
+  "IsSoftError": false,
+  "InnerExceptions": null
+}

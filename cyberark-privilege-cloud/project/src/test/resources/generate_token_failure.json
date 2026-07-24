@@ -1,0 +1,4 @@
+{
+  "error": "access_denied",
+  "error_description": "invalid client creds or client not allowed"
+}

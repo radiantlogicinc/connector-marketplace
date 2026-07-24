@@ -1,0 +1,55 @@
+{
+  "name": "CyberArk Privilege Cloud",
+  "description": "IDDM connector for performing various operations against CyberArk Privilege Cloud datasource.",
+  "backendCategory": "custom",
+  "userCreated": true,
+  "icon": "",
+  "isSchemaExtractable": false,
+  "meta": [
+    {
+      "name": "identity_tenant_id",
+      "description": "Unique identifier assigned to tenant.",
+      "sectionName": "Properties",
+      "defaultValue": null,
+      "dataType": "STRING",
+      "isRequired": true,
+      "regex": null
+    },
+    {
+      "name": "client_id",
+      "description": "Username of type service user",
+      "sectionName": "Properties",
+      "defaultValue": null,
+      "dataType": "STRING",
+      "isRequired": true,
+      "regex": null
+    },
+    {
+      "name": "client_secret",
+      "description": "Password associated with user",
+      "sectionName": "Properties",
+      "defaultValue": null,
+      "dataType": "PASSWORD",
+      "isRequired": true,
+      "regex": null
+    },
+    {
+      "name": "subdomain",
+      "description": "Subdomain for which password vault data to be fetched",
+      "sectionName": "Properties",
+      "defaultValue": null,
+      "dataType": "STRING",
+      "isRequired": false,
+      "regex": null
+    },
+    {
+      "name": "page_size",
+      "description": "Please enter a page size between 100 and 1000",
+      "sectionName": "Pagination",
+      "dataType": "NUMBER",
+      "isRequired": true,
+      "defaultValue": 100,
+      "regex": "/^(10[0-9]|1[1-9][0-9]|[2-9][0-9]{2}|1000)$/"
+    }
+  ]
+}

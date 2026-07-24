@@ -1,0 +1,23 @@
+{
+  "value": [
+    {
+      "safeNumber": 16,
+      "location": "\\",
+      "creator": {
+        "id": "db751c9e-54c0-4ca4-8309-f56ba310795b",
+        "name": "alex.t@cyberark.cloud.39470"
+      },
+      "olacEnabled": false,
+      "numberOfVersionsRetention": 5,
+      "numberOfDaysRetention": null,
+      "autoPurgeEnabled": false,
+      "creationTime": 1763543129,
+      "lastModificationTime": 1764118842638370,
+      "safeUrlId": "test_safe1",
+      "safeName": "test_safe1",
+      "description": "test_safe1 desc",
+      "managingCPM": "",
+      "isExpiredMember": false
+    }
+  ]
+}

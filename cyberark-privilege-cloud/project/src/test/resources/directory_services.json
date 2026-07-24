@@ -1,0 +1,274 @@
+{
+  "success": true,
+  "Result": {
+    "IsAggregate": false,
+    "Count": 3,
+    "Columns": [
+      {
+        "Name": "Service",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "Service",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 12,
+        "Format": null,
+        "Width": 3,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      },
+      {
+        "Name": "DisplayName",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "DisplayName",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 12,
+        "Format": null,
+        "Width": 33,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      },
+      {
+        "Name": "Tenant",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "Tenant",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 12,
+        "Format": null,
+        "Width": 7,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      },
+      {
+        "Name": "Name",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "Name",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 12,
+        "Format": null,
+        "Width": 7,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      },
+      {
+        "Name": "Status",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "Status",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 12,
+        "Format": null,
+        "Width": 6,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      },
+      {
+        "Name": "Config",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "Config",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 12,
+        "Format": null,
+        "Width": 66,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      },
+      {
+        "Name": "SyncRulesConfigured",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "SyncRulesConfigured",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 16,
+        "Format": null,
+        "Width": 0,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      },
+      {
+        "Name": "StatusDisplay",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "StatusDisplay",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 12,
+        "Format": null,
+        "Width": 6,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      },
+      {
+        "Name": "SyncJobStatus",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "SyncJobStatus",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 16,
+        "Format": null,
+        "Width": 0,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      },
+      {
+        "Name": "Everybody",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "Everybody",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 16,
+        "Format": null,
+        "Width": 0,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      },
+      {
+        "Name": "Description",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "Description",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 12,
+        "Format": null,
+        "Width": 24,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      },
+      {
+        "Name": "DisplayNameShort",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "DisplayNameShort",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 12,
+        "Format": null,
+        "Width": 24,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      },
+      {
+        "Name": "directoryServiceUuid",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "directoryServiceUuid",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 12,
+        "Format": null,
+        "Width": 36,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      }
+    ],
+    "FullCount": 3,
+    "Results": [
+      {
+        "Entities": [
+          {
+            "Type": "DirectoryServices",
+            "Key": "??",
+            "IsForeignKey": false
+          }
+        ],
+        "Row": {
+          "Service": "CDS",
+          "DisplayName": "Idaptive CyberArk Cloud Directory",
+          "Tenant": "ABY4558",
+          "Name": "CDS",
+          "Status": "Active",
+          "Config": "CyberArk Cloud Directory    (Default Suffix: cyberark.cloud.39470)",
+          "SyncRulesConfigured": false,
+          "StatusDisplay": "Online",
+          "SyncJobStatus": null,
+          "Everybody": true,
+          "Description": "CyberArk Cloud Directory",
+          "DisplayNameShort": "CyberArk Cloud Directory",
+          "directoryServiceUuid": "09B9A9B0-6CE8-465F-AB03-65766D33B05E"
+        }
+      },
+      {
+        "Entities": [
+          {
+            "Type": "DirectoryServices",
+            "Key": "??",
+            "IsForeignKey": false
+          }
+        ],
+        "Row": {
+          "Service": "AAD",
+          "DisplayName": "Microsoft Entra ID RL_CArk",
+          "Tenant": "ABY4558",
+          "Name": "RL_CArk",
+          "Status": "Active",
+          "Config": "RL_CArk",
+          "SyncRulesConfigured": false,
+          "StatusDisplay": "Online",
+          "SyncJobStatus": null,
+          "Everybody": true,
+          "Description": "Microsoft Entra ID",
+          "DisplayNameShort": "RL_CArk",
+          "directoryServiceUuid": "ed83a871-99a7-3aca-0496-8ce6e148745a"
+        }
+      },
+      {
+        "Entities": [
+          {
+            "Type": "DirectoryServices",
+            "Key": "??",
+            "IsForeignKey": false
+          }
+        ],
+        "Row": {
+          "Service": "FDS",
+          "DisplayName": "Federated Directory Service",
+          "Tenant": "ABY4558",
+          "Name": "FDS",
+          "Status": "Active",
+          "Config": "Federated Directory Service",
+          "SyncRulesConfigured": false,
+          "StatusDisplay": "Online",
+          "SyncJobStatus": null,
+          "Everybody": true,
+          "Description": "Federated Directory",
+          "DisplayNameShort": "FDS",
+          "directoryServiceUuid": "C30B30B1-0B46-49AC-8D99-F6279EED7999"
+        }
+      }
+    ],
+    "ReturnID": ""
+  },
+  "Message": null,
+  "MessageID": null,
+  "Exception": null,
+  "ErrorID": null,
+  "ErrorCode": null,
+  "IsSoftError": false,
+  "InnerExceptions": null
+}

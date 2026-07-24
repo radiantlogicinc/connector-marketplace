@@ -1,0 +1,106 @@
+{
+  "success": true,
+  "Result": {
+    "IsAggregate": false,
+    "Count": 2,
+    "Columns": [
+      {
+        "Name": "Id",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "Id",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 12,
+        "Format": null,
+        "Width": 67,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      },
+      {
+        "Name": "Name",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "Name",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 12,
+        "Format": null,
+        "Width": 68,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      },
+      {
+        "Name": "Description",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "Description",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 12,
+        "Format": null,
+        "Width": 179,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      },
+      {
+        "Name": "Members",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "Members",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 12,
+        "Format": null,
+        "Width": 207,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      }
+    ],
+    "FullCount": 2,
+    "Results": [
+      {
+        "Entities": [
+          {
+            "Type": "??",
+            "Key": "??",
+            "IsForeignKey": false
+          }
+        ],
+        "Row": {
+          "Id": "be3c524a_1234_489b_b10a_69a9ebbfbc58",
+          "Name": "test role",
+          "Description": "This role gives advanced monitoring rights to TDR Space.",
+          "Members": "[\"(User)t.alex@cyberark.cloud.39470\"]"
+        }
+      },
+      {
+        "Entities": [
+          {
+            "Type": "??",
+            "Key": "??",
+            "IsForeignKey": false
+          }
+        ],
+        "Row": {
+          "Id": "1b80ce35_bbbb_4503_a32f_c0fd5c5f9974",
+          "Name": "test role 45",
+          "Description": "This role gives rights to Cloud Onboarding service",
+          "Members": "[\"(User)t.alex@cyberark.cloud.39470\"]"
+        }
+      }
+    ],
+    "ReturnID": ""
+  },
+  "Message": null,
+  "MessageID": null,
+  "Exception": null,
+  "ErrorID": null,
+  "ErrorCode": null,
+  "IsSoftError": false,
+  "InnerExceptions": null
+}

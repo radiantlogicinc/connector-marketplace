@@ -1,0 +1,23 @@
+{
+  "value": [
+    {
+      "safeNumber": 3,
+      "location": "\\",
+      "creator": {
+        "id": "2",
+        "name": "Administrator"
+      },
+      "olacEnabled": false,
+      "numberOfVersionsRetention": null,
+      "numberOfDaysRetention": 30,
+      "autoPurgeEnabled": false,
+      "creationTime": 1756228745,
+      "lastModificationTime": 1764177631643401,
+      "safeUrlId": "Notification%20Engine",
+      "safeName": "Notification Engine",
+      "description": "",
+      "managingCPM": "",
+      "isExpiredMember": false
+    }
+  ]
+}

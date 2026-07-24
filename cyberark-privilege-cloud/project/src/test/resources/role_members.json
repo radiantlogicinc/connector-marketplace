@@ -1,0 +1,186 @@
+{
+  "success": true,
+  "Result": {
+    "IsAggregate": false,
+    "Count": 2,
+    "Columns": [
+      {
+        "Name": "Name",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "Name",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 12,
+        "Format": null,
+        "Width": 23,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      },
+      {
+        "Name": "Guid",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "Guid",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 12,
+        "Format": null,
+        "Width": 36,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      },
+      {
+        "Name": "OrgPath",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "OrgPath",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 12,
+        "Format": null,
+        "Width": 0,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      },
+      {
+        "Name": "FirstName",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "FirstName",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 16,
+        "Format": null,
+        "Width": 0,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      },
+      {
+        "Name": "IsEffective",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "IsEffective",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 16,
+        "Format": null,
+        "Width": 0,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      },
+      {
+        "Name": "EMail",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "EMail",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 16,
+        "Format": null,
+        "Width": 0,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      },
+      {
+        "Name": "LastName",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "LastName",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 16,
+        "Format": null,
+        "Width": 0,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      },
+      {
+        "Name": "OrgId",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "OrgId",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 16,
+        "Format": null,
+        "Width": 0,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      },
+      {
+        "Name": "Type",
+        "IsHidden": false,
+        "DDName": null,
+        "Title": "Type",
+        "DDTitle": null,
+        "Description": null,
+        "Type": 12,
+        "Format": null,
+        "Width": 4,
+        "TableKey": null,
+        "ForeignKey": null,
+        "TableName": null
+      }
+    ],
+    "FullCount": 2,
+    "Results": [
+      {
+        "Entities": [
+          {
+            "Type": "??",
+            "Key": "??",
+            "IsForeignKey": false
+          }
+        ],
+        "Row": {
+          "Name": "Advanced TDR Monitoring",
+          "Guid": "be3c524a_1234_489b_b10a_69a9ebbfbc58",
+          "OrgPath": "",
+          "FirstName": null,
+          "IsEffective": true,
+          "EMail": null,
+          "LastName": null,
+          "OrgId": null,
+          "Type": "Role"
+        }
+      },
+      {
+        "Entities": [
+          {
+            "Type": "??",
+            "Key": "??",
+            "IsForeignKey": false
+          }
+        ],
+        "Row": {
+          "Name": "Cloud Onboarding Admin",
+          "Guid": "1b80ce35_1234_4503_a32f_c0fd5c5f9974",
+          "OrgPath": "",
+          "FirstName": null,
+          "IsEffective": true,
+          "EMail": null,
+          "LastName": null,
+          "OrgId": null,
+          "Type": "Role"
+        }
+      }
+    ],
+    "ReturnID": ""
+  },
+  "Message": null,
+  "MessageID": null,
+  "Exception": null,
+  "ErrorID": null,
+  "ErrorCode": null,
+  "IsSoftError": false,
+  "InnerExceptions": null
+}
