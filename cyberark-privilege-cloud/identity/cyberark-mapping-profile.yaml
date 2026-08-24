@@ -1,0 +1,185 @@
+version: v1
+
+#########################################################
+###
+### Source Object
+###
+#########################################################
+
+source-objects:
+  - name: cyberark-user
+    datasource: cyberark-proxy 
+    object-name: vdUserck
+    backend-attributes:
+      - name: DisplayName
+      - name: ID
+      - name: Mail
+      - name: MobileNumber
+      - name: Name
+      - name: RiskLevelRank
+      - name: Source
+      - name: Status
+    meta-attributes:
+      - name: repositoryName
+        literal: CyberArk
+      - name: repositoryDisplayname
+        literal: CyberArk
+      - name: repositoryDescription
+        literal: CyberArk repository
+      - name: repositoryType
+        literal: Accounts
+      - name: repositoryFamily
+        literal: CyberArk
+    computed-attributes:
+      - name: disabled
+        function: evaluateExpression
+        fields:
+          - '"{Status == ''Suspended''}"'
+      - name: MemberIdentifier   
+        function: evaluateExpression
+        fields:
+          - '"{''(User)'' + Name}"'
+
+  - name: cyberark-role
+    datasource: cyberark-proxy  
+    object-name: vdRoleck
+    backend-attributes: 
+      - name: Description
+      - name: ID
+      - name: Members
+      - name: Name
+      - name: RoleRights
+      - name: RoleType 
+    meta-attributes:
+      - name: repositoryName
+        literal: CyberArk
+      - name: repositoryDisplayname
+        literal: CyberArk
+      - name: repositoryDescription
+        literal: CyberArk repository
+      - name: repositoryType
+        literal: Accounts
+      - name: repositoryFamily
+        literal: CyberArk
+    computed-attributes:
+      - name: MemberIdentifier
+        function: evaluateExpression
+        fields:
+          - '"{''(Role)'' + Name}"'
+  
+#########################################################
+###
+### Vertices
+###
+#########################################################
+vertices:
+  - name: rt_account
+    linkage:
+      - source-object-name: cyberark-user
+        vertex-uid: ID
+        properties:
+          - name: name
+            attribute-name: Name
+          - name: displayname
+            attribute-name: DisplayName
+          - name: email
+            attribute-name: Mail
+          - name: identifier
+            attribute-name: ID
+          - name: disabled
+            attribute-name: disabled
+          - name: member_identifier
+            attribute-name: MemberIdentifier
+            transient: true
+
+  - name: rt_group
+    linkage:
+      - source-object-name: cyberark-role
+        vertex-uid: ID
+        properties:
+          - name: name
+            attribute-name: Name
+          - name: displayname
+            attribute-name: Name
+          - name: description
+            attribute-name: Description
+          - name: object_guid
+            attribute-name: ID
+          - name: member_identifier
+            attribute-name: MemberIdentifier
+            transient: true
+
+  - name: rt_repository
+    linkage:
+      - source-object-name: cyberark-user
+        vertex-uid: repositoryName
+        properties:
+          - name: name
+            attribute-name: repositoryName
+          - name: displayname
+            attribute-name: repositoryDisplayname
+          - name: description
+            attribute-name: repositoryDescription
+          - name: family
+            attribute-name: repositoryFamily
+          - name: type
+            attribute-name: repositoryType
+      - source-object-name: cyberark-role
+        vertex-uid: repositoryName
+        properties:
+          - name: name
+            attribute-name: repositoryName
+          - name: displayname
+            attribute-name: repositoryDisplayname
+          - name: description
+            attribute-name: repositoryDescription
+          - name: family
+            attribute-name: repositoryFamily
+          - name: type
+            attribute-name: repositoryType
+
+#########################################################
+###
+### Edges
+###
+#########################################################
+
+edges:
+  - name: is_in_repository
+    source-vertex-name: rt_account
+    target-vertex-name: rt_repository
+ 
+  - name: is_in_repository
+    source-vertex-name: rt_group
+    target-vertex-name: rt_repository
+ 
+  - name: is_in_group
+    source-vertex-name: rt_account
+    target-vertex-name: rt_group
+    rules:
+      - name: user_membership
+        event-sources: [cyberark-role]
+        event-types: [INSERT, UPDATE, DELETE]
+        link-condition:
+          predicates:
+            - field: member_identifier
+              operator: EQUALS
+              value: Members
+
+  - name: is_in_group
+    source-vertex-name: rt_group
+    target-vertex-name: rt_group
+    rules:
+      - name: role_nesting
+        event-sources: [cyberark-role]
+        event-types: [INSERT, UPDATE, DELETE]
+        event-vertex-role: TARGET
+        link-condition:
+          predicates:
+            - field: member_identifier
+              operator: EQUALS
+              value: Members             
+
+
+
+ 
