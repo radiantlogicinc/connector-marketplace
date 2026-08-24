@@ -41,7 +41,10 @@ This section describes how the connector fits into RadiantOne: its identity and 
     <th scope="row" align="left">Documentation</th><td>Not available</td>
   </tr>
   <tr>
-    <th scope="row" align="left">Observability template</th><td>Not available</td>
+    <th scope="row" align="left">Mapping profile</th><td><a href="./identity/cyberark-mapping-profile.yaml">cyberark-mapping-profile.yaml</a></td>
+  </tr>
+  <tr>
+    <th scope="row" align="left">Consuming configuration</th><td><a href="./identity/cyberark-consuming-config.yaml">cyberark-consuming-config.yaml</a></td>
   </tr>
 </table>
 

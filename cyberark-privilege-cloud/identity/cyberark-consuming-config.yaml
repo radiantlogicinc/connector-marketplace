@@ -1,0 +1,17 @@
+#########################################################
+###
+### Pipeline configuration file for CyberArk v.1
+###
+#########################################################
+
+version: v1
+templates:
+  - ref: functions_v1
+
+  - ref: CyberArk_v1
+    template-overload:
+      source-objects:
+        - name: cyberark-user
+          datasource: cyberark-proxy  # your-real-datasource name
+        - name: cyberark-role
+          datasource: cyberark-proxy  # your-real-datasource name
