@@ -18,6 +18,7 @@ The following table lists the available connectors and their latest versions:
 |--------------------------------------------------------|----------------|
 | [AWS Bedrock](./agentic-aws-bedrock)                   | 1.0.0          |
 | [CyberArk Privilege Cloud](./cyberark-privilege-cloud) | 1.0.0          |
+|[Google Cloud Agents](./google-cloud-agents) | 0.9.2 (beta) |
 
 Each connector has a project folder in this repository that contains:
 
@@ -27,6 +28,16 @@ Each connector has a project folder in this repository that contains:
 Some connectors also publish their source:
 
 - `project/`: Connector source code and tests
+
+## Versioning
+
+Connectors in this repository follow [Semantic Versioning](https://semver.org/). In brief:
+
+- The patch version is incremented for backward-compatible bug fixes.
+- The minor version is incremented for new backward-compatible functionality or deprecations.
+- The major version is incremented for any breaking changes to a connector's configuration or behavior.
+
+Each connector is versioned independently. Connectors with a version below `1.0.0` are considered beta: the configuration and behavior are not yet stable and may change at any time. Deploy beta connectors to non-production environments only, and expect breaking changes between releases until the connector reaches `1.0.0`.
 
 ## License
 
