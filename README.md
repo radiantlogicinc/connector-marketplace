@@ -16,12 +16,16 @@ The following table lists the available connectors and their latest versions:
 
 | Connector                                              | Latest version |
 |--------------------------------------------------------|----------------|
+| [AWS Bedrock](./agentic-aws-bedrock)                   | 1.0.0          |
 | [CyberArk Privilege Cloud](./cyberark-privilege-cloud) | 1.0.0          |
 
 Each connector has a project folder in this repository that contains:
 
 - `README.md`: Connector-specific documentation
 - `builds/`: Pre-built connector JAR files organized by version
+
+Some connectors also publish their source:
+
 - `project/`: Connector source code and tests
 
 ## License
