@@ -1,0 +1,288 @@
+# =============================================================================================
+# agent-canonical-model-mapping-v1 -- AI agent identities into the IDO canonical model
+# =============================================================================================
+#
+# Maps the `vdAgentIdentity` object class that every agentic connector publishes (AWS Bedrock /
+# AgentCore, Azure AI Foundry, GCP) onto `rt_agent_identity` and its repository.
+#
+# THIS TEMPLATE IS GENERIC. It maps every attribute the connector's object class DECLARES, not
+# only those a given backend populates: which attributes carry a value differs per backend, and
+# an unmapped one is dropped silently. LDAP has no null, so an attribute a scan cannot fill is
+# simply absent from the entry and its property is left unset -- which costs nothing.
+#
+# ---------------------------------------------------------------------------------------------
+# REVISION HISTORY
+# ---------------------------------------------------------------------------------------------
+#
+# Revision 3 -- 2026-09-01
+#   Removed `dependsOn` from backend-attributes. It is an optional AWS-only attribute, read through LDAP
+#   queries and mapped by nothing here: the canonical model has no attribute for it, and no edge on
+#   rt_agent_identity could carry an agent-to-role dependency.
+#
+# Revision 2 -- 2026-08-31
+#   Aligned with IDO canonical model builtin:1.0.0 
+#
+#   Eleven vertex properties added to rt_agent_identity:
+#     instruction        <- instruction     the agent's system prompt; the model notes IDO uses it,
+#                                           with the rest of the entry, to self-generate `intent`
+#     intent             <- intent
+#     backend_labels     <- tags
+#     published_by       <- publishedBy
+#     last_invoked_by    <- lastInvokedBy
+#     blocked_by         <- blockedBy
+#     suspended_by       <- suspendedBy
+#     agent_deleted_by   <- deletedBy
+#     blocked_at         <- blocked_at_ldap    (converted)
+#     suspended_at       <- suspended_at_ldap  (converted)
+#     agent_deleted_at   <- deleted_at_ldap    (converted)
+#
+# Revision 1
+#   Initial version: 29 of the 42 canonical attributes, rt_repository with its three mandatory
+#   capability flags declared false (D-043, D-074), and the is_in_repository edge.
+#
+# =============================================================================================
+
+version: v1
+
+#########################################################
+###
+### Source Object
+###
+#########################################################
+
+source-objects:
+  - name: ai-agents
+    datasource: DATASOURCE-NAME # to be overwritten
+    object-name: vdAgentIdentity
+    backend-attributes:
+      - name: actionQuarantined
+      - name: agentCardUrl
+      - name: agentId
+      - name: blockedAt
+      - name: blockedBy
+      - name: createdAt
+      - name: createdBy
+      - name: deletedAt
+      - name: deletedBy
+      - name: description
+      - name: externalId
+      - name: features
+      - name: guardrails
+      - name: instruction
+      - name: intent
+      - name: lastInvokedAt
+      - name: lastInvokedBy
+      - name: lastUpdatedAt
+      - name: lastUpdatedBy
+      - name: metadata
+      - name: model
+      - name: name
+      - name: permissionFlow
+      - name: platform
+      - name: provider
+      - name: publishedAt
+      - name: publishedBy
+      - name: repositoryDisplayName
+      - name: repositoryId
+      - name: resources
+      - name: runtimeIdentity
+      - name: skills
+      - name: status
+      - name: statusChangedAt
+      - name: statusChangedBy
+      - name: statusReason
+      - name: subagents
+      - name: suspendedAt
+      - name: suspendedBy
+      - name: tags
+      - name: tools
+      - name: url
+      - name: version
+    meta-attributes:
+      - name: agent_date_format
+        literal: yyyy-MM-dd'T'HH:mm:ss[.SSSSSSSSS]'Z'
+      # Repository information
+      - name: repository_type
+        literal: Accounts
+      # Mandatory on rt_repository in the graph schema, and an agent platform says nothing about them.
+      # Declared false rather than omitted.
+      - name: repositoryMfaCapable
+        literal: "false"
+      - name: repositoryPasswordlessCapable
+        literal: "false"
+      - name: repositorySsprCapable
+        literal: "false"
+    computed-attributes:
+      - name: blocked_at_ldap
+        function: convertDate
+        fields:
+          - blockedAt
+          - agent_date_format
+      - name: created_at_ldap
+        function: convertDate
+        fields:
+          - createdAt
+          - agent_date_format
+      - name: deleted_at_ldap
+        function: convertDate
+        fields:
+          - deletedAt
+          - agent_date_format
+      - name: last_invoked_at_ldap
+        function: convertDate
+        fields:
+          - lastInvokedAt
+          - agent_date_format
+      - name: last_updated_at_ldap
+        function: convertDate
+        fields:
+          - lastUpdatedAt
+          - agent_date_format
+      - name: published_at_ldap
+        function: convertDate
+        fields:
+          - publishedAt
+          - agent_date_format
+      - name: status_changed_at_ldap
+        function: convertDate
+        fields:
+          - statusChangedAt
+          - agent_date_format
+      - name: suspended_at_ldap
+        function: convertDate
+        fields:
+          - suspendedAt
+          - agent_date_format
+      - name: repository_family
+        function: jsonExtract
+        fields:
+          - provider
+          - '"organization"'
+      - name: repository_family
+        function: evaluateExpression
+        fields:
+          - '"{repository_family.toUppercase()}"'
+
+# #########################################################
+# ###
+# ### Vertices
+# ###
+# #########################################################
+
+vertices:
+  - name: rt_agent_identity
+    linkage:
+      - source-object-name: ai-agents
+        vertex-uid: externalId
+        properties:
+          - name: action_quarantined
+            attribute-name: actionQuarantined
+          - name: agent_card_url
+            attribute-name: agentCardUrl
+          - name: agent_created_at
+            attribute-name: created_at_ldap
+          - name: agent_created_by
+            attribute-name: createdBy
+          - name: agent_deleted_at
+            attribute-name: deleted_at_ldap
+          - name: agent_deleted_by
+            attribute-name: deletedBy
+          - name: backend_labels
+            attribute-name: tags
+          - name: blocked_at
+            attribute-name: blocked_at_ldap
+          - name: blocked_by
+            attribute-name: blockedBy
+          - name: description
+            attribute-name: description
+          - name: displayname
+            attribute-name: name
+          - name: features
+            attribute-name: features
+          - name: guardrails
+            attribute-name: guardrails
+          - name: instruction
+            attribute-name: instruction
+          - name: intent
+            attribute-name: intent
+          - name: last_invoked_at
+            attribute-name: last_invoked_at_ldap
+          - name: last_invoked_by
+            attribute-name: lastInvokedBy
+          - name: last_updated_at
+            attribute-name: last_updated_at_ldap
+          - name: last_updated_by
+            attribute-name: lastUpdatedBy
+          - name: metadata
+            attribute-name: metadata
+          - name: model
+            attribute-name: model
+          - name: name
+            attribute-name: agentId
+          - name: permission_flow
+            attribute-name: permissionFlow
+          - name: platform
+            attribute-name: platform
+          - name: provider
+            attribute-name: provider
+          - name: published_at
+            attribute-name: published_at_ldap
+          - name: published_by
+            attribute-name: publishedBy
+          - name: resources
+            attribute-name: resources
+          - name: runtime_identity
+            attribute-name: runtimeIdentity
+          - name: skills
+            attribute-name: skills
+          - name: status
+            attribute-name: status
+          - name: status_changed_at
+            attribute-name: status_changed_at_ldap
+          - name: status_changed_by
+            attribute-name: statusChangedBy
+          - name: status_reason
+            attribute-name: statusReason
+          - name: subagents
+            attribute-name: subagents
+          - name: suspended_at
+            attribute-name: suspended_at_ldap
+          - name: suspended_by
+            attribute-name: suspendedBy
+          - name: tools
+            attribute-name: tools
+          - name: url
+            attribute-name: url
+          - name: version
+            attribute-name: version
+
+  - name: rt_repository
+    linkage:
+      - source-object-name: ai-agents
+        vertex-uid: repositoryId
+        properties:
+          - name: name
+            attribute-name: repositoryId
+          - name: displayname
+            attribute-name: repositoryDisplayName
+          - name: type
+            attribute-name: repository_type
+          - name: family
+            attribute-name: repository_family
+          - name: is_mfa_capable
+            attribute-name: repositoryMfaCapable
+          - name: is_passwordless_capable
+            attribute-name: repositoryPasswordlessCapable
+          - name: is_sspr_capable
+            attribute-name: repositorySsprCapable
+
+# #########################################################
+# ###
+# ### Edges
+# ###
+# #########################################################
+
+edges:
+  - name: is_in_repository
+    source-vertex-name: rt_agent_identity
+    target-vertex-name: rt_repository
