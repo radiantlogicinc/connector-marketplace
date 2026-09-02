@@ -44,7 +44,7 @@ This section describes how the connector fits into RadiantOne Identity Data Plat
     <th scope="row" align="left">Documentation</th><td><a href="user-guide.md">User guide</a></td>
   </tr>
   <tr>
-    <th scope="row" align="left">Mapping profile</th><td>Not available</td>
+    <th scope="row" align="left">Mapping profile</th><td><a href="../shared-resources/agent-canonical-model-mapping-v1.yaml">Agent model v1 YAML</a></td>
   </tr>
   <tr>
     <th scope="row" align="left">Consuming configuration</th><td>Not available</td>
