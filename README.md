@@ -20,6 +20,7 @@ The following table lists the available connectors and their latest versions:
 | [CyberArk Privilege Cloud](./cyberark-privilege-cloud) | 1.0.0          |
 |[Google Cloud Agents](./google-cloud-agents) | 0.9.2 (beta) |
 |[Microsoft Azure AI Foundry](./microsoft-azure-ai-foundry) | 0.9.2 (beta) |
+|[ServiceNow](./servicenow) | 1.0.0 |
 
 Each connector has a project folder in this repository that contains:
 
