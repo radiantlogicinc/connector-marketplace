@@ -2,7 +2,7 @@
 
 This document describes the Radiant Logic custom connector for AWS Bedrock, including configuration, data source properties, supported operations, schema, known limitations, and release history. The connector is built using the Radiant Logic Connector SDK and integrates with Amazon Bedrock Agents and Amazon Bedrock AgentCore through the AWS control-plane APIs. It virtualizes every AI agent in the configured AWS accounts and region—classic Bedrock Agents and AgentCore Runtimes—as a single object type. Each entry carries its foundation model, guardrails, tools, reachable resources, IAM permission graph, ownership history, and invocation recency. The connector provides search across all discovered agents and one opt-in write: quarantine remediation.
 
-[Download the AWS Bedrock connector JAR file](builds/aws-bedrock-connector-1.0.0.jar).
+[Download the AWS Bedrock connector JAR file](builds/aws-bedrock-connector-1.0.1.jar).
 
 ## Connector identity
 
@@ -16,7 +16,7 @@ This section describes how the connector fits into RadiantOne Identity Data Plat
     <th scope="row" align="left">Connector type</th><td>SDK</td>
   </tr>
   <tr>
-    <th scope="row" align="left">Latest version</th><td>1.0.0</td>
+    <th scope="row" align="left">Latest version</th><td>1.0.1</td>
   </tr>
   <tr>
     <th scope="row" align="left">Connector SDK version</th><td>1.2.0</td>
@@ -193,6 +193,7 @@ The following table records the connector's public release history:
 
 | Version | Release date | Description |
 | --- | --- | --- |
+| 1.0.1 | September 9, 2026 | Bug fix: deleting an agent in AWS now removes the agent from Identity Data Platform. A failed read does not delete the entry. No schema, property, or permission changes. |
 | 1.0.0 | August 31, 2026 | First official release. |
 
 ## Appendix A: Attribute reference
