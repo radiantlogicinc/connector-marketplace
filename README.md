@@ -16,7 +16,7 @@ The following table lists the available connectors and their latest versions:
 
 | Connector                                              | Latest version |
 |--------------------------------------------------------|----------------|
-| [AWS Bedrock](./agentic-aws-bedrock)                   | 1.0.0          |
+| [AWS Bedrock](./agentic-aws-bedrock)                   | 1.0.1          |
 | [CyberArk Privilege Cloud](./cyberark-privilege-cloud) | 1.0.0          |
 |[Google Cloud Agents](./google-cloud-agents) | 0.9.2 (beta) |
 |[Microsoft Azure AI Foundry](./microsoft-azure-ai-foundry) | 0.9.2 (beta) |

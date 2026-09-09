@@ -1,7 +1,7 @@
 # AWS Bedrock Agent Connector for RadiantOne IDDM — User Guide
 
 **Product:** AWS Bedrock Agent Connector (IDDM custom connector)
-**Version:** 1.0.0 (see [version history](CHANGELOG.md))
+**Version:** 1.0.1 (see [release history](readme.md#release-history))
 **Author / Publisher:** Radiant Logic
 
 This is the complete, self-contained guide to the AWS Bedrock Agent Connector — a RadiantOne IDDM
@@ -222,19 +222,19 @@ account id from STS); for AgentCore the ARN comes straight from the listing call
 - **An AWS account + region** with Bedrock and/or AgentCore agents.
 - **An IAM principal** the data source authenticates as, with the read permissions in §3.4.
 - **The connector JAR** shipped with this package —
-  [download the AWS Bedrock connector JAR](builds/aws-bedrock-connector-1.0.0.jar)
+  [download the AWS Bedrock connector JAR](builds/aws-bedrock-connector-1.0.1.jar)
   (~39 MB, all dependencies embedded). This is the file IDDM loads; nothing needs to be built.
 
 ### 3.2 Deploying the JAR into IDDM
 
 1. Open the IDDM **Control Panel → Connector Library** (a.k.a. Connectors).
-2. Upload `builds/aws-bedrock-connector-1.0.0.jar`.
-3. IDDM reads the descriptor embedded in the JAR and registers the **BedrockConnector** connector type,
+2. Upload `builds/aws-bedrock-connector-1.0.1.jar`.
+3. IDDM reads the descriptor embedded in the JAR and registers the **AWS Bedrock** connector type,
    with its configuration form pre-populated.
 
 ### 3.3 Creating the data source
 
-1. Create a new data source of type **BedrockConnector**.
+1. Create a new data source of type **AWS Bedrock**.
 2. Fill in the configuration form (see §4). The form groups properties into **Connection → Agent
    sources → Filtering → Enrichment → Performance**.
 3. Mount the resulting view where you want it in the IDDM namespace; that mount point is the
@@ -1373,6 +1373,19 @@ exact rights with your RadiantOne administrator.
 > many agents. Within a short window (e.g. 5–15 s) the monitor deduplicates the impacted DN set and
 > issues **one** `synchronizecache` per DN, with a concurrency cap that respects the connector's AWS
 > quota.
+
+> **Deleted agents (since 1.0.1).** The same refresh is what removes an agent that was **deleted in
+> AWS**: the connector verifies that the requested agent still exists and, when AWS reports it as *not
+> found*, returns **no entry at all**, so Identity Data Platform drops it from its cache. In 1.0.0 the
+> connector answered with a hollow record built from the requested identifier, and a deleted agent
+> stayed in the directory indefinitely.
+>
+> **A failed read is never treated as a deletion.** Only a definitive *not found* removes the entry. If
+> the agent cannot be read for any other reason — the credentials lack permission, the agent is
+> encrypted with a customer-managed key the connector's role cannot use, the API is throttling, the
+> network fails — the entry is **kept**, with the usual per-entry diagnostic attribute naming the
+> source that failed. This asymmetry is deliberate: a transient permission or quota failure must never
+> delete live agents from the directory.
 
 #### 7.6.2 Reconciliation backstop
 
