@@ -1,0 +1,430 @@
+version: v1
+
+#########################################################
+###
+### Source Object
+###
+#########################################################
+
+source-objects:
+  - name: ad_users
+    datasource: ActiveDirectory ## -- TO OVERWRITE  -- ##
+    object-name: user
+    backend-attributes:
+      - name: accountExpires
+        type: LONG
+      - name: actualdn
+      - name: badPasswordTime
+        type: LONG
+      - name: badPwdCount
+        type: INTEGER
+      - name: c 
+      - name: co 
+      - name: cn
+      - name: comment
+      - name: company
+      - name: department
+      - name: departmentNumber
+      - name: description
+      - name: displayName
+      - name: division
+      - name: employeeID
+      - name: employeeNumber
+      - name: employeeType
+      - name: givenName
+      - name: homePhone
+      - name: homePostalAddress
+      - name: initials
+      - name: l 
+      - name: lastLogoff
+      - name: lastLogon
+        type: LONG
+      - name: logonCount
+        type: INTEGER
+      - name: mail
+      - name: manager
+      - name: memberOf
+      - name: mobile
+      - name: name
+      - name: objectGUID
+      - name: objectSid
+      - name: ou
+      - name: preferredLanguage
+      - name: primaryGroupID
+      - name: pwdLastSet
+        type: LONG
+      - name: roomNumber
+      - name: sAMAccountName
+      - name: sn
+      - name: title
+      - name: userAccountControl
+        type: INTEGER
+      - name: UserPrincipalName
+      - name: whenChanged
+        type: STRING
+      - name: whenCreated
+        type: STRING
+    meta-attributes:
+      - name: repositoryName
+        literal: Active Directory ## -- TO OVERWRITE  -- ##
+      - name: repositoryDisplayname
+        literal: Active Directory ## -- TO OVERWRITE  -- ##
+      - name: repositoryDescription
+        literal: This is the account repository for Active Directory ## -- TO OVERWRITE  -- ##
+      - name: repositoryType
+        literal: Accounts
+      - name: repositoryFamily
+        literal: AD
+      - name: uacLockout
+        literal: "LOCKOUT"
+      - name: uacPwdExpired
+        literal: "PASSWORD_EXPIRED"
+      - name: uacDisabled
+        literal: "ACCOUNTDISABLE"
+      - name: uacPwdNotRequired
+        literal: "PASSWD_NOTREQD"
+      - name: uacSmartCardRequired
+        literal: "SMARTCARD_REQUIRED"
+      - name: uacPwdCantChange
+        literal: "PASSWD_CANT_CHANGE"
+      - name: uacPwdDontExpire
+        literal: "DONT_EXPIRE_PASSWORD"
+      - name: empty
+        literal: ""
+    computed-attributes:
+      - name: locked
+        function: getUserAccountControlAttribute
+        fields:
+          - userAccountControl
+          - uacLockout
+      - name: disabled
+        function: getUserAccountControlAttribute
+        fields:
+          - userAccountControl
+          - uacDisabled
+      - name: password_not_required
+        function: getUserAccountControlAttribute
+        fields:
+          - userAccountControl
+          - uacPwdNotRequired
+      - name: password_expired
+        function: getUserAccountControlAttribute
+        fields:
+          - userAccountControl
+          - uacPwdExpired
+      - name: password_cant_change
+        function: getUserAccountControlAttribute
+        fields:
+          - userAccountControl
+          - uacPwdCantChange
+      - name: dont_expire_password
+        function: getUserAccountControlAttribute
+        fields:
+          - userAccountControl
+          - uacPwdDontExpire
+      - name: smart_card_required
+        function: getUserAccountControlAttribute
+        fields:
+          - userAccountControl
+          - uacSmartCardRequired
+      - name: privileged_account
+        function: inferPrivilegedAccountFromUac
+        fields:
+          - userAccountControl
+      - name: whenCreated
+        function: convertLDAPGeneralizedDateTime
+        fields:
+          - whenCreated
+      - name: whenChanged
+        function: convertLDAPGeneralizedDateTime
+        fields:
+          - whenChanged
+      - name: lastLogon
+        function: evaluateExpression
+        fields:
+          - '"{(Number(lastLogon)/10000)-11644473600000}"'
+      - name: lastLogon
+        function: convertTimestamp
+        fields:
+          - lastLogon
+      - name: pwdLastSet
+        function: evaluateExpression
+        fields:
+          - '"{(Number(pwdLastSet)/10000)-11644473600000}"'
+      - name: pwdLastSet
+        function: convertTimestamp
+        fields:
+          - pwdLastSet
+      - name: accountExpires
+        function: evaluateExpression
+        fields:
+          - '"{ ( accountExpires == 9223372036854775807 || accountExpires == 0 ) ? NULL : (Number(accountExpires)/10000)-11644473600000 }"'
+      - name: accountExpires
+        compute-strategy: IF_NOT_EMPTY
+        function: convertTimestamp
+        fields:
+          - accountExpires
+      - name: badPasswordTime
+        function: evaluateExpression
+        fields:
+          - '"{(Number(badPasswordTime)/10000)-11644473600000}"'
+      - name: badPasswordTime
+        function: convertTimestamp
+        fields:
+          - badPasswordTime
+      - name: mail
+        function: normalizeValue
+        fields:
+          - mail
+      - name: actualdn
+        function: normalizeDns
+        fields:
+          - actualdn
+      - name: objectGUID
+        function: convertBase64ObjectGuidToUuid
+        fields:
+          - objectGUID
+      - name: displayName
+        function: concat
+        compute-strategy: IF_EMPTY
+        fields:
+          - attribute-name: cn
+            auxiliary-attribute-names: [empty]
+
+  - name: ad_groups
+    datasource: ActiveDirectory ## -- TO OVERWRITE  -- ##
+    object-name: group
+    backend-attributes:
+      - name: actualdn
+      - name: cn
+      - name: description
+      - name: displayName
+      - name: managedBy
+      - name: member
+      - name: name
+      - name: objectGUID
+      - name: objectSid
+      - name: sAMAccountName
+      - name: whenChanged
+        type: STRING
+      - name: whenCreated
+        type: STRING
+    meta-attributes:
+      - name: repositoryName
+        literal: Active Directory ## -- TO OVERWRITE  -- ##
+      - name: repositoryDisplayname
+        literal: Active Directory ## -- TO OVERWRITE  -- ##
+      - name: repositoryDescription
+        literal: This is the account repository for Active Directory ## -- TO OVERWRITE  -- ##
+      - name: repositoryType
+        literal: Accounts
+      - name: repositoryFamily
+        literal: AD
+      - name: empty
+        literal: ""
+    computed-attributes:
+      - name: member
+        function: normalizeDns
+        fields:
+          - member
+      - name: actualdn
+        function: normalizeDns
+        fields:
+          - actualdn
+      - name: membershipCreationTime
+        function: getDateTimeNow
+      - name: whenCreated
+        function: convertLDAPGeneralizedDateTime
+        fields:
+          - whenCreated
+      - name: whenChanged
+        function: convertLDAPGeneralizedDateTime
+        fields:
+          - whenChanged
+      - name: membershipCreationTime
+        function: getDateTimeNow
+      - name: displayName
+        function: concat
+        compute-strategy: IF_EMPTY
+        fields:
+          - attribute-name: cn
+            auxiliary-attribute-names: [empty]     
+      - name: objectGUID
+        function: convertBase64ObjectGuidToUuid
+        fields:
+          - objectGUID
+
+#########################################################
+###
+### Vertices
+###
+#########################################################
+
+vertices:
+  - name: rt_account
+    linkage:
+      - source-object-name: ad_users
+        vertex-uid: objectGUID
+        properties:
+          - name: comment
+            attribute-name: comment
+          - name: account_manager
+            attribute-name: manager
+          - name: given_name
+            attribute-name: givenName
+          - name: employee_number
+            attribute-name: employeeNumber
+          - name: employee_type
+            attribute-name: employeeType
+          - name: name
+            attribute-name: sAMAccountName
+          - name: displayname
+            attribute-name: displayName
+          - name: full_name
+            attribute-name: name
+          - name: surname
+            attribute-name: sn
+          - name: samaccountname
+            attribute-name: sAMAccountName
+          - name: identifier
+            attribute-name: objectGUID
+          - name: description
+            attribute-name: description
+          - name: email
+            attribute-name: mail
+          - name: creation_date
+            attribute-name: whenCreated
+          - name: last_modification_date
+            attribute-name: whenChanged
+          - name: object_guid
+            attribute-name: objectGUID
+          - name: object_sid
+            attribute-name: objectSid
+          - name: dn
+            attribute-name: actualdn
+          - name: login_count
+            attribute-name: logonCount
+          - name: disabled
+            attribute-name: disabled
+          - name: locked
+            attribute-name: locked
+          - name: password_not_required
+            attribute-name: password_not_required
+          - name: password_cant_change
+            attribute-name: password_cant_change
+          - name: privileged_account
+            attribute-name: privileged_account
+          - name: dont_expire_password
+            attribute-name: dont_expire_password
+          - name: password_expired
+            attribute-name: password_expired
+          - name: smart_card_required
+            attribute-name: smart_card_required
+          - name: last_login_date
+            attribute-name: lastLogon
+          - name: password_last_set_date
+            attribute-name: pwdLastSet
+          - name: bad_password_date
+            attribute-name: badPasswordTime
+
+  - name: rt_group
+    linkage:
+      - source-object-name: ad_groups
+        vertex-uid: objectGUID
+        properties:
+          - name: name
+            attribute-name: objectGUID
+          - name: external_identifier
+            attribute-name: sAMAccountName
+          - name: displayname
+            attribute-name: displayName
+          - name: description
+            attribute-name: description
+          - name: creation_date
+            attribute-name: whenCreated
+          - name: last_modification_date
+            attribute-name: whenChanged
+          - name: object_guid
+            attribute-name: objectGUID
+          - name: object_sid
+            attribute-name: objectSid
+          - name: dn
+            attribute-name: actualdn
+
+  - name: rt_repository
+    linkage:
+      - source-object-name: ad_users
+        vertex-uid: repositoryName
+        properties:
+          - name: name
+            attribute-name: repositoryName
+          - name: displayname
+            attribute-name: repositoryDisplayname
+          - name: description
+            attribute-name: repositoryDescription
+          - name: type
+            attribute-name: repositoryType
+          - name: family
+            attribute-name: repositoryFamily
+      - source-object-name: ad_groups
+        vertex-uid: repositoryName
+        properties:
+          - name: name
+            attribute-name: repositoryName
+          - name: displayname
+            attribute-name: repositoryDisplayname
+          - name: description
+            attribute-name: repositoryDescription
+          - name: type
+            attribute-name: repositoryType
+          - name: family
+            attribute-name: repositoryFamily
+
+#########################################################
+###
+### Edges
+###
+#########################################################
+
+edges:
+  - name: is_in_group
+    source-vertex-name: rt_account
+    target-vertex-name: rt_group
+    rules:
+      - name: ad_account_group_is_in_group
+        event-sources: [ad_groups]
+        event-types: [INSERT, UPDATE]
+        properties:
+          - name: created_at
+            attribute-name: membershipCreationTime
+        link-condition:
+          logical-operator: AND
+          predicates: 
+            - field: dn
+              operator: EQUALS
+              value: member
+
+  - name: is_in_group
+    source-vertex-name: rt_group
+    target-vertex-name: rt_group
+    rules:
+      - name: ad_group_group_is_in_group
+        event-sources: [ad_groups]
+        event-types: [INSERT, UPDATE]
+        properties:
+          - name: created_at
+            attribute-name: membershipCreationTime
+        link-condition:
+          logical-operator: AND
+          predicates: 
+            - field: dn
+              operator: EQUALS
+              value: member
+
+  - name: is_in_repository
+    source-vertex-name: rt_account
+    target-vertex-name: rt_repository
+
+  - name: is_in_repository
+    source-vertex-name: rt_group
+    target-vertex-name: rt_repository

@@ -1,0 +1,25 @@
+version: v1
+templates:
+  - ref: functions_v1
+
+  - ref: active_directory_v1
+    template-overload:
+      source-objects:
+        - name: ad_users
+          datasource: ActiveDirectory # your-real-datasource name
+          meta-attributes:
+            - name: repositoryName
+              literal: Active Directory  # unique per Active Directory tenant
+            - name: repositoryDisplayname
+              literal: Active Directory 
+            - name: repositoryDescription
+              literal: This is the account repository for Active Directory tenant 
+        - name: ad_groups
+          datasource: ActiveDirectory # your-real-datasource name
+          meta-attributes:
+            - name: repositoryName
+              literal: Active Directory  # must be IDENTICAL to ad_users' value above
+            - name: repositoryDisplayname
+              literal: Active Directory
+            - name: repositoryDescription
+              literal: This is the account repository for Active Directory tenant 
