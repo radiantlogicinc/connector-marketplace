@@ -212,7 +212,7 @@ Complete this process once for each of the five reports in the following table. 
 
 ### Configure RadiantOne
 
-1. [Create a custom template](https://developer.radiantlogic.com/idm/v8.1/configuration/data-sources/data-sources/#creating-templates) using the Workday connector JAR file. There is no need to fill in template details; the system reads them automatically from the connector configuration file.
+1. [Create a custom template](https://developer.radiantlogic.com/idm/v8.1/configuration/data-sources/data-sources/#creating-templates) using the Workday connector JAR file. There is no need to fill in template details; the system reads them automatically from the connector configuration file. If a template named **Workday** already exists, don't upload the new JAR file to it. Follow [Upgrade an SDK connector](../readme.md#upgrade-an-sdk-connector) instead.
 2. [Create a custom data source](https://developer.radiantlogic.com/idm/v8.1/configuration/data-sources/data-sources/#creating-data-sources), selecting the newly created **Workday** template. The system automatically generates a new schema.
 3. Fill in the data source properties. You created values for many of these properties in the [Configure Workday](#configure-workday) steps earlier in this document. For more information, see the [Data source properties](#data-source-properties) section of this document.
 4. Run **Test Connection** to confirm the connector reaches Workday. After it succeeds, the data source is ready. Use it to create a naming context, then browse the directory as you would any data source.

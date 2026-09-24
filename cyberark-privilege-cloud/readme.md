@@ -66,7 +66,7 @@ Complete steps in the following sections to configure CyberArk and RadiantOne.
 
 ### Configure RadiantOne
 
-1. [Create a custom template](https://developer.radiantlogic.com/idm/v8.1/configuration/data-sources/data-sources/#creating-templates) using the CyberArk Privilege Cloud connector JAR file. There is no need to fill in template details—IDDM automatically reads this information from the connector configuration file. The template details appear automatically.
+1. [Create a custom template](https://developer.radiantlogic.com/idm/v8.1/configuration/data-sources/data-sources/#creating-templates) using the CyberArk Privilege Cloud connector JAR file. There is no need to fill in template details—IDDM automatically reads this information from the connector configuration file. The template details appear automatically. If a template named **CyberArk Privilege Cloud** already exists, don't upload the new JAR file to it. Follow [Upgrade an SDK connector](../readme.md#upgrade-an-sdk-connector) instead.
 2. [Create a custom data source](https://developer.radiantlogic.com/idm/v8.1/configuration/data-sources/data-sources/#creating-data-sources), selecting the newly created **CyberArk Privilege Cloud** template. IDDM automatically generates a new schema.
 3. Fill in the data source properties. For more information, see the [Data source properties](#data-source-properties) section.
 

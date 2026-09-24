@@ -73,7 +73,7 @@ To configure Google Cloud and RadiantOne, complete the steps in the following se
 
 ### Configure RadiantOne
 
-1. [Create a custom template](https://developer.radiantlogic.com/idm/v8.1/configuration/data-sources/data-sources/#creating-templates) using the Google Cloud Agents connector JAR file. There is no need to fill in template details; the system reads them automatically from the connector configuration file.
+1. [Create a custom template](https://developer.radiantlogic.com/idm/v8.1/configuration/data-sources/data-sources/#creating-templates) using the Google Cloud Agents connector JAR file. There is no need to fill in template details; the system reads them automatically from the connector configuration file. If a template named **Google Cloud Agents** already exists, don't upload the new JAR file to it. Follow [Upgrade an SDK connector](../readme.md#upgrade-an-sdk-connector) instead.
 2. [Create a custom data source](https://developer.radiantlogic.com/idm/v8.1/configuration/data-sources/data-sources/#creating-data-sources), selecting the newly created **Google Cloud Agents** template. The system automatically generates a new schema.
 3. Fill in the data source properties. At a minimum, supply one credential; Radiant Logic also recommends that you set `gcpProjectIds` and `gcpLocations` explicitly. For more information, see the [Data source properties](#data-source-properties) section of this document.
 4. Run **Test Connection** to confirm the connector reaches Google Cloud. After it succeeds, the data source is ready. Use it to create a naming context, then browse the directory as you would any data source. You'll see one entry per agent.
