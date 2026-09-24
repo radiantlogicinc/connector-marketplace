@@ -103,7 +103,9 @@ To configure Azure and RadiantOne, complete the steps in the following sections.
 
 1. [Create a custom template](https://developer.radiantlogic.com/idm/v8.1/configuration/data-sources/data-sources/#creating-templates)
    using the Microsoft Azure AI Foundry connector JAR file. There is no need to fill in template details; the
-   system reads them automatically from the connector configuration file.
+   system reads them automatically from the connector configuration file. If a template named
+   **Microsoft Azure AI Foundry** already exists, don't upload the new JAR file to it. Follow
+   [Upgrade an SDK connector](../readme.md#upgrade-an-sdk-connector) instead.
 2. [Create a custom data source](https://developer.radiantlogic.com/idm/v8.1/configuration/data-sources/data-sources/#creating-data-sources),
    selecting the newly created **Microsoft Azure AI Foundry** template. The system automatically generates a new
    schema.
