@@ -51,7 +51,7 @@ Don't upload a newer JAR file to a template that already exists. This upload can
 3. [Create a custom template](https://developer.radiantlogic.com/idm/v8.1/configuration/data-sources/data-sources/#creating-templates) from the new connector JAR file.
 4. Recreate each data source with the same name as the one you deleted.
 
-As long as the data source name is unchanged and the new schema matches the old one, naming contexts and views that were built on a deleted data source keep working after you recreate it. A new major version of a connector can change the schema. After that kind of upgrade, review the naming contexts and views that depend on the data source.
+As long as the data source name is unchanged and the new schema matches the old one, naming contexts, views, and observability pipelines that were built on a deleted data source keep working after you recreate it. A new major version of a connector can change the schema. After that kind of upgrade, review the naming contexts and views that depend on the data source.
 
 ## License
 
