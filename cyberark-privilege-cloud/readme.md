@@ -1,12 +1,12 @@
 # CyberArk Privilege Cloud connector
 
-This document describes the Radiant Logic custom connector for CyberArk Privilege Cloud, including configuration, data source properties, supported operations, schema, known limitations, and release history. The connector is built using the Radiant Logic IDDM Connector SDK and integrates with CyberArk Privilege Cloud and CyberArk Identity Services. It virtualizes CyberArk Users, Roles, Safes, Accounts, and Directory Services through the CyberArk REST APIs. It provides search across all object types and create, modify, and delete for Users and Roles.
+This document describes the Radiant Logic custom connector for CyberArk Privilege Cloud, including configuration, data source properties, supported operations, schema, known limitations, and release history. The connector uses the Radiant Logic Connector SDK and integrates with CyberArk Privilege Cloud and CyberArk Identity Services through the CyberArk REST APIs. It virtualizes CyberArk Users, Roles, Safes, Accounts, and Directory Services. It provides search across all object types and create, modify, and delete for Users and Roles.
 
 [Download the latest JAR file](builds/CyberArk_Privilege_Cloud_Connector_v1.0.0.jar).
 
 ## Connector identity
 
-This section describes how the connector fits into RadiantOne: its identity and its support for Identity Data Management (IDDM) and Identity Observability. Refer to the following tables for more details.
+This section describes how the connector fits into RadiantOne Identity Data Platform: its identity and its support for data management and observability. Refer to the following tables for more details.
 
 <table>
   <tr>
@@ -16,7 +16,7 @@ This section describes how the connector fits into RadiantOne: its identity and 
     <th scope="row" align="left">Connector type</th><td>SDK</td>
   </tr>
   <tr>
-    <th scope="row" align="left">IDDM Connector SDK version</th><td>1.1.1</td>
+    <th scope="row" align="left">Connector SDK version</th><td>1.1.1</td>
   </tr>
 </table>
 
@@ -31,20 +31,20 @@ This section describes how the connector fits into RadiantOne: its identity and 
   </tr>
 </table>
 
-### Identity Observability support
+### Identity Data Platform support
 
 <table>
   <tr>
     <th scope="row" align="left">Supported versions</th><td>2.1.0 or later</td>
   </tr>
   <tr>
-    <th scope="row" align="left">Documentation</th><td>Not available</td>
+    <th scope="row" align="left">Documentation</th><td><a href="user-guide.md">User guide</a></td>
   </tr>
   <tr>
-    <th scope="row" align="left">Mapping profile</th><td><a href="./identity/cyberark-mapping-profile.yaml">cyberark-mapping-profile.yaml</a></td>
+    <th scope="row" align="left">Mapping profile</th><td><a href="resources/cyberark-privilege-cloud-mapping-profile-v1.yaml"><code>cyberark-privilege-cloud-mapping-profile-v1.yaml</code></a></td>
   </tr>
   <tr>
-    <th scope="row" align="left">Consuming configuration</th><td><a href="./identity/cyberark-consuming-config.yaml">cyberark-consuming-config.yaml</a></td>
+    <th scope="row" align="left">Agentic source</th><td>No</td>
   </tr>
 </table>
 
@@ -54,7 +54,7 @@ Complete steps in the following sections to configure CyberArk and RadiantOne.
 
 ### Preconditions
 
-- CyberArk Privilege Cloud (Shared Services) tenant, including Privileged Access Management (PAM) Service and Identity Service, reachable from IDDM over HTTPS.
+- A CyberArk Privilege Cloud (Shared Services) tenant, including Privileged Access Management (PAM) Service and Identity Service, that's reachable from RadiantOne over HTTPS.
 - CyberArk REST APIs must be enabled with documented base URLs available for the following services:
     - Privilege Cloud: <code>https://<var>SUBDOMAIN</var>.privilegecloud.cyberark.cloud/PasswordVault/API/</code>
     - Identity: <code>https://<var>IDENTITY_TENANT_ID</var>.id.cyberark.cloud/</code>
@@ -66,9 +66,10 @@ Complete steps in the following sections to configure CyberArk and RadiantOne.
 
 ### Configure RadiantOne
 
-1. [Create a custom template](https://developer.radiantlogic.com/idm/v8.1/configuration/data-sources/data-sources/#creating-templates) using the CyberArk Privilege Cloud connector JAR file. There is no need to fill in template details—IDDM automatically reads this information from the connector configuration file. The template details appear automatically. If a template named **CyberArk Privilege Cloud** already exists, don't upload the new JAR file to it. Follow [Upgrade an SDK connector](../readme.md#upgrade-an-sdk-connector) instead.
-2. [Create a custom data source](https://developer.radiantlogic.com/idm/v8.1/configuration/data-sources/data-sources/#creating-data-sources), selecting the newly created **CyberArk Privilege Cloud** template. IDDM automatically generates a new schema.
+1. [Create a custom template](https://developer.radiantlogic.com/idm/v8.1/configuration/data-sources/data-sources/#creating-templates) using the CyberArk Privilege Cloud connector JAR file. There is no need to fill in template details; the system reads them automatically from the connector configuration file. If a template named **CyberArk Privilege Cloud** already exists, don't upload the new JAR file to it. Follow [Upgrade an SDK connector](../readme.md#upgrade-an-sdk-connector) instead.
+2. [Create a custom data source](https://developer.radiantlogic.com/idm/v8.1/configuration/data-sources/data-sources/#creating-data-sources), selecting the newly created **CyberArk Privilege Cloud** template. The system automatically generates a new schema.
 3. Fill in the data source properties. For more information, see the [Data source properties](#data-source-properties) section.
+4. Run **Test Connection** to confirm the connector reaches CyberArk. After it succeeds, the data source is ready. Use it to create a naming context, then browse the directory as you would any data source.
 
 ## Data source properties
 
@@ -129,10 +130,10 @@ To create an object, supply its required attributes:
 | `user`             | `Name`                     |
 | `role`             | `Name`                     |
 | `safe`             | Not applicable (read-only) |
-| `account`          | N/A (read-only)            |
-| `directoryservice` | N/A (read-only)            |
+| `account`          | Not applicable (read-only) |
+| `directoryservice` | Not applicable (read-only) |
 
-The connector supports automatic schema authoring: IDDM generates the schema when the data source is created. See [Appendix A: Attribute reference](#appendix-a-attribute-reference) for each type's attributes, data types, and write support.
+The connector supports automatic schema authoring: the system generates the schema when you create the data source. For more information about each attribute's data type and write support, see the [Appendix A: Attribute reference](#appendix-a-attribute-reference) section of this document.
 
 > [!CAUTION]
 > Schema object (table) names are case-sensitive and must exactly match the object type names listed earlier in this section (for example, `directoryservice`). Set each object's primary key to the attribute marked _Primary key and RDN_ in its [Appendix A: Attribute reference](#appendix-a-attribute-reference) section.
@@ -157,13 +158,13 @@ The following table records the connector's public release history:
 
 ## Appendix A: Attribute reference
 
-IDDM provides search (read) support for every attribute that the connector returns, so the following tables focus on write support. The 'Create' and 'Modify' columns indicate whether an attribute can be written during each object-level write operation:
+Identity Data Platform provides search (read) support for every attribute that the connector returns, so the following tables focus on write support. In the 'Create' and 'Modify' columns, a checkmark (✔) marks an attribute that you can write during that operation, and a blank cell marks one that you can't:
 
 - **Create**: the attribute can be set when the object is created.
 - **Modify**: the attribute can be changed on an existing object.
 - **Neither**: the attribute is read-only and can't be written.
 
-Some attributes represent a number, a boolean, a nested object or map, or a list, but the connector returns them to IDDM as strings. IDDM represents these attributes as a `string` in the schema. To help you identify the original type, this document adds a qualifier in the 'Data type' column:
+Some attributes represent a number, a boolean, a nested object or map, or a list, but the schema declares them as `string`. To help you identify the original type, this document adds a qualifier in the 'Data type' column:
 - `string` (number)
 - `string` (boolean)
 - `string` (JSON)
