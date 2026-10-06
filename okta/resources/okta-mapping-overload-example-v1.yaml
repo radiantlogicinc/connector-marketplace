@@ -1,0 +1,25 @@
+version: v1
+templates:
+  - ref: functions_v1
+
+  - ref: okta_v1
+    template-overload:
+      source-objects:
+        - name: okta-user
+          datasource: okta-proxy  # your-real-datasource name
+          meta-attributes:
+            - name: repositoryName
+              literal: Okta  # unique per Okta tenant
+            - name: repositoryDisplayname
+              literal: Okta
+            - name: repositoryDescription
+              literal: This is the repository for the Okta tenant 
+        - name: okta-group
+          datasource: okta-proxy  # your-real-datasource name
+          meta-attributes:
+            - name: repositoryName
+              literal: Okta  # must be IDENTICAL to okta-user's value above
+            - name: repositoryDisplayname
+              literal: Okta
+            - name: repositoryDescription
+              literal: This is th repository for the Okta tenant 

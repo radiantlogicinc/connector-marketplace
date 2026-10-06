@@ -1,0 +1,259 @@
+version: v1
+
+#########################################################
+###
+### Source Object
+###
+######################################################### 
+
+source-objects:
+  - name: okta-user
+    datasource: okta-proxy ## -- TO OVERWRITE  -- ##
+    object-name: oktauser
+    backend-attributes:
+      - name: activated
+      - name: created
+      - name: id
+      - name: lastlogin
+      - name: lastupdated
+      - name: password
+      - name: passwordchanged
+      - name: profile-city
+      - name: profile-costcenter
+      - name: profile-countrycode
+      - name: profile-department
+      - name: profile-displayname
+      - name: profile-division
+      - name: profile-email
+      - name: profile-employeenumber
+      - name: profile-firstname
+      - name: profile-lastname
+      - name: profile-locale
+      - name: profile-login
+      - name: profile-manager
+      - name: profile-managerid
+      - name: profile-middlename
+      - name: profile-mobilephone
+      - name: profile-nickname
+      - name: profile-organization
+      - name: profile-postaladdress
+      - name: profile-primaryphone
+      - name: profile-profileurl
+      - name: profile-state
+      - name: profile-streetaddress
+      - name: profile-timezone
+      - name: profile-title
+      - name: profile-usertype
+      - name: profile-zipcode
+      - name: status
+      - name: statuschanged
+      - name: transitioningtostatus
+    meta-attributes:
+      - name: repositoryName
+        literal: Okta ## -- TO OVERWRITE  -- ##
+      - name: repositoryDescription 
+        literal: This is the repository for Okta tenant ## -- TO OVERWRITE  -- ##
+      - name: repositoryDisplayname 
+        literal: Okta ## -- TO OVERWRITE  -- ##
+      - name: repositoryType
+        literal: Accounts
+      - name: repositoryFamily
+        literal: Okta
+      - name: disabled_map
+        literal: "DEPROVISIONED,true,SUSPENDED,true"
+        literal-list-separator: ","
+      - name: disabled_default
+        literal: "false"
+      - name: name_separator
+        literal: " "
+    computed-attributes:
+      - name: disabled
+        function: mapValue
+        fields:
+          - status
+          - disabled_map
+      - name: disabled
+        function: normalizeValue
+        compute-strategy: IF_EMPTY
+        fields:
+          - disabled_default
+      - name: profile-displayname
+        function: concatWithSeparator
+        compute-strategy: IF_EMPTY
+        fields:
+          - name_separator
+          - attribute-name: profile-firstname
+            auxiliary-attribute-names: [profile-lastname]
+      - name: creation_datetime
+        function: convertDate
+        fields:
+          - created
+          - '"yyyy-MM-dd''T''HH:mm:ss.SSSX"'
+      - name: last_modification_datetime
+        function: convertDate
+        fields:
+          - lastupdated
+          - '"yyyy-MM-dd''T''HH:mm:ss.SSSX"'
+      - name: last_login_datetime
+        function: convertDate
+        fields:
+          - lastlogin
+          - '"yyyy-MM-dd''T''HH:mm:ss.SSSX"'
+
+  - name: okta-group
+    datasource: okta-proxy ## -- TO OVERWRITE  -- ##
+    object-name: oktagroup
+    backend-attributes:
+      - name: created       
+      - name: id
+      - name: lastmembershipupdated
+      - name: lastupdated
+      - name: member
+      - name: profile-description
+      - name: profile-name
+      - name: type
+    meta-attributes:
+      - name: repositoryName
+        literal: Okta ## -- TO OVERWRITE  -- ##
+      - name: repositoryDescription 
+        literal: This is the repository for Okta tenant ## -- TO OVERWRITE  -- ##
+      - name: repositoryDisplayname 
+        literal: Okta ## -- TO OVERWRITE  -- ##
+      - name: repositoryType
+        literal: Accounts
+      - name: repositoryFamily
+        literal: Okta
+    computed-attributes:
+      - name: membershipCreationTime
+        function: getDateTimeNow
+        fields:
+          - attribute-name: member
+            active: false
+      - name: creation_datetime
+        function: convertDate
+        fields:
+          - created
+          - '"yyyy-MM-dd''T''HH:mm:ss.SSSX"'
+      - name: last_modification_datetime
+        function: convertDate
+        fields:
+          - lastupdated
+          - '"yyyy-MM-dd''T''HH:mm:ss.SSSX"'
+
+#########################################################
+###
+### Vertices
+###
+#########################################################
+
+vertices:
+  - name: rt_account
+    linkage:
+      - source-object-name: okta-user
+        vertex-uid: id
+        properties:
+          - name: displayname
+            attribute-name: profile-displayname
+          - name: employee_number
+            attribute-name: profile-employeenumber
+          - name: given_name
+            attribute-name: profile-firstname
+          - name: identifier
+            attribute-name: id
+          - name: email
+            attribute-name: profile-email
+          - name: account_manager
+            attribute-name: profile-manager
+          - name: surname
+            attribute-name: profile-lastname
+          - name: name
+            attribute-name: profile-login
+          - name: disabled
+            attribute-name: disabled
+          - name: creation_date
+            attribute-name: creation_datetime
+          - name: last_modification_date
+            attribute-name: last_modification_datetime
+          - name: last_login_date
+            attribute-name: last_login_datetime
+            
+  - name: rt_group
+    linkage:
+      - source-object-name: okta-group
+        vertex-uid: id
+        properties:
+          - name: name
+            attribute-name: profile-name
+          - name: external_identifier
+            attribute-name: id
+          - name: displayname            
+            attribute-name: profile-name               
+          - name: description
+            attribute-name: profile-description
+          - name: creation_date
+            attribute-name: creation_datetime       
+          - name: last_modification_date
+            attribute-name: last_modification_datetime
+          - name: group_type
+            attribute-name: type 
+
+  - name: rt_repository
+    linkage:
+      - source-object-name: okta-user
+        vertex-uid: repositoryName
+        properties:
+          - name: name
+            attribute-name: repositoryName
+          - name: displayname
+            attribute-name: repositoryDisplayname
+          - name: description
+            attribute-name: repositoryDescription
+          - name: type
+            attribute-name: repositoryType
+          - name: family
+            attribute-name: repositoryFamily
+      - source-object-name: okta-group
+        vertex-uid: repositoryName
+        properties:
+          - name: name
+            attribute-name: repositoryName
+          - name: displayname
+            attribute-name: repositoryDisplayname
+          - name: description
+            attribute-name: repositoryDescription
+          - name: type
+            attribute-name: repositoryType
+          - name: family
+            attribute-name: repositoryFamily
+
+#########################################################
+###
+### Edges
+###
+#########################################################
+
+edges:
+  - name: is_in_group
+    source-vertex-name: rt_account
+    target-vertex-name: rt_group
+    rules:
+      - name: okta_account_is_in_group
+        event-sources: [okta-group]
+        event-types: [INSERT, UPDATE, DELETE]
+        properties:
+          - name: created_at
+            attribute-name: membershipCreationTime
+        link-condition:
+          logical-operator: AND
+          predicates: 
+            - field: name
+              operator: EQUALS
+              value: member
+
+  - name: is_in_repository
+    source-vertex-name: rt_account
+    target-vertex-name: rt_repository
+
+  - name: is_in_repository
+    source-vertex-name: rt_group
+    target-vertex-name: rt_repository

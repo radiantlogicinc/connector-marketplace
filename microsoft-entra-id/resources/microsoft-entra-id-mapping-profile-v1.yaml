@@ -1,0 +1,230 @@
+version: v1
+
+#########################################################
+###
+### Source Object
+###
+######################################################### 
+
+source-objects:
+  - name: entra_users
+    datasource: entra-proxy ## -- TO OVERWRITE  -- ##
+    object-name: azureaduser
+    backend-attributes:
+      - name: accountEnabled
+      - name: city
+      - name: companyName
+      - name: country
+      - name: department
+      - name: displayName
+      - name: employeeId
+      - name: faxNumber
+      - name: givenName
+      - name: id
+      - name: jobTitle
+      - name: mail
+      - name: mailNickname
+      - name: manager
+      - name: mobilePhone
+      - name: officeLocation
+      - name: postalCode
+      - name: state
+      - name: streetAddress
+      - name: surname
+      - name: userPrincipalName
+      - name: userType
+    meta-attributes:
+      - name: repositoryName
+        literal: Entra ## -- TO OVERWRITE  -- ##
+      - name: repositoryDescription 
+        literal: This is a RL Entra test environment ## -- TO OVERWRITE  -- ##
+      - name: repositoryDisplayname 
+        literal: Entra ## -- TO OVERWRITE  -- ##
+      - name: repositoryType
+        literal: Accounts
+      - name: repositoryFamily
+        literal: Entra
+      - name: guest_regex
+        literal: "#(EXT)#"
+      - name: first_regex_group
+        literal: 1
+        type: INTEGER
+      - name: guest_mapping
+        literal: "EXT,false"
+        literal-list-separator: ","    
+    computed-attributes:
+      - name: disabled
+        function: evaluateExpression
+        fields:
+          - '"{!accountEnabled}"'
+      - name: internal
+        function: extractValueFromRegex
+        fields:
+          - userPrincipalName
+          - guest_regex
+          - first_regex_group
+      - name: internal
+        function: mapValue
+        fields:
+          - internal
+          - guest_mapping
+
+  - name: entra_groups
+    datasource: entra-proxy ## -- TO OVERWRITE  -- ##
+    object-name: azureadgroup
+    backend-attributes:
+      - name: id         
+      - name: displayName
+      - name: description
+      - name: member
+      - name: createdDateTime
+      - name: entrydn
+      - name: owners
+    meta-attributes:
+      - name: repositoryName
+        literal: Entra ## -- TO OVERWRITE  -- ##
+      - name: repositoryDescription
+        literal: This is a RL Entra test environment ## -- TO OVERWRITE  -- ##
+      - name: repositoryDisplayname 
+        literal: Entra ## -- TO OVERWRITE  -- ##
+      - name: repositoryType
+        literal: Accounts
+      - name: repositoryFamily
+        literal: Entra
+    computed-attributes:
+      - name: membershipCreationTime
+        function: getDateTimeNow
+      - name: member
+        function: normalizeDns
+        fields:
+          - member
+
+#########################################################
+###
+### Vertices
+###
+#########################################################
+
+vertices:
+  - name: rt_account
+    linkage:
+      - source-object-name: entra_users
+        vertex-uid: id
+        properties:
+          - name: displayname
+            attribute-name: displayName
+          - name: employee_number
+            attribute-name: employeeId
+          - name: given_name
+            attribute-name: givenName
+          - name: identifier
+            attribute-name: id
+          - name: internal
+            attribute-name: internal
+          - name: email
+            attribute-name: mail
+          - name: account_manager
+            attribute-name: manager
+          - name: surname
+            attribute-name: surname
+          - name: name
+            attribute-name: userPrincipalName
+          - name: disabled
+            attribute-name: disabled
+          - name: external_identifier
+            attribute-name: userPrincipalName
+            
+  - name: rt_group
+    linkage:
+      - source-object-name: entra_groups
+        vertex-uid: id
+        properties:
+          - name: name
+            attribute-name: id
+          - name: external_identifier
+            attribute-name: id
+          - name: displayname            
+            attribute-name: displayName                  
+          - name: description
+            attribute-name: description
+          - name: dn
+            attribute-name: entrydn            
+
+  - name: rt_repository
+    linkage:
+      - source-object-name: entra_users
+        vertex-uid: repositoryName
+        properties:
+          - name: name
+            attribute-name: repositoryName
+          - name: displayname
+            attribute-name: repositoryDisplayname
+          - name: description
+            attribute-name: repositoryDescription
+          - name: type
+            attribute-name: repositoryType
+          - name: family
+            attribute-name: repositoryFamily
+      - source-object-name: entra_groups
+        vertex-uid: repositoryName
+        properties:
+          - name: name
+            attribute-name: repositoryName
+          - name: displayname
+            attribute-name: repositoryDisplayname
+          - name: description
+            attribute-name: repositoryDescription
+          - name: type
+            attribute-name: repositoryType
+          - name: family
+            attribute-name: repositoryFamily
+
+#########################################################
+###
+### Edges
+###
+#########################################################
+
+edges:
+  - name: is_in_group
+    source-vertex-name: rt_account
+    target-vertex-name: rt_group
+    rules:
+      - name: entra_account_group_is_in_group
+        event-sources: [entra_groups]
+        event-types: [INSERT, UPDATE]
+        properties:
+          - name: created_at
+            attribute-name: membershipCreationTime
+        link-condition:
+          logical-operator: AND
+          predicates: 
+            - field: dn
+              operator: EQUALS
+              value: member
+
+  - name: is_in_group
+    source-vertex-name: rt_group
+    target-vertex-name: rt_group
+    rules:
+      - name: entra_group_group_is_in_group
+        event-sources: [entra_groups]
+        event-types: [INSERT, UPDATE]
+        properties:
+          - name: created_at
+            attribute-name: membershipCreationTime
+        link-condition:
+          logical-operator: AND
+          predicates: 
+            - field: dn
+              operator: EQUALS
+              value: member
+
+
+  - name: is_in_repository
+    source-vertex-name: rt_account
+    target-vertex-name: rt_repository
+
+  - name: is_in_repository
+    source-vertex-name: rt_group
+    target-vertex-name: rt_repository

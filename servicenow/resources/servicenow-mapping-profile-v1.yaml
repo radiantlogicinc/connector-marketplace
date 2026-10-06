@@ -1,0 +1,301 @@
+#########################################################
+###
+### Pipeline configuration template file for ServiceNow
+### Version: 1
+###
+#########################################################
+
+version: v1
+
+#########################################################
+###
+### Source Object
+###
+#########################################################
+
+source-objects:
+  - name: servicenow-user
+    datasource: servicenow-proxy  ## -- TO OVERWRITE  -- ##
+    object-name: vdUserSN
+    backend-attributes:
+      - name: active
+      - name: email
+      - name: employeeNumber
+      - name: federatedId
+      - name: firstName
+      - name: identityType
+      - name: lastName
+      - name: middleName
+      - name: mobilePhone
+      - name: name
+      - name: source
+      - name: sysId 
+      - name: title 
+      - name: userName
+      - name: userRoles
+    meta-attributes:
+      - name: repositoryName
+        literal: ServiceNow ## -- TO OVERWRITE  -- ##
+      - name: repositoryDisplayname
+        literal: ServiceNow ## -- TO OVERWRITE  -- ##
+      - name: repositoryDescription
+        literal: ServiceNow repository ## -- TO OVERWRITE  -- ##
+      - name: repositoryType
+        literal: Accounts
+      - name: repositoryFamily
+        literal: ServiceNow
+    computed-attributes:
+      - name: disabled
+        function: evaluateExpression
+        fields:
+          - '"{!active}"'
+
+  - name: servicenow-group
+    datasource: servicenow-proxy ## -- TO OVERWRITE  -- ##
+    object-name: vdGroupSN
+    backend-attributes:
+      - name: active
+      - name: description
+      - name: groupRoles
+      - name: groupUsers
+      - name: includeMembers
+      - name: name
+      - name: source
+      - name: sysId
+      - name: type
+    meta-attributes:
+      - name: repositoryName
+        literal: ServiceNow ## -- TO OVERWRITE  -- ##
+      - name: repositoryDisplayname
+        literal: ServiceNow ## -- TO OVERWRITE  -- ##
+      - name: repositoryDescription
+        literal: ServiceNow repository ## -- TO OVERWRITE  -- ##
+      - name: repositoryType
+        literal: Accounts
+      - name: repositoryFamily
+        literal: ServiceNow
+    
+  - name: servicenow-role
+    datasource: servicenow-proxy  ## -- TO OVERWRITE  -- ##
+    object-name: vdRoleSN
+    backend-attributes: 
+      - name: canDelegate
+      - name: childRoles
+      - name: description
+      - name: elevatedPrivilege
+      - name: federatedId
+      - name: grantable
+      - name: includesRoles
+      - name: name
+      - name: scopedAdmin
+      - name: suffix
+      - name: sysCreatedBy
+      - name: sysId
+      - name: sysPolicy  
+    meta-attributes:
+      - name: repositoryName
+        literal: ServiceNow ## -- TO OVERWRITE  -- ##
+      - name: repositoryDisplayname
+        literal: ServiceNow ## -- TO OVERWRITE  -- ##
+      - name: repositoryDescription
+        literal: ServiceNow repository ## -- TO OVERWRITE  -- ##
+      - name: repositoryType
+        literal: Accounts
+      - name: repositoryFamily
+        literal: ServiceNow
+      - name: permissionType
+        literal: Role
+      - name: resourceType
+        literal: Profile
+    
+#########################################################
+###
+### Vertices
+###
+#########################################################
+vertices:
+  - name: rt_account
+    linkage:
+      - source-object-name: servicenow-user
+        vertex-uid: sysId
+        properties:
+          - name: name
+            attribute-name: userName
+          - name: displayname
+            attribute-name: name
+          - name: email
+            attribute-name: email
+          - name: given_name
+            attribute-name: firstName
+          - name: surname
+            attribute-name: lastName
+          - name: identifier
+            attribute-name: sysId
+          - name: disabled
+            attribute-name: disabled
+
+  - name: rt_group
+    linkage:
+      - source-object-name: servicenow-group
+        vertex-uid: sysId
+        properties:
+          - name: name
+            attribute-name: name
+          - name: displayname
+            attribute-name: name
+          - name: description
+            attribute-name: description
+          - name: group_type
+            attribute-name: type
+
+  - name: rt_permission
+    linkage:
+      - source-object-name: servicenow-role
+        vertex-uid: sysId
+        properties:
+          - name: name
+            attribute-name: name
+          - name: displayname
+            attribute-name: name
+          - name: description
+            attribute-name: description
+          - name: family
+            attribute-name: repositoryFamily
+          - name: type
+            attribute-name: permissionType
+
+  - name: rt_repository
+    linkage:
+      - source-object-name: servicenow-user
+        vertex-uid: repositoryName
+        properties:
+          - name: name
+            attribute-name: repositoryName
+          - name: displayname
+            attribute-name: repositoryDisplayname
+          - name: description
+            attribute-name: repositoryDescription
+          - name: family
+            attribute-name: repositoryFamily
+          - name: type
+            attribute-name: repositoryType
+      - source-object-name: servicenow-group
+        vertex-uid: repositoryName
+        properties:
+          - name: name
+            attribute-name: repositoryName
+          - name: displayname
+            attribute-name: repositoryDisplayname
+          - name: description
+            attribute-name: repositoryDescription
+          - name: family
+            attribute-name: repositoryFamily
+          - name: type
+            attribute-name: repositoryType
+      - source-object-name: servicenow-role
+        vertex-uid: repositoryName
+        properties:
+          - name: name
+            attribute-name: repositoryName
+          - name: displayname
+            attribute-name: repositoryDisplayname
+          - name: description
+            attribute-name: repositoryDescription
+          - name: family
+            attribute-name: repositoryFamily
+          - name: type
+            attribute-name: repositoryType
+
+  - name: rt_resource
+    linkage:
+      - source-object-name: servicenow-role
+        vertex-uid: repositoryName
+        properties:
+          - name: name
+            attribute-name: repositoryName
+          - name: displayname
+            attribute-name: repositoryDisplayname
+          - name: family
+            attribute-name: repositoryFamily
+          - name: type
+            attribute-name: resourceType
+
+#########################################################
+###
+### Edges
+###
+#########################################################
+
+edges:
+  - name: is_in_repository
+    source-vertex-name: rt_account
+    target-vertex-name: rt_repository
+ 
+  - name: is_in_repository
+    source-vertex-name: rt_group
+    target-vertex-name: rt_repository
+
+  - name: is_in_repository
+    source-vertex-name: rt_resource
+    target-vertex-name: rt_repository
+ 
+  - name: is_in_group
+    source-vertex-name: rt_account
+    target-vertex-name: rt_group
+    rules:
+      - name: user_membership
+        event-sources: [servicenow-group]
+        event-types: [INSERT, UPDATE]
+        link-condition:
+          predicates:
+            - field: name
+              operator: EQUALS
+              value: groupUsers
+
+  - name: grants_right_to
+    source-vertex-name: rt_account
+    target-vertex-name: rt_permission
+    rules:
+      - name: user_role_assignment
+        event-sources: [servicenow-user]
+        event-types: [INSERT, UPDATE]
+        link-condition:
+          predicates:
+            - field: name
+              operator: EQUALS
+              value: userRoles
+
+  - name: grants_right_to
+    source-vertex-name: rt_group
+    target-vertex-name: rt_permission
+    rules:
+      - name: group_role_assignment
+        event-sources: [servicenow-group]
+        event-types: [INSERT, UPDATE]
+        link-condition:
+          predicates:
+            - field: name
+              operator: EQUALS
+              value: groupRoles
+
+  - name: belongs_to
+    source-vertex-name: rt_permission
+    target-vertex-name: rt_resource
+
+  - name: is_in_parent
+    source-vertex-name: rt_permission
+    target-vertex-name: rt_permission
+    rules:
+      - name: role_hierarchy
+        event-sources: [servicenow-role]
+        event-types: [INSERT, UPDATE]
+        event-vertex-role: TARGET
+        link-condition:
+          predicates:
+            - field: name
+              operator: EQUALS
+              value: childRoles
+
+                
+
+ 

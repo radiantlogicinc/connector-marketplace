@@ -1,0 +1,25 @@
+version: v1
+templates:
+  - ref: functions_v1
+
+  - ref: entra_v1
+    template-overload:
+      source-objects:
+        - name: entra_users
+          datasource: entra-proxy  # your-real-datasource name
+          meta-attributes:
+            - name: repositoryName
+              literal: Entra  # unique per Entra tenant
+            - name: repositoryDisplayname
+              literal: Entra
+            - name: repositoryDescription
+              literal: This is the repository for the Entra tenant 
+        - name: entra_groups
+          datasource: entra-proxy  # your-real-datasource name
+          meta-attributes:
+            - name: repositoryName
+              literal: Entra  # must be IDENTICAL to entra_users' value above
+            - name: repositoryDisplayname
+              literal: Entra
+            - name: repositoryDescription
+              literal: This is the repository for the Entra tenant 

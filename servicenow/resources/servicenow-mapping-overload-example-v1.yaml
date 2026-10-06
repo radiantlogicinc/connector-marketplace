@@ -1,0 +1,40 @@
+#########################################################
+###
+### Pipeline configuration file for ServiceNow
+###
+#########################################################
+
+version: v1
+templates:
+  - ref: functions_v1
+
+  - ref: servicenow_v1
+    template-overload:
+      source-objects:
+        - name: servicenow-user
+          datasource: servicenow-proxy  # your-real-datasource name
+          meta-attributes:
+            - name: repositoryName
+              literal: ServiceNow  # unique per ServiceNow tenant
+            - name: repositoryDisplayname
+              literal: ServiceNow
+            - name: repositoryDescription
+              literal: ServiceNow repository
+        - name: servicenow-group
+          datasource: servicenow-proxy  # your-real-datasource name
+          meta-attributes:
+            - name: repositoryName
+              literal: ServiceNow  # must be IDENTICAL to servicenow-user's value above
+            - name: repositoryDisplayname
+              literal: ServiceNow
+            - name: repositoryDescription
+              literal: ServiceNow repository
+        - name: servicenow-role
+          datasource: servicenow-proxy  # your-real-datasource name
+          meta-attributes:
+            - name: repositoryName
+              literal: ServiceNow  # must be IDENTICAL to servicenow-user's value above
+            - name: repositoryDisplayname
+              literal: ServiceNow
+            - name: repositoryDescription
+              literal: ServiceNow repository
