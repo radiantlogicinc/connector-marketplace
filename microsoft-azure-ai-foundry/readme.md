@@ -10,7 +10,7 @@ guardrails, tools, reachable resources, runtime managed identity, permission gra
 history, and invocation recency. The connector provides search across every discovered agent and one opt-in
 write: quarantine remediation.
 
-[Download the Microsoft Azure AI Foundry connector JAR file](builds/microsoft-azure-ai-foundry-connector-0.9.2.jar).
+[Download the Microsoft Azure AI Foundry connector JAR file](builds/microsoft-azure-ai-foundry-connector-0.9.3.jar).
 
 ## Connector identity
 
@@ -25,7 +25,7 @@ support for data management and observability. Refer to the following tables for
     <th scope="row" align="left">Connector type</th><td>SDK</td>
   </tr>
   <tr>
-    <th scope="row" align="left">Latest version</th><td>0.9.2 (beta)</td>
+    <th scope="row" align="left">Latest version</th><td>0.9.3 (beta)</td>
   </tr>
   <tr>
     <th scope="row" align="left">Connector SDK version</th><td>1.2.0</td>
@@ -111,9 +111,22 @@ To configure Azure and RadiantOne, complete the steps in the following sections.
    schema.
 3. Fill in the data source properties. For more information, see the
    [Data source properties](#data-source-properties) section of this document.
-4. Run **Test Connection** to confirm the connector reaches Azure. After it succeeds, the data source is
-   ready. Use it to create a naming context, then browse the directory as you would any data source. You'll
-   see one entry per agent.
+4. Run **Test Connection** to confirm the connector reaches Azure. A passing test means the data source is
+   ready to read. It says nothing about the identity graph.
+5. **Mount the data source under a naming context, and publish every attribute.** The system wires up the
+   naming attribute automatically; the rest are not published unless you say so, and an attribute that is
+   not published is invisible below the naming context. A graph mapping that names it then resolves to
+   nothing, with no error anywhere. This is the most-skipped step in the chain.
+6. **Create an `IDO_` LDAP proxy over that naming context.** Identity Observability reads change events
+   through the proxy, never through the connector data source directly.
+7. **Upload the agent pipeline template and merge this connector's block into the shared mapping archive.**
+   Both files ship with the connector. Every agentic connector references the same template by name, so
+   merge your block into the archive rather than replacing it.
+8. **Assess, apply, and read the processed-event count.** A pipeline that reaches the running state with a
+   processed count matching the entry count, and no rise in the rejected count, is the first evidence that
+   anything reached the graph. Stopping at step 4 leaves a green connection over an empty graph.
+
+Browse the directory as you would any data source: you'll see one entry per agent.
 
 ## Data source properties
 
@@ -137,10 +150,10 @@ For more information, see
 
 | Property | Required | Type | Default | Allowed values | Description |
 | --- | --- | --- | --- | --- | --- |
-| `enableMultiProject` | No | `boolean` | `false` | `true`, `false` | Scan every Foundry project in scope instead of only `foundryProjectEndpoint`. Requires `enableArmEnrichment`, because the connector discovers projects on the management plane. The connector qualifies `agentId` with the account and project so that distinguished names stay unique. The connector doesn't populate the optional `vdIdentity` object type in this mode. |
+| `enableMultiProject` | No | `boolean` | `false` | `true`, `false` | Scan every Foundry project in scope instead of only `foundryProjectEndpoint`. Requires `enableArmEnrichment`, because the connector discovers projects on the management plane. The connector qualifies `agentId` with the account and project so that distinguished names stay unique. |
 | `multiProjectScope` | No | `string` | `resourceGroup` | `resourceGroup`, `subscription` | Discovery scope for the multi-project scan. `resourceGroup` needs `azureResourceGroup`; `subscription` covers every Foundry account and project in the subscription. An unrecognized value logs a warning and falls back to `resourceGroup`. |
-| `maxProjects` | No | `number` | `50` | `0` or greater | Hard ceiling on projects scanned per multi-project scan. Discovery stops at the cap and logs a warning. `0` means no cap. |
-| `maxAgents` | No | `number` | `1000` | `0` or greater | Hard ceiling on agents collected and enriched per project. When exceeded, the connector truncates the candidate set before enrichment and logs a warning. `0` means no cap. Raise it or set `0` for projects with more than 1,000 agents. |
+| `maxProjects` | No | `number` | `50` | 0 to 2147483647 | Hard ceiling on projects scanned per multi-project scan. Discovery stops at the cap and logs a warning. `0` means no cap. |
+| `maxAgents` | No | `number` | `1000` | 0 to 2147483647 | Hard ceiling on agents collected and enriched per project. When exceeded, the connector truncates the candidate set before enrichment and logs a warning. `0` means no cap. Raise it or set `0` for projects with more than 1,000 agents. |
 
 ### Copilot Studio
 
@@ -153,11 +166,10 @@ For more information, see
 
 | Property | Required | Type | Default | Allowed values | Description |
 | --- | --- | --- | --- | --- | --- |
-| `enableArmEnrichment` | No | `boolean` | `true` | `true`, `false` | Populate `runtimeIdentity`, `resources`, `permissionFlow`, `guardrails`, and `tags` from the Azure management plane. Needs management-plane read access, and `azureResourceGroup` except in a subscription-scoped multi-project scan. Also a prerequisite for multi-project discovery, for the `vdIdentity` object type, and for the `enableInvocationHistory` and `enableActivityHistory` properties. |
+| `enableArmEnrichment` | No | `boolean` | `true` | `true`, `false` | Populate `runtimeIdentity`, `resources`, `permissionFlow`, `guardrails`, and `tags` from the Azure management plane. Needs management-plane read access, and `azureResourceGroup` except in a subscription-scoped multi-project scan. Also a prerequisite for multi-project discovery and for the `enableInvocationHistory` and `enableActivityHistory` properties. |
 | `enableGraphEnrichment` | No | `boolean` | `true` | `true`, `false` | Enrich the identities that the agents run as from the directory: display name and application ID, then their API permissions and group memberships. Also resolves an opaque governance actor to a name. Active only when management-plane enrichment is on. |
 | `enableInvocationHistory` | No | `boolean` | `true` | `true`, `false` | Populate `lastInvokedAt` and a 30-day invocation count from the Application Insights resource connected to the project. One aggregate query per project, reading timestamps, counts, and agent names only, never conversation or prompt content. |
 | `enableActivityHistory` | No | `boolean` | `true` | `true`, `false` | Populate project governance (the most recent successful control-plane write, its actor, and its operation) from the Azure Activity Log, exposed in `metadata` and as `lastUpdatedBy`. Project-level, not per-agent. |
-| `enableIdentityEntity` | No | `boolean` | `false` | `true`, `false` | Expose the second object type `vdIdentity`: one entry per distinct principal that the agents run as. Single-project only. |
 | `enableInstructionText` | No | `boolean` | `false` | `true`, `false` | Emit the raw agent instruction (system prompt) in the `instruction` attribute. When off, the connector keeps only the instruction's cryptographic fingerprint and length, so the prompt text stays out of the directory. |
 
 ### Remediation
@@ -171,12 +183,12 @@ For more information, see
 | Property | Required | Type | Default | Allowed values | Description |
 | --- | --- | --- | --- | --- | --- |
 | `foundryApiVersion` | No | `string` | `v1` | Any Foundry agent API version value | Data-plane API version. This property is overridable because the preview value has changed across platform releases; you can set the value that your tenant expects without deploying a new JAR file. |
-| `enrichmentThreads` | No | `number` | `10` | `1-50` (inclusive) | Number of projects that the connector scans concurrently during a multi-project scan. Set it to `1` for a fully sequential scan. No effect on a single-project data source. High values increase the risk of service-side throttling. |
-| `azureMaxRetries` | No | `number` | `3` | `0-10` (inclusive) | Retry budget per Azure call on throttling and transient errors. Backoff honors the service's `Retry-After` hint. The first attempt isn't a retry. |
+| `enrichmentThreads` | No | `number` | `10` | 1 to 50 | Number of projects that the connector scans concurrently during a multi-project scan. Set it to `1` for a fully sequential scan. No effect on a single-project data source. High values increase the risk of service-side throttling. |
+| `azureMaxRetries` | No | `number` | `3` | 0 to 10 | Retry budget per Azure call on throttling and transient errors. Backoff honors the service's `Retry-After` hint. The first attempt isn't a retry. |
 
 ## Supported operations
 
-The following table summarizes the operations that the connector supports for its object types. Each cell
+The following table summarizes the operations that the connector supports for its one object type. Each cell
 shows one of three support levels:
 
 - **Yes**: fully supported
@@ -186,7 +198,6 @@ shows one of three support levels:
 | Object type | Search | Create | Modify | Delete |
 | --- | --- | --- | --- | --- |
 | `vdAgentIdentity` | Yes | No | Limited | No |
-| `vdIdentity` | Yes | No | No | No |
 
 The [Operation details](#operation-details) section explains cells marked _No_ or _Limited_. For more
 information about attribute-level detail, see the
@@ -196,17 +207,15 @@ information about attribute-level detail, see the
 
 | Object type | Operation | Support | Details |
 | --- | --- | --- | --- |
-| `vdAgentIdentity` | Search | Yes | Subtree search returns every agent, subject to `maxAgents` and `maxProjects`. Base search on <code>agentId=<var>AGENT_ID</var></code>, where <code><var>AGENT_ID</var></code> is the agent's `agentId` value, returns exactly that entry. An unscoped browse returns both object types in one response. The connector doesn't support paging, because the SDK search contract returns all results in one response. Bound the result size with attribute narrowing, `maxAgents`, or a client-supplied size limit. |
+| `vdAgentIdentity` | Search | Yes | Subtree search returns every agent, subject to `maxAgents` and `maxProjects`. Base search on <code>agentId=<var>AGENT_ID</var></code>, where <code><var>AGENT_ID</var></code> is the agent's `agentId` value, returns exactly that entry. An unscoped browse returns every agent. The connector doesn't support paging, because the SDK search contract returns all results in one response. Bound the result size with attribute narrowing, `maxAgents`, or a client-supplied size limit. |
 | `vdAgentIdentity` | Modify | Limited | Only `actionQuarantined` is writable, and only when `enableRemediation` is `true`; the connector supports all three sub-operations (add, replace, delete value), and deleting the value releases the quarantine. Modifying it with remediation off returns `UNWILLING_TO_PERFORM (53)` and writes nothing. Modifying any other attribute returns `OPERATIONS_ERROR (1)`. |
-| `vdIdentity` | Modify | No | Every attribute of this object type is read-only. |
 | Both | Create, Delete | No | The connector never creates or deletes Azure agents or directory objects. |
 
 ## Schema overview
 
-The schema defines two object types:
+The schema defines one object type:
 
 - `vdAgentIdentity`, one entry per agent.
-- `vdIdentity`, one entry per distinct principal that the agents run as.
 
 The connector exposes both Azure AI Foundry and Copilot Studio agents through the single `vdAgentIdentity`
 object type and uses the `platform` attribute to tell them apart. Many attributes might be absent from a
@@ -228,7 +237,6 @@ The following table lists the connector's known limitations:
 | # | Limitation |
 | --- | --- |
 | 1 | **One subscription per data source.** One data source can scan several Azure AI Foundry projects, but a single scan never spans subscriptions or tenants. Configure one data source per subscription. |
-| 2 | **The `vdIdentity` object type is single-project only.** The connector doesn't populate this object type during a multi-project scan, and the object type needs management-plane enrichment. With `enableArmEnrichment` off, this object type returns an empty result set rather than an error. |
 | 3 | **No paging.** The connector must materialize and return the whole result set at once, so bound the result size with attribute narrowing, `maxAgents` or `maxProjects`, or a client-supplied size limit rather than by paging. |
 | 4 | **`maxAgents` truncates by default.** The default cap of 1,000 agents per project truncates larger projects, with a warning in the log. Raise it or set `0` when a project is larger and entry counts must match Azure exactly. |
 | 5 | **No per-agent authorship or lifecycle actor history.** Foundry agents are data-plane objects and aren't individually audited, so `createdBy` and the per-transition lifecycle actors (`publishedBy`, `suspendedBy`, `blockedBy`, `deletedBy`, `statusChangedBy`, and `lastInvokedBy`) are always absent for Foundry agents. The only obtainable governance signal is the project-level last control-plane write, exposed as `lastUpdatedBy` and therefore shared by every agent in the project. |
@@ -247,6 +255,7 @@ The following table records the connector's public release history:
 
 | Version | Release date | Description |
 | --- | --- | --- |
+| 0.9.3 | Unreleased | Updates a bundled third-party library to close a critical vulnerability (CVE-2026-53914). Rebuilds the connector on the Radiant Logic connector development kit, so that agents now reach the identity graph. Removes the `vdIdentity` object type, so you must delete and recreate the data source. |
 | 0.9.2 | August 31, 2026 | First beta release. |
 
 ## Appendix A: Attribute reference
@@ -255,7 +264,7 @@ Identity Data Platform provides search (read) support for every attribute that t
 following tables focus on write support and availability. The connector doesn't support creating new
 entries, so the tables omit the 'Create' column. In the 'Modify' column, a checkmark (✔) marks an attribute
 that you can modify on an existing object, and a blank cell marks a read-only attribute. Every attribute of
-`vdIdentity` is read-only, so the `vdIdentity` table omits the column entirely.
+
 
 The 'Platform' column indicates which agent platforms populate an attribute:
 
@@ -265,6 +274,11 @@ The 'Platform' column indicates which agent platforms populate an attribute:
 - **None**: declared in the schema, but Azure exposes no source on either platform
 
 An attribute that belongs to only one platform is absent from entries for the other platform.
+
+**Legend.** In the 'Modify' column, `✔` marks an attribute you can change on an existing object and an
+empty cell marks a read-only attribute. In the 'Platform' column, `Both` means Azure AI Foundry and
+Copilot Studio, `Foundry` and `Copilot` mean that platform only, and `None` means the attribute is
+declared in the schema but Azure exposes no source for it on either platform.
 
 The 'Nullable' column indicates whether the attribute must have a value. Attributes marked with a checkmark
 (✔) are allowed to have a null value; those with a blank cell must have a value on every entry. Null values
@@ -334,28 +348,3 @@ For more information about object-level operation support, see the
 | `_connectorFoundrySourceAvailable` | `boolean` | | Both | | Diagnostic, scan-level: whether the agent listing succeeded this scan. |
 | `_connectorSourcesUnavailable` | `string` | | Both | | Diagnostic, per entry: comma-separated Azure sources that failed for this entry. Blank when the entry is complete. |
 
-### Object type: `vdIdentity`
-
-Exposed only when `enableIdentityEntity` is on, and only for a single-project data source. Every attribute
-is read-only and entirely derived from the management plane and the directory: with `enableArmEnrichment`
-off, this object type returns an empty result set rather than an error.
-
-| Attribute | Data type | Nullable | Description |
-| --- | --- | --- | --- |
-| `principalId` | `string` | | Primary key and RDN. Directory object ID of the principal. |
-| `externalId` | `string` | ✔ | Correlation key: the directory application ID for a service principal or managed identity, and the principal ID otherwise. The inverse of each agent's runtime identity. |
-| `displayName` | `string` | ✔ | Directory name. Absent when directory enrichment is off or forbidden. |
-| `principalType` | `string` | ✔ | `MANAGED_IDENTITY`, `SERVICE_PRINCIPAL`, `USER`, or `GROUP`. |
-| `appId` | `string` | ✔ | Directory application (client) ID for service principals and managed identities. |
-| `accountEnabled` | `boolean` | ✔ | Directory enablement state. |
-| `identityType` | `string` | ✔ | `SystemAssigned` or `UserAssigned` for managed identities. Absent otherwise. |
-| `tenantId` | `string` | ✔ | Owning Microsoft Entra ID tenant ID. |
-| `apiPermissions` | `string` (JSON array) | ✔ | API permissions and application-role grants held by this identity: the access plane that Azure role assignments don't cover. |
-| `groupMemberships` | `string` (JSON array) | ✔ | Groups and directory roles that this identity belongs to. |
-| `roleAssignments` | `string` (JSON array) | ✔ | Azure role assignments held by this identity. Usually empty for Foundry, whose access is connection-centric. |
-| `owners` | `string` (JSON array) | ✔ | Directory owners of this identity: the accountability signal for a non-human identity. |
-| `referencedByAgents` | `string` (JSON array) | ✔ | The agents in this scan that run as this identity. |
-| `agentFanout` | `integer` | | Number of agents running as this identity. |
-| `isShared` | `boolean` | | `true` when more than one agent runs as this identity: the over-shared identity signal. |
-| `metadata` | `string` (JSON object) | ✔ | Provenance: the scope at which the connector found the identity, and which planes described it. |
-| `_connectorSourcesUnavailable` | `string` | | Diagnostic, per entry: comma-separated sources that failed for this entry. Blank when the entry is complete. |
