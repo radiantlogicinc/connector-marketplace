@@ -20,9 +20,9 @@ The following table lists the available connectors, their type, and their latest
 | --- | --- | --- |
 | [AWS Bedrock](./agentic-aws-bedrock) | SDK | 1.0.1 |
 | [CyberArk Privilege Cloud](./cyberark-privilege-cloud) | SDK | 1.0.0 |
-| [Google Cloud Agents](./google-cloud-agents) | SDK | 0.9.2 |
+| [Google Cloud Agents](./google-cloud-agents) | SDK | 0.9.4 |
 | [Microsoft Active Directory](./microsoft-active-directory) | Classic | Not applicable |
-| [Microsoft Azure AI Foundry](./microsoft-azure-ai-foundry) | SDK | 0.9.2 |
+| [Microsoft Azure AI Foundry](./microsoft-azure-ai-foundry) | SDK | 0.9.3 |
 | [Microsoft Entra ID](./microsoft-entra-id) | Classic | Not applicable |
 | [Okta](./okta) | Classic | Not applicable |
 | [ServiceNow](./servicenow) | SDK | 1.0.0 |

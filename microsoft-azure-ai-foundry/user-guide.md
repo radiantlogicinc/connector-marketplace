@@ -1,14 +1,14 @@
-# Microsoft Azure AI Foundry Connector for RadiantOne IDDM — User Guide
+# Microsoft Azure AI Foundry Connector for RadiantOne — User Guide
 
-**Product:** Microsoft Azure AI Foundry Connector (IDDM custom connector)
-**Version:** 0.9.2 — **Beta**
+**Product:** Microsoft Azure AI Foundry Connector (custom connector for the Identity Data Platform)
+**Version:** 0.9.3 — **Beta**
 **Author / Publisher:** Radiant Logic
 
 > **Beta.** This connector has not yet completed official validation. Deploy it to a non-production
 > environment first. Beta versions are numbered `0.9.x`, with the patch digit incremented on every
 > change; `1.0.0` is reserved for the first officially validated release.
 
-This is the complete, self-contained guide to the Microsoft Azure AI Foundry Connector — a RadiantOne IDDM
+This is the complete, self-contained guide to the Microsoft Azure AI Foundry Connector — a RadiantOne
 custom connector that brings **agentic AI** under Identity Observability (IDO) governance by exposing Azure
 AI Foundry agents, and optionally Microsoft Copilot Studio agents, as LDAP identities.
 
@@ -29,7 +29,7 @@ cloud land in the same shape.
 4. [Configuration reference — all parameters](#4-configuration-reference--all-parameters)
 5. [The agent data model](#5-the-agent-data-model)
 6. [Data model ↔ Azure mapping](#6-data-model--azure-mapping)
-7. [Keeping IDDM in sync](#7-keeping-iddm-in-sync)
+7. [Keeping the directory in sync](#7-keeping-the-directory-in-sync)
 8. [Write-back — quarantine remediation](#8-write-back--quarantine-remediation)
 9. [Performance & scale](#9-performance--scale)
 10. [Capacity planning — memory](#10-capacity-planning--memory)
@@ -40,9 +40,11 @@ cloud land in the same shape.
 
 ## 1. Introduction — agentic AI identity for IDO
 
+What the connector is, why it exists, what it produces, and the posture and scope it commits to.
+
 ### 1.1 What this connector is
 
-A RadiantOne IDDM **custom connector** that discovers AI agents in **Azure AI Foundry** — and, when enabled,
+A RadiantOne **custom connector** that discovers AI agents in **Azure AI Foundry** — and, when enabled,
 in **Microsoft Copilot Studio** — and presents each as an LDAP entry conforming to a provider-agnostic
 **agent data model** (defined in full in section 5). It targets the same data model as Radiant Logic's other
 agentic-AI connectors; only the source provider differs.
@@ -52,7 +54,7 @@ agentic-AI connectors; only the source provider differs.
 Agents are a fast-growing class of **non-human identity (NHI)**: they run under managed identities, hold
 permissions, call tools, reach resources, and invoke each other. Identity Observability needs them as
 first-class, correlatable objects. This connector brings Foundry agents — and, optionally, the principals
-they run as — into IDDM so they can be searched, correlated, and governed alongside every other identity.
+they run as — into the directory so they can be searched, correlated, and governed alongside every other identity.
 
 ### 1.3 What it produces at a glance
 
@@ -64,7 +66,6 @@ graph** (`permissionFlow`), **`lastInvokedAt`** (invocation recency), project **
 project's **`tags`** (Azure resource tags), and the mandatory repository-linking fields `repositoryId` /
 `repositoryDisplayName` (from which Identity Observability resolves a Repository object).
 
-Optionally, a second object type (`vdIdentity`) emits one row per distinct principal the agents reference.
 
 ### 1.4 Posture — read-only by default, one opt-in write
 
@@ -79,7 +80,7 @@ inbound write. See section 8 for the mechanism, the gate, the attribution model 
 | Code | Name | Returned when |
 |---|---|---|
 | **0** | `SUCCESS` | The quarantine or release action succeeded. |
-| **1** | `OPERATIONS_ERROR` | The modification targets a **read-only attribute** — anything other than `actionQuarantined`. 45 of the 46 `vdAgentIdentity` attributes, and all 17 `vdIdentity` attributes, are read-only. A `modify` carrying no modifications at all is treated the same way. |
+| **1** | `OPERATIONS_ERROR` | The modification targets a **read-only attribute** — anything other than `actionQuarantined`. 45 of the 46 `vdAgentIdentity` attributes are read-only. A `modify` carrying no modifications at all is treated the same way. |
 | **32** | `NO_SUCH_OBJECT` | The target distinguished name carries no usable `agentId`, or the platform reports the agent does not exist. |
 | **53** | `UNWILLING_TO_PERFORM` | `enableRemediation` is **off**. The attribute *is* writable; the connector is declining to leave its read-only posture. Nothing is sent to Azure. |
 | **80** | `OTHER` | The write was attempted and failed — for example the service principal lacks agent write access (the Reader used for listing is not sufficient), or the agent kind does not support the lifecycle action. |
@@ -100,11 +101,11 @@ inbound write. See section 8 for the mechanism, the gate, the attribution model 
 
 | Question | Answer |
 |---|---|
-| **Connector type** | **SDK connector** — built on the IDDM Connector SDK 1.2.0. It is **not** a legacy plugin: there is no fully-qualified class name to enter, and its configuration **auto-populates** on import. |
-| **Target application** | **IDDM.** The connector is deployed into IDDM and nowhere else. The data it produces is consumed **downstream by Identity Observability**, whose connector mapping translates the connector's `camelCase` LDAP attribute names to its own `snake_case` storage names on ingest. It is **not** installed into Identity Observability. |
-| **Schema authoring** | **Used.** The schema is auto-generated by IDDM from the connector's declarations when the data source is created. **Do not hand-build the schema** — generate it, then compare the result against the reference tables in section 12.5. There is no ORX file. |
-| **Object types exposed** | **Two.** `vdAgentIdentity` (46 attributes, always present) and `vdIdentity` (17 attributes, **opt-in**, single-project only). |
-| **Naming attributes (RDN)** | `agentId` for `vdAgentIdentity`; `principalId` for `vdIdentity`. |
+| **Connector type** | **SDK connector** — built on the Radiant Logic Connector SDK 1.2.0. It is **not** a legacy plugin: there is no fully-qualified class name to enter, and its configuration **auto-populates** on import. |
+| **Target application** | **The Identity Data Platform.** The connector is deployed there and nowhere else. The data it produces is consumed **downstream by Identity Observability**, whose connector mapping translates the connector's `camelCase` LDAP attribute names to its own `snake_case` storage names on ingest. It is **not** installed into Identity Observability. |
+| **Schema authoring** | **Used.** The schema is auto-generated from the connector's declarations when the data source is created. **Do not hand-build the schema** — generate it, then compare the result against the reference tables in section 12.5. There is no ORX file. |
+| **Object types** | **One.** `vdAgentIdentity` (46 attributes, **opt-in**, single-project only). |
+| **Naming attribute (RDN)** | `agentId`. |
 
 **Supported LDAP operations**
 
@@ -121,6 +122,8 @@ inbound write. See section 8 for the mechanism, the gate, the attribution model 
 ---
 
 ## 2. Background — Azure AI Foundry
+
+Enough of the source platform to read the rest of this guide: what a Foundry agent is, where its data lives, and why the connector has to talk to two different planes to assemble one record.
 
 ### 2.1 Azure AI Foundry & the Agent Service
 
@@ -183,36 +186,36 @@ look the way they do.
 
 ## 3. Installation & deployment
 
+From an empty environment to a data source returning entries: prerequisites, the JAR, the data source, the Azure permissions, a smoke test, and the one upgrade rule that costs an operator real work.
+
 ### 3.1 Prerequisites
 
-- **RadiantOne IDDM 8.2.0 or later.**
+- **RadiantOne 8.2.0 or later.**
 - **An Azure subscription** containing at least one Foundry account and project with agents.
 - **A Microsoft Entra service principal** (app registration) that the data source authenticates as, holding
   the role assignments in 3.4, plus a **client secret** for it.
-- **The connector JAR** — `microsoft-azure-ai-foundry-connector-0.9.2.jar` (about 13 MB), which embeds all of
-  its dependencies. This is the file IDDM loads; nothing is built on site and no source tree is required.
+- **The connector JAR** — `microsoft-azure-ai-foundry-connector-0.9.3.jar` (about 13 MB), which embeds all of
+  its dependencies. This is the file the Identity Data Platform loads; nothing is built on site and no source tree is required.
 
-### 3.2 Deploying the JAR into IDDM
+### 3.2 Deploying the JAR into the Identity Data Platform
 
-1. Copy the JAR into the IDDM custom-connector directory (per your IDDM version's documented location for
+1. Copy the JAR into the the Identity Data Platform custom-connector directory (per your the Identity Data Platform version's documented location for
    custom connector JARs).
-2. Restart or reload so IDDM discovers the connector and registers its configuration.
-3. Confirm the connector type **Microsoft Azure AI Foundry** appears in the IDDM Control Panel's data-source wizard.
+2. Restart or reload so the Identity Data Platform discovers the connector and registers its configuration.
+3. Confirm the connector type **Microsoft Azure AI Foundry** appears in the the Identity Data Platform Control Panel's data-source wizard.
 
 > **One JAR only.** The published JAR is self-contained. Do not also load a thin or partial JAR alongside it.
 
 ### 3.3 Creating the data source
 
-1. In the IDDM Control Panel, create a new data source of type **Microsoft Azure AI Foundry**.
+1. In the the Identity Data Platform Control Panel, create a new data source of type **Microsoft Azure AI Foundry**.
 2. Fill in the configuration form (section 4 documents every field). Minimum: `azureTenantId`,
    `azureClientId`, `azureClientSecret`, `azureSubscriptionId`, and `foundryProjectEndpoint` for a
    single-project data source — plus `azureResourceGroup` if you want management-plane enrichment
    (recommended).
 3. Save. The connector's object types map to the object classes **`vdAgentIdentity`** (agents) and, when
-   `enableIdentityEntity` is on, **`vdIdentity`** (principals).
 
 > **Schema is locked at data-source creation.** Any change to the attribute set — including turning on
-> `enableIdentityEntity` — requires **deleting and recreating the data source**, or hand-editing the schema
 > in the Control Panel. See 3.7.
 
 ### 3.4 Entra and Azure role setup
@@ -280,18 +283,37 @@ Capture the **value** immediately; it is shown only once.
 ### 3.7 Upgrading & the schema-recreate rule
 
 - A **code-only** upgrade (new JAR, same attribute set) is a JAR swap and a reload.
-- Any change to the **attribute set** — including turning on `enableIdentityEntity` — changes the LDAP
+- Any change to the **attribute set** changes the LDAP
   schema and requires **recreating the data source**.
+
+#### Upgrade notes
+
+What each release costs an administrator who already holds the previous one, newest first.
+
+##### 0.9.3
+
+**Version 0.9.3 removes an object type, so upgrading to it is not a JAR swap.**
+
+| What changed | What an administrator must do |
+|---|---|
+| The object type `vdIdentity` and the property that exposed it are **removed** | **Delete and recreate the data source**, re-entering the credentials. The identity data management service reads the schema once, when the data source is created, and never refreshes it when the connector is upgraded |
+| A deployment that had the second object type switched on loses that branch | Nothing about *which* identity an agent runs as is lost: the runtime identity and the permission-flow graph carry it, and both reach the identity graph. What goes is the reverse view, one row per principal, which was directory-only |
+| The connector now ships an identity-graph mapping | Upload the shared agent pipeline template if the instance does not already carry it, merge this connector's block into the shared mapping archive, apply, and then rebuild. Applying identical content produces no change events, so a genuine re-ingest is: apply the empty document, wait for the pipelines to drain, apply the real one again |
+
+**The upgrade is reversible** in the sense that matters: re-installing the previous version restores the
+removed object type, at the cost of another delete-and-recreate.
 
 ---
 
 ## 4. Configuration reference — all parameters
 
+Every data-source property, grouped as the form groups them, with its type, its default, what it costs and what it requires. Recommended combinations are at the end.
+
 ### 4.1 How the form is organized
 
 Properties are grouped in setup order: **Connection** (who and where) → **Scope** (what to crawl) →
 **Copilot Studio** (the opt-in second source) → **Enrichment** (what data to pull) → **Remediation** (the
-opt-in write-back) → **Advanced** (rarely-touched tuning). IDDM displays each property by its uppercased
+opt-in write-back) → **Advanced** (rarely-touched tuning). the Identity Data Platform displays each property by its uppercased
 name; its description is the tooltip.
 
 ### 4.2 Connection
@@ -309,7 +331,7 @@ name; its description is the tooltip.
 
 | Property | Default | Notes |
 |---|---|---|
-| `enableMultiProject` | `false` | Scan **all** Foundry projects in scope rather than only `foundryProjectEndpoint`. The endpoint becomes optional and projects are discovered on the management plane, so this **requires `enableArmEnrichment`**. Agent RDNs are qualified `{account}__{project}__{id}`. `vdIdentity` is single-project only and is **not** populated in this mode. |
+| `enableMultiProject` | `false` | Scan **all** Foundry projects in scope rather than only `foundryProjectEndpoint`. The endpoint becomes optional and projects are discovered on the management plane, so this **requires `enableArmEnrichment`**. Agent RDNs are qualified `{account}__{project}__{id}`. |
 | `multiProjectScope` | `resourceGroup` | `resourceGroup` (needs `azureResourceGroup`) or `subscription` (every Foundry account and project in the subscription). An unrecognized value logs a warning and falls back to `resourceGroup`. |
 | `maxProjects` | `50` | Cap on projects per multi-project walk (`0` = no cap). Discovery stops at the cap and logs a warning. |
 | `maxAgents` | `1000` | Cap on agents collected and enriched **per project** (`0` = no cap). Paging stops at the cap and the set is truncated **before** enrichment, with a warning — never a silent cut. In a multi-project walk the cap applies to each project independently. |
@@ -325,12 +347,11 @@ name; its description is the tooltip.
 
 | Property | Default | Notes |
 |---|---|---|
-| `enableArmEnrichment` | `true` | `runtimeIdentity`, `resources`, `permissionFlow`, `guardrails` and `tags` from the management plane. Needs `azureResourceGroup` and management-plane read access. **Prerequisite** for multi-project discovery, for `vdIdentity`, and for both history properties below. Degrades gracefully when absent or forbidden. |
+| `enableArmEnrichment` | `true` | `runtimeIdentity`, `resources`, `permissionFlow`, `guardrails` and `tags` from the management plane. Needs `azureResourceGroup` and management-plane read access. **Prerequisite** for multi-project discovery. Degrades gracefully when absent or forbidden. |
 | `enableGraphEnrichment` | `true` | Directory enrichment: resolve the runtime identity to a display name and application id, then its API permissions and group memberships; also resolve an opaque governance actor to a name and principal type. Active only when management-plane enrichment is on. Needs `Directory.Read.All`. Best-effort. |
 | `enableInstructionText` | `false` | Emit the raw system prompt in the `instruction` attribute. **Off by default for content safety** — the prompt can carry sensitive business logic. The instruction's cryptographic fingerprint and length are emitted **always**, regardless of this flag. Turn it on only when your governance policy permits prompt text in the directory. |
 | `enableInvocationHistory` | `true` | `lastInvokedAt` and the 30-day invocation count from the Application Insights resource connected to the project. One **content-safe** aggregate query per project — timestamps, counts and agent names only; conversation and prompt content are never read. Needs a connected Application Insights and query access. Best-effort. |
 | `enableActivityHistory` | `true` | Project governance — the most recent successful control-plane write (`lastWriteBy`, `lastWriteAt`, `lastWriteOperation`) from the Azure Activity Log, surfaced inside `metadata` and as the top-level `lastUpdatedBy`. **Project-level, not per-agent.** A capped, newest-first walk over a 90-day window. Needs Activity Log read access. Best-effort. |
-| `enableIdentityEntity` | `false` | Expose the optional second object type `vdIdentity` — one row per distinct principal the agents reference. Adds a directory owners lookup on the identity path only. Single-project only. **Schema-affecting: recreate the data source to enable it.** |
 
 ### 4.6 Remediation — the opt-in write-back
 
@@ -354,7 +375,6 @@ name; its description is the tooltip.
   history.
 - **Estate-wide:** `enableMultiProject=true`, `multiProjectScope=subscription`, `enrichmentThreads=10–25`,
   `maxProjects=0`. Watch for throttling (section 9).
-- **Identity-centric:** add `enableIdentityEntity=true` (single project) for the `vdIdentity` non-human
   identity rows.
 - **Copilot Studio inventory:** `enableCopilotStudio=true` with `copilotEnvironmentFilter` set to the
   environments you govern; leave `foundryProjectEndpoint` empty for a Copilot-only data source.
@@ -363,11 +383,13 @@ name; its description is the tooltip.
 
 ## 5. The agent data model
 
+The provider-agnostic shape the connector targets, the two object classes it publishes, and how a Foundry agent is rendered into them.
+
 ### 5.1 What it is and why
 
 The connector's output conforms to the **agent data model version 1.6** — a provider-agnostic schema for AI
 agents. The point is normalization: an Azure AI Foundry agent and an agent from another platform land in the
-**same** shape, so IDDM can govern a heterogeneous agent fleet without per-provider special-casing. The
+**same** shape, so the Identity Data Platform can govern a heterogeneous agent fleet without per-provider special-casing. The
 connector's job is to map Azure's APIs onto this shared vocabulary; the field-level mapping is section 6.
 
 Every top-level LDAP attribute name is **camelCase** (`externalId`, `statusReason`, `runtimeIdentity`,
@@ -519,14 +541,14 @@ Concepts 2–8 ride on the agent core as JSON arrays; concept 9 rides as a singl
 #### 5.2.9 Permission Flow (single JSON graph object)
 
 A versioned, acyclic graph of every intermediate principal the agent traverses to reach the assets it can
-access. Consumed by the IDDM interface to render the reachable-resource graph.
+access. Consumed by the the Identity Data Platform interface to render the reachable-resource graph.
 
 **Top level:** `version` (currently `1`), `agent_id` (the id of the node whose `type` is `agent`), `nodes[]`,
 `edges[]`.
 
 **Node:** `id` (document-scoped, stable across scans), `external_id` (the native Azure resource id or GUID),
 `name`, `description`, `type` (drives icon and colour — for example `agent`, `managed_identity`, `resource`),
-`data` (free-form JSON, rendered as-is and not interpreted by IDDM).
+`data` (free-form JSON, rendered as-is and not interpreted by the Identity Data Platform).
 
 **Edge:** `from` / `to` (must reference node ids), `relation` (for example `runs_as`, `connects_to`),
 `description`, `data` (free-form).
@@ -565,46 +587,10 @@ Every emitted entry carries the same **uniform key set**, with a null for absent
 > That is not a defect: declaring the full set means no *second* data-source recreate is needed if a source
 > later appears.
 
-### 5.4 The optional object type `vdIdentity`
-
-Opt-in via `enableIdentityEntity` (default off), object class `vdIdentity`, RDN `principalId`. **One row per
-distinct principal** (managed identity, service principal, user or group) that the project's agents
-reference — deduplicated across the scan and back-referenced to the agents that use it. Principals are
-*derived from* the agent scan: the management plane finds them and the directory describes them. The
-connector never enumerates the directory.
-
-> This object type is a deliberate **extension** beyond the agent data model, which is agent-centric and
-> treats the identity as part of `runtimeIdentity` and the permission graph. It does not carry the
-> repository-linking fields.
-
-| Attribute | Type | Description |
-|---|---|---|
-| `principalId` | string (RDN) | Directory object id of the principal. |
-| `externalId` | string | Cross-connector correlation key: the directory application id for a service principal or managed identity, otherwise the principal id. The inverse of each agent's `runtimeIdentity.principalId`. |
-| `displayName` | string | Directory name. Absent when directory enrichment is off or forbidden. |
-| `principalType` | string | `MANAGED_IDENTITY` / `SERVICE_PRINCIPAL` / `USER` / `GROUP`. |
-| `appId` | string | Directory application (client) id for service principals and managed identities. |
-| `accountEnabled` | boolean | Directory enablement state. |
-| `identityType` | string | `SystemAssigned` / `UserAssigned` for managed identities; absent otherwise. |
-| `tenantId` | string | Owning Entra tenant id. |
-| `apiPermissions` | JSON array | API permissions and application-role grants held **by** this identity — the access plane Azure role assignments cannot see. |
-| `groupMemberships` | JSON array | Groups and directory roles this identity belongs to. |
-| `roleAssignments` | JSON array | Azure role assignments. Usually empty for Foundry, whose access is connection-centric. |
-| `owners` | JSON array | Directory owners of this identity — the accountability signal for a non-human identity. |
-| `referencedByAgents` | JSON array | The agents in this scan that **run as** this identity. |
-| `agentFanout` | integer | Number of agents that run as this identity. |
-| `isShared` | boolean | `true` when more than one agent runs as this identity — the over-shared identity signal. |
-| `metadata` | JSON object | Provenance: the scope the identity was found at and which planes described it. |
-| `_connectorSourcesUnavailable` | string | Per-row failed sources; blank when the row is complete. |
-
-> `vdIdentity` is single-project only and is **not** populated during a multi-project walk. Adding the
-> object type changes the schema, so enabling it requires recreating the data source.
-
 ### 5.5 Extensions beyond the agent data model
 
 A few emitted constructs are deliberate connector extensions rather than parts of the shared model:
 
-- **`vdIdentity`** — promotes the principal to a first-class, cross-connector-correlatable object with its
   own grants, group memberships, owners, role assignments, and the "N agents share one identity"
   relationship.
 - **`metadata.projectGovernance`** — `{lastWriteBy, lastWriteAt, lastWriteOperation}`, the most recent
@@ -620,7 +606,7 @@ A few emitted constructs are deliberate connector extensions rather than parts o
 
 ### 5.6 Output mechanics that matter to consumers
 
-- **Uniform key set.** Every `vdAgentIdentity` entry carries the same 46 keys and every `vdIdentity` entry
+- **Uniform key set.** Every `vdAgentIdentity` entry carries the same 46 keys
   the same 17. Attributes that do not apply are present as null.
 - **Null-dropping at the LDAP wire layer.** Null-valued attributes are **not shown** in the LDAP entry.
   Empty strings *do* appear with a blank value — which is why some diagnostic fields use a blank string
@@ -628,7 +614,7 @@ A few emitted constructs are deliberate connector extensions rather than parts o
   error".
 - **JSON-bearing string attributes.** `metadata`, `runtimeIdentity`, `model`, `guardrails`, `features`,
   `url`, `provider`, `skills`, `tools`, `resources`, `subagents`, `permissionFlow`, `tags` and every
-  populated `*By` identity reference ride on the entry as **JSON-serialized strings**. On `vdIdentity` the
+  populated `*By` identity reference ride on the entry as **JSON-serialized strings**. The
   JSON-bearing attributes are `apiPermissions`, `groupMemberships`, `roleAssignments`, `owners`,
   `referencedByAgents` and `metadata`. Plain strings: `agentCardUrl`, `intent`, `instruction`,
   `repositoryId`, `repositoryDisplayName`, and all timestamps. Booleans: `accountEnabled`, `isShared`,
@@ -778,7 +764,7 @@ stay snake_case:
 }
 ```
 
-**`vdIdentity`** — one emitted row, the shared project managed identity:
+**The runtime identity** — the shared project managed identity, carried on every agent:
 
 ```json
 {
@@ -836,13 +822,15 @@ stay snake_case:
 
 ---
 
-## 7. Keeping IDDM in sync
+## 7. Keeping the directory in sync
+
+How the directory learns that something in Azure changed, and what the connector deliberately does not do.
 
 ### 7.1 The model today
 
 The connector is **scan-on-search**: each LDAP search triggers a fresh scan (data-plane listing plus
-per-project enrichment), and IDDM's own cache layer fronts it — the connector performs no internal caching
-of its own, so IDDM's cache settings are the single place freshness is controlled.
+per-project enrichment), and the Identity Data Platform's own cache layer fronts it — the connector performs no internal caching
+of its own, so the Identity Data Platform's cache settings are the single place freshness is controlled.
 
 A **request-aware** plan keeps cheap searches cheap:
 
@@ -858,13 +846,15 @@ This release has **no event-driven refresh path** and emits no dependency index.
 data-plane agents are structurally weaker than a per-resource audit trail: the Activity Log does not see
 per-agent writes (2.5), so a change feed cannot be built on it without additional platform support.
 
-**Practical guidance:** rely on IDDM's cache time-to-live and periodic re-scan. For large estates, schedule
+**Practical guidance:** rely on the Identity Data Platform's cache time-to-live and periodic re-scan. For large estates, schedule
 periodic re-scans rather than relying on per-query freshness, and use the request-aware fast paths above to
 keep targeted lookups cheap.
 
 ---
 
 ## 8. Write-back — quarantine remediation
+
+The connector's only write to Azure: what it does, how it is gated, what permission it needs, and why the record of who performed it lives outside the source platform.
 
 ### 8.1 What quarantine is
 
@@ -914,6 +904,8 @@ immediately. Nothing needs to be built on your side to enforce the decision.
 ---
 
 ## 9. Performance & scale
+
+What actually bounds a scan, what was measured, and what those numbers extrapolate to at scale.
 
 ### 9.1 What bounds throughput
 
@@ -972,12 +964,14 @@ proactive rate limiter, so allow a factor of two to five under heavy load.
 
 ### 9.6 No streaming — a structural limit
 
-The connector materializes the full result set per search, as the IDDM search contract expects. There is no
+The connector materializes the full result set per search, as the the Identity Data Platform search contract expects. There is no
 incremental or streaming emit, so capacity is bounded as described in section 10.
 
 ---
 
 ## 10. Capacity planning — memory
+
+Where the heap goes during a scan, what was measured, and how much to give the process.
 
 ### 10.1 Where the memory goes
 
@@ -997,7 +991,7 @@ metadata, model, tools and features, all serialized).
 
 ### 10.3 Recommendation
 
-Comfortable to 10,000–20,000 agents on a default IDDM heap. Above roughly 50,000, raise the heap or split
+Comfortable to 10,000–20,000 agents on a default the Identity Data Platform heap. Above roughly 50,000, raise the heap or split
 the estate across data sources (one per project or per resource group).
 
 ### 10.4 Levers when memory-bound
@@ -1009,6 +1003,8 @@ the estate across data sources (one per project or per resource group).
 ---
 
 ## 11. Logs & troubleshooting
+
+What the connector logs, the two diagnostic attributes that explain a thin result, and a symptom-first playbook.
 
 ### 11.1 Logging model
 
@@ -1040,7 +1036,6 @@ aborts a scan.
 | `runtimeIdentity` is present but has no display name, application id or group data | The directory permission is not consented | Grant and admin-consent `Directory.Read.All` |
 | `lastInvokedAt` is always absent | No Application Insights connected to the project, no runs in the 30-day window, or no query access | Confirm the project's Application Insights connection and the Monitoring Reader grant; absence is normal for an un-invoked agent |
 | Project governance data is absent | No Activity Log read access, or no control-plane writes in the 90-day window | Grant **Reader** at resource-group or subscription scope; absence is normal on a quiet project |
-| A `vdIdentity` search returns nothing | `enableIdentityEntity` is off, the schema was not recreated, or the data source is in multi-project mode | Set the flag **and recreate the data source**; this object type is single-project only |
 | A newly introduced attribute is not visible | The data source predates the schema change | **Recreate the data source** (3.7) |
 | `instruction` is always absent | `enableInstructionText` is off (the default) | Set `enableInstructionText=true`; the fingerprint and length are present either way |
 | A multi-project scan finds nothing | `enableArmEnrichment` is off, or `azureResourceGroup` is empty with the default resource-group scope | Enable management-plane enrichment; set the resource group, or use `multiProjectScope=subscription` |
@@ -1055,6 +1050,8 @@ aborts a scan.
 ---
 
 ## 12. Appendices
+
+Reference material: the glossary, the call-to-permission cross-reference, known limitations, a worked example, the full schema tables, and what QA needs before an acceptance run.
 
 ### 12.1 Glossary
 
@@ -1077,7 +1074,6 @@ aborts a scan.
 | Management-plane account, project, connections, deployments, policies | Reader (resource group or account) | `enableArmEnrichment` |
 | Management-plane role assignments and role definitions | Reader | `enableArmEnrichment` |
 | Directory objects and service principals | `Directory.Read.All` | `enableGraphEnrichment` |
-| Service principal owners | `Directory.Read.All` | `enableIdentityEntity` |
 | Application Insights query | Monitoring Reader on the Application Insights resource | `enableInvocationHistory` |
 | Activity Log management events | Reader | `enableActivityHistory` |
 | Agent disable / enable lifecycle action | Azure AI Developer or Contributor (project) | `enableRemediation` |
@@ -1088,7 +1084,6 @@ aborts a scan.
 
 1. **One subscription per data source.** Several projects can be crawled in one data source, but a single
    crawl never spans subscriptions or tenants.
-2. **`vdIdentity` is single-project only** and requires management-plane enrichment.
 3. **No paging.** The whole result set is materialized and returned at once; bound it with attribute
    narrowing, the caps, or a client size limit.
 4. **`maxAgents` truncates by default** at 1000 agents per project, with a warning in the log.
@@ -1225,14 +1220,14 @@ governance — all from one read-only scan across four Azure surfaces.
 
 ### 12.5 Schema reference
 
-The authoritative attribute reference for **both** object types — the table to compare the IDDM-generated
+The authoritative attribute reference for **both** object types — the table to compare the the Identity Data Platform-generated
 schema against.
 
 **Column meanings**
 
 | Column | Meaning |
 |---|---|
-| **Type** | The wire type IDDM generates. `JSON` means a string whose value is a serialized JSON object or array — IDDM stores and returns it as an opaque string; Identity Observability parses it. |
+| **Type** | The wire type the Identity Data Platform generates. `JSON` means a string whose value is a serialized JSON object or array — the Identity Data Platform stores and returns it as an opaque string; Identity Observability parses it. |
 | **Write** | `RO` = read-only, `RW` = writable. A `modify` against a read-only attribute returns LDAP status **1** — see 1.4. |
 | **Create** | Whether the attribute is required or optional when adding an entry. **`n/a` on every row**: the connector does not implement add, so no attribute is ever required *or* optional at create time. |
 | **Platform** | Which agent surface populates it: `Both`, `Foundry`, `Copilot`, or a dash for attributes declared in the schema that have no Azure source on either. |
@@ -1299,34 +1294,6 @@ RDN / naming attribute: **`agentId`**. Structural object class: `vdAgentIdentity
 **Guaranteed present on every entry:** `agentId`, `name`, `platform`, `actionQuarantined`, `repositoryId`,
 `repositoryDisplayName`, `provider`, `_connectorFoundrySourceAvailable`, `_connectorSourcesUnavailable`.
 
-#### 12.5.2 Object type `vdIdentity` — 17 attributes
-
-RDN / naming attribute: **`principalId`**. Structural object class: `vdIdentity`. **Opt-in**
-(`enableIdentityEntity=true`, default off), **single-project only**, and entirely derived from the
-management plane and the directory — with `enableArmEnrichment=false` this object type returns an empty
-result set (a success, not a failure). **Every attribute is read-only; modify is not supported for this
-object type at all.**
-
-| # | Attribute | Type | Write | Create | May be absent | Notes |
-|---|---|---|---|---|---|---|
-| 1 | `principalId` | STRING | RO | n/a | **no** | RDN. Directory object id of the principal. |
-| 2 | `externalId` | STRING | RO | n/a | yes | Directory application id for a service principal or managed identity, otherwise the principal id. |
-| 3 | `displayName` | STRING | RO | n/a | yes | Directory name. Absent when directory enrichment is off or forbidden. |
-| 4 | `principalType` | STRING | RO | n/a | yes | `MANAGED_IDENTITY` / `SERVICE_PRINCIPAL` / `USER` / `GROUP`. |
-| 5 | `appId` | STRING | RO | n/a | yes | Directory application (client) id for service principals and managed identities. |
-| 6 | `accountEnabled` | BOOLEAN | RO | n/a | yes | Directory enablement state. |
-| 7 | `identityType` | STRING | RO | n/a | yes | `SystemAssigned` / `UserAssigned`; absent for non-managed identities. |
-| 8 | `tenantId` | STRING | RO | n/a | yes | Owning Entra tenant id. |
-| 9 | `apiPermissions` | JSON | RO | n/a | yes | API permissions and application-role grants held **by** this identity. |
-| 10 | `groupMemberships` | JSON | RO | n/a | yes | Groups and directory roles this identity belongs to. |
-| 11 | `roleAssignments` | JSON | RO | n/a | yes | Azure role assignments. Usually empty for Foundry. |
-| 12 | `owners` | JSON | RO | n/a | yes | Directory owners of this identity — the accountability signal. |
-| 13 | `referencedByAgents` | JSON | RO | n/a | yes | The agents in this scan that **run as** this identity. |
-| 14 | `agentFanout` | INTEGER | RO | n/a | **no** | Number of agents running as this identity. |
-| 15 | `isShared` | BOOLEAN | RO | n/a | **no** | `true` when more than one agent runs as this identity — the over-sharing signal. |
-| 16 | `metadata` | JSON | RO | n/a | yes | Provenance: scope and source planes. |
-| 17 | `_connectorSourcesUnavailable` | STRING | RO | n/a | **no** | Per-row failed sources; blank when the row is complete. |
-
 ### 12.6 Acceptance-test configuration
 
 Configure the data source as below before running functional acceptance tests, or several will fail for
@@ -1335,20 +1302,17 @@ configuration reasons rather than defects.
 | Setting | Value | Why |
 |---|---|---|
 | `maxAgents` | **`0`** | The default `1000` caps agents **per project** and truncates with only a warning, so entry counts cannot match the platform on a larger estate. The default stays at 1000 deliberately as a production scale guard, so this is a test-configuration change only. |
-| `enableIdentityEntity` | `true` | Otherwise the second object type returns zero rows and cannot be exercised. |
-| `enableArmEnrichment` | `true` | Required for `vdIdentity` to be populated at all, and for the subscription and resource-group validation in the connection test. |
-| `foundryProjectEndpoint` | a **single** project | `vdIdentity` is single-project only and is not populated during a multi-project walk. Leave `enableMultiProject` off. |
+| `enableArmEnrichment` | `true` | Required for the management-plane attributes, and for the subscription and resource-group validation in the connection test. |
 | `enableRemediation` | `true` | Otherwise every modify returns 53 and the write-operations section is untestable. Requires a service principal with agent **write** access — the Reader used for listing is **not** sufficient. |
 | `enableCopilotStudio` | **decide up front** | If on, Copilot Studio agents merge into the *same* result set, so the independently-verified expected entry count must cover **both** surfaces. Simplest is to leave it off and certify that source separately. |
-| IDDM server and connector log level | `DEBUG` | How page-size and entry-count claims are verified. |
+| the Identity Data Platform server and connector log level | `DEBUG` | How page-size and entry-count claims are verified. |
 
 **Notes for the test engineer**
 
-- **Object types:** there are **two**, so every "repeat for each object type" instruction is two passes —
-  and the second one needs `enableIdentityEntity`.
+- **Object types:** there is **one**, `vdAgentIdentity`, so every "repeat for each object type"
+  instruction is a single pass.
 - **Expected entry counts:** determine the expected `vdAgentIdentity` count from the Foundry project
-  directly, and the expected `vdIdentity` count as the number of **distinct principals** the agents
-  reference — not the number of agents.
+  directly — not from a number the connector itself reported.
 - **"All attributes populated":** no entry ever carries all 46 attributes, by design. Use the **May be
   absent** and **Platform** columns in 12.5 as the expectation — an absent Copilot-only attribute on a
   Foundry agent is correct behaviour, not a defect.
@@ -1358,7 +1322,7 @@ configuration reasons rather than defects.
   the attribute *is* writable and the connector is declining rather than refusing. See the table in 1.4.
 - **Equivalence classes for modify:** `actionQuarantined` is the only writable attribute. It is
   single-valued, optional, boolean (non-string) and connector-transformed. The multi-value, string and
-  pass-through classes therefore have **no writable representative** and are not applicable. `vdIdentity`
+  pass-through classes therefore have **no writable representative** and are not applicable. Every attribute except `actionQuarantined`
   has no writable attribute at all, so modify is not applicable for that object type.
 - **Verifying a persisted quarantine:** after a successful quarantine, `actionQuarantined` deliberately
   still reads **`false`** — the platform exposes no in-place attribution, so the connector never asserts an

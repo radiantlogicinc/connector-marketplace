@@ -2,7 +2,7 @@
 
 This document describes the Radiant Logic custom connector for Google Cloud agents, including configuration, data source properties, supported operations, schema, known limitations, and release history. The connector uses the Radiant Logic Connector SDK and integrates with Google Cloud through its control-plane REST APIs. It virtualizes the AI agents in the configured Google Cloud projects across five services—Vertex AI Agent Engine (Reasoning Engines), Dialogflow CX, Dialogflow ES, Vertex AI Agent Builder, and CX Agent Studio—as a single object type. Each entry carries the agent's model, guardrails, tools, reachable resources, runtime identity, _Identity and Access Management (IAM)_ permission graph, and ownership history. The connector is strictly read-only.
 
-[Download the Google Cloud Agents connector JAR file](builds/google-cloud-agents-connector-0.9.2.jar).
+[Download the Google Cloud Agents connector JAR file](builds/google-cloud-agents-connector-0.9.4.jar).
 
 ## Connector identity
 
@@ -16,7 +16,7 @@ This section describes how the connector fits into RadiantOne Identity Data Plat
     <th scope="row" align="left">Connector type</th><td>SDK</td>
   </tr>
   <tr>
-    <th scope="row" align="left">Latest version</th><td>0.9.2 (beta)</td>
+    <th scope="row" align="left">Latest version</th><td>0.9.4 (beta)</td>
   </tr>
   <tr>
     <th scope="row" align="left">Connector SDK version</th><td>1.2.0</td>
@@ -172,7 +172,7 @@ The following table lists the connector's known limitations:
 | # | Limitation |
 | --- | --- |
 | 1 | **Read-only.** There is no write path of any kind: no create, no modify, no delete, no tagging, and no remediation. `actionQuarantined` exists in the data model as a write-back control, and the connector always reports it as `false`. |
-| 2 | **No lifecycle status.** No Google Cloud agent service exposes a lifecycle state field, so `status` and `statusReason` are always absent, as are `statusChangedAt` and `statusChangedBy`. |
+| 2 | **Status is derived, not read.** No Google Cloud agent service exposes a lifecycle state field, so `status` is derived from the agent being listed: published for Agent Engine, Agent Builder and CX Agent Studio agents, created for Dialogflow agents. The status reason says so. `statusChangedAt` and `statusChangedBy` are always absent. |
 | 3 | **Several lifecycle attributes have no Google Cloud source.** `publishedAt`, `publishedBy`, `suspendedAt`, `suspendedBy`, `blockedAt`, `blockedBy`, `deletedAt`, and `deletedBy` are part of the data model but are always absent. So are `subagents`: the connector doesn't call a discovery API for them. |
 | 4 | **The connector doesn't populate invocation recency.** `lastInvokedAt` and `lastInvokedBy` are always absent: the connector deliberately excludes invocation events from the audit query, to bound its volume and cost. |
 | 5 | **Google Cloud doesn't expose a Reasoning Engine's model or runtime identity.** The model lives inside the deployed agent's code, and the API doesn't return the runtime service account, so `model` and `runtimeIdentity` are absent for that platform. |
@@ -193,6 +193,8 @@ The following table records the connector's public release history:
 
 | Version | Release date | Description |
 | --- | --- | --- |
+| 0.9.4 | October 9, 2026 | Fixes the missing agent status: every agent now reports a status (published for deployed agents, created for Dialogflow agents, which expose no deployment signal), with the reason stated alongside. No change to the attribute set or the configuration properties; see the upgrade notes in the user guide before replacing an installed JAR in place. |
+| 0.9.3 | September 17, 2026 | Security and maintenance release. Fixes three third-party library vulnerabilities carried by the previous release (CVE-2026-53914, CVSS 9.8; CVE-2026-54512 and CVE-2026-54513, CVSS 8.1). Aligns the connector with the Radiant Logic Connector Kit, which is what adds the identity graph mapping profile listed above. Drop-in replacement: no change to the collected attributes or the configuration properties. |
 | 0.9.2 | August 31, 2026 | First beta release. |
 
 ## Appendix A: Attribute reference
@@ -232,8 +234,8 @@ The connector emits attribute names in LDAP-valid `camelCase`; a downstream mapp
 | `platform` | `string` | All | | Never | Discriminator across the five agent services. |
 | `kind` | `string` | All | ✔ | Never | Subtype: `reasoning_engine`, `dialogflow_cx`, `dialogflow_es`, `agent_builder`, `cx_agent_studio`. |
 | `tags` | `string` (JSON object) | All | ✔ | Sometimes | Google Cloud labels, where present. |
-| `status` | `string` | None | ✔ | Always | No Google Cloud lifecycle-state field exists. |
-| `statusReason` | `string` | None | ✔ | Always | Same. |
+| `status` | `string` | All | | Never | Derived, as Google Cloud exposes no lifecycle state: published for Agent Engine, Agent Builder and CX Agent Studio, created for Dialogflow. |
+| `statusReason` | `string` | All | | Never | States that the status is derived, and why. |
 | `actionQuarantined` | `boolean` | All | | Never | Always `false`: a write-back control that this read-only connector never sets. |
 | `statusChangedAt` | `string` | None | ✔ | Always | No status-transition signal. |
 | `statusChangedBy` | `string` (JSON object) | None | ✔ | Always | Identity reference; no source. |
