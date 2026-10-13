@@ -1,0 +1,18 @@
+{
+  "result": [
+    {
+      "grantable": "false",
+      "description": "Can delegate roles to group members",
+      "elevated_privilege": "false",
+      "suffix": "admin",
+      "scoped_admin": "false",
+      "can_delegate": "false",
+      "includes_roles": "user_admin",
+      "sys_id": "011ba5aa0a0a0b3001a439c580549134",
+      "federated_id": "XolTkTIC/bmoG0WmwP0UNGHbAE+8GExntslIgs81Bwg=",
+      "name": "role_delegator",
+      "sys_created_by": "quinn",
+      "sys_policy": "read"
+    }
+  ]
+}

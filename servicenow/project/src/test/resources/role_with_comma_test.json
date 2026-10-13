@@ -1,0 +1,18 @@
+{
+  "result": [
+    {
+      "grantable": "false",
+      "description": "Role with comma in name",
+      "elevated_privilege": "false",
+      "suffix": "",
+      "scoped_admin": "false",
+      "can_delegate": "false",
+      "includes_roles": "",
+      "sys_id": "test002",
+      "federated_id": "test002fedid",
+      "name": "role,test",
+      "sys_created_by": "admin",
+      "sys_policy": "read"
+    }
+  ]
+}

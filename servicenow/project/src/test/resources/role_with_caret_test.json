@@ -1,0 +1,18 @@
+{
+  "result": [
+    {
+      "grantable": "false",
+      "description": "Role with caret in name",
+      "elevated_privilege": "false",
+      "suffix": "",
+      "scoped_admin": "false",
+      "can_delegate": "false",
+      "includes_roles": "",
+      "sys_id": "test001",
+      "federated_id": "test001fedid",
+      "name": "role^test",
+      "sys_created_by": "admin",
+      "sys_policy": "read"
+    }
+  ]
+}

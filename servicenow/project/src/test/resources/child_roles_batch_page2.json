@@ -1,0 +1,12 @@
+{
+  "result": [
+    {
+      "role.name": "role_delegator",
+      "contains.name": "itil"
+    },
+    {
+      "role.name": "role_delegator",
+      "contains.name": "security_admin"
+    }
+  ]
+}

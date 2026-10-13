@@ -1,0 +1,52 @@
+{
+  "result": [
+    {
+      "user_name": "test_user_name",
+      "first_name": "Test",
+      "last_name": "User",
+      "email": "test.user@example.com",
+      "active": "true",
+      "sys_id": "test_user_001",
+      "grantable": "false",
+      "locked_out": "false",
+      "internal_integration_user": "false",
+      "country": "us",
+      "gender": "male",
+      "introduction": "mr.",
+      "user_type": "human",
+      "federated_id": "federated_001"
+    },
+    {
+      "user_name": "dana",
+      "first_name": "Dana",
+      "last_name": "R.",
+      "email": "dana@example.com",
+      "active": "true",
+      "sys_id": "test_user_002",
+      "grantable": "false",
+      "locked_out": "false",
+      "internal_integration_user": "false",
+      "country": "it",
+      "gender": "male",
+      "introduction": "mr.",
+      "user_type": "human",
+      "federated_id": "federated_002"
+    },
+    {
+      "user_name": "kim",
+      "first_name": "Kim",
+      "last_name": "L.",
+      "email": "kim@example.com",
+      "active": "true",
+      "sys_id": "test_user_003",
+      "grantable": "false",
+      "locked_out": "false",
+      "internal_integration_user": "false",
+      "country": "gb",
+      "gender": "female",
+      "introduction": "ms.",
+      "user_type": "human",
+      "federated_id": "federated_003"
+    }
+  ]
+}

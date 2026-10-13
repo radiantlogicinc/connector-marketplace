@@ -1,0 +1,86 @@
+{
+  "result": [
+    {
+      "calendar_integration": "1",
+      "country": "",
+      "user_password": "",
+      "last_login_time": "",
+      "source": "",
+      "sys_updated_on": "2026-01-22 06:25:45",
+      "building": "",
+      "web_service_access_only": "false",
+      "notification": "2",
+      "enable_multifactor_authn": "false",
+      "sys_updated_by": "admin",
+      "sys_created_on": "2012-02-18 03:04:49",
+      "sys_domain": {
+        "link": "https://instance.example.com/api/now/table/sys_user_group/global",
+        "value": "global"
+      },
+      "state": "",
+      "fax": "",
+      "identity_type": "unclassified",
+      "vip": "false",
+      "sys_created_by": "admin",
+      "zip": "",
+      "home_phone": "",
+      "time_format": "",
+      "last_login": "",
+      "default_perspective": "",
+      "active": "true",
+      "sys_domain_path": "/",
+      "cost_center": {
+        "link": "https://instance.example.com/api/now/table/cmn_cost_center/91e8bbf43710200044e0bfc8bcbe5daa",
+        "value": "91e8bbf43710200044e0bfc8bcbe5daa"
+      },
+      "phone": "",
+      "name": "Dana R.",
+      "employee_number": "",
+      "password_needs_reset": "false",
+      "gender": "Male",
+      "city": "",
+      "failed_attempts": "",
+      "user_name": "dana",
+      "roles": "",
+      "manager_hp1": "/A<-GF/6`0:|/YPPN9/^KJW?/~^~|G/X~*)M",
+      "title": "",
+      "sys_class_name": "sys_user",
+      "sys_id": "02826bf03710200044e0bfc8bcbe5d3f",
+      "federated_id": "f737nH9Kw1raNr82OZPt9fM0T6+ETZqw3746MB96ncQ=",
+      "internal_integration_user": "false",
+      "ldap_server": "",
+      "mobile_phone": "",
+      "street": "",
+      "company": {
+        "link": "https://instance.example.com/api/now/table/core_company/81fd65ecac1d55eb42a426568fc87a63",
+        "value": "81fd65ecac1d55eb42a426568fc87a63"
+      },
+      "department": {
+        "link": "https://instance.example.com/api/now/table/cmn_department/5d7f17f03710200044e0bfc8bcbe5d43",
+        "value": "5d7f17f03710200044e0bfc8bcbe5d43"
+      },
+      "first_name": "Dana",
+      "email": "dana@example.com",
+      "introduction": "",
+      "preferred_language": "",
+      "manager": {
+        "link": "https://instance.example.com/api/now/table/sys_user/02826bf03710200044e0bfc8bcbe5d88",
+        "value": "02826bf03710200044e0bfc8bcbe5d88"
+      },
+      "locked_out": "false",
+      "sys_mod_count": "6",
+      "last_name": "R.",
+      "photo": "",
+      "avatar": "",
+      "middle_name": "",
+      "sys_tags": "",
+      "time_zone": "",
+      "schedule": "",
+      "date_format": "",
+      "location": {
+        "link": "https://instance.example.com/api/now/table/cmn_location/0002c0a93790200044e0bfc8bcbe5df5",
+        "value": "0002c0a93790200044e0bfc8bcbe5df5"
+      }
+    }
+  ]
+}

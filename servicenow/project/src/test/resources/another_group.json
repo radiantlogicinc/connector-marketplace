@@ -1,0 +1,29 @@
+{
+  "result": [
+    {
+      "parent": "",
+      "manager": {
+        "link": "https://instance.example.com/api/now/table/sys_user/506c0f9cd7011200f2d224837e61030f",
+        "value": "506c0f9cd7011200f2d224837e61030f"
+      },
+      "roles": "",
+      "sys_mod_count": "1",
+      "active": "true",
+      "description": "Team Develops ITSM Applications in London",
+      "source": "test source2",
+      "sys_updated_on": "2025-08-21 16:42:02",
+      "sys_tags": "",
+      "type": "458de4f067671300dbfdbb2d07415ad7",
+      "sys_id": "0a52d3dcd7011200f2d224837e6103f2",
+      "sys_updated_by": "admin",
+      "cost_center": "",
+      "default_assignee": "",
+      "sys_created_on": "2025-08-21 16:42:02",
+      "name": "Database",
+      "exclude_manager": "false",
+      "email": "",
+      "include_members": "false",
+      "sys_created_by": "admin"
+    }
+  ]
+}

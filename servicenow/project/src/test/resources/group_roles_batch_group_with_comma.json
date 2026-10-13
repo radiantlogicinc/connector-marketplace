@@ -1,0 +1,12 @@
+{
+  "result": [
+    {
+      "role.name": "role^admin",
+      "group.name": "group,test"
+    },
+    {
+      "role.name": "role,test",
+      "group.name": "group,test"
+    }
+  ]
+}

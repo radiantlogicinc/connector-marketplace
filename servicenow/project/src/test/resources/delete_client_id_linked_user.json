@@ -1,0 +1,7 @@
+{
+  "error": {
+    "message": "Operation Failed",
+    "detail": "Operation against file 'sys_user' was aborted by Business Rule 'User Delete Self^6381a015c393721019b4fa0ed40131a1'. Business Rule Stack:User Delete Self"
+  },
+  "status": "failure"
+}

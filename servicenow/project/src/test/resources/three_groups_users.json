@@ -1,0 +1,16 @@
+{
+  "result": [
+    {
+      "user.user_name": "alex",
+      "group.name": "IT Support"
+    },
+    {
+      "user.user_name": "ariel",
+      "group.name": "HR Team"
+    },
+    {
+      "user.user_name": "bola",
+      "group.name": "Finance"
+    }
+  ]
+}

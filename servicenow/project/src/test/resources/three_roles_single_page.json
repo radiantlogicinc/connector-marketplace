@@ -1,0 +1,46 @@
+{
+  "result": [
+    {
+      "name": "parent_role_1",
+      "description": "First parent role",
+      "sys_id": "parent_role_1_sys_id",
+      "grantable": "false",
+      "elevated_privilege": "false",
+      "suffix": "admin",
+      "scoped_admin": "false",
+      "can_delegate": "false",
+      "includes_roles": "base_role",
+      "federated_id": "federated_1",
+      "sys_created_by": "admin",
+      "sys_policy": "read"
+    },
+    {
+      "name": "parent_role_2",
+      "description": "Second parent role",
+      "sys_id": "parent_role_2_sys_id",
+      "grantable": "false",
+      "elevated_privilege": "false",
+      "suffix": "user",
+      "scoped_admin": "false",
+      "can_delegate": "false",
+      "includes_roles": "base_role",
+      "federated_id": "federated_2",
+      "sys_created_by": "admin",
+      "sys_policy": "read"
+    },
+    {
+      "name": "parent_role_3",
+      "description": "Third parent role",
+      "sys_id": "parent_role_3_sys_id",
+      "grantable": "false",
+      "elevated_privilege": "false",
+      "suffix": "itil",
+      "scoped_admin": "false",
+      "can_delegate": "false",
+      "includes_roles": "base_role",
+      "federated_id": "federated_3",
+      "sys_created_by": "admin",
+      "sys_policy": "read"
+    }
+  ]
+}
