@@ -1,0 +1,31 @@
+{
+  "total": 2,
+  "data": [
+    {
+      "id": "11111",
+      "descriptor": "Controller_Test - Noam J.",
+      "supervisoryOrganization": {
+        "id": "adiu2heio32jqlwmq2",
+        "descriptor": "Finance & Administration",
+        "Organization_Reference_ID": "Finance_Administration_supervisory"
+      },
+      "jobType": {
+        "descriptor": "Primary",
+        "Job_Type_Name_ID": "Primary"
+      },
+      "worker": {
+        "id": "ne32ieh23ioej3kw",
+        "descriptor": "Noam J."
+      },
+      "location": {
+        "id": "adwwe1qsadsws",
+        "descriptor": "San Francisco",
+        "Location_ID": "San_Francisco_site",
+        "country": {
+          "descriptor": "United States of America",
+          "ISO_3166-1_Alpha-3_Code": "USA"
+        }
+      }
+    }
+  ]
+}

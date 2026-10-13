@@ -1,0 +1,26 @@
+{
+  "id": "sadsdsa",
+  "descriptor": "Chief Financial Officer - Alex N.",
+  "worker": {
+    "id": "dgdgsdfws",
+    "descriptor": "Alex N."
+  },
+  "supervisoryOrganization": {
+    "id": "fsafaretfaesgafz",
+    "descriptor": "Executive Management - Example Organization",
+    "Organization_Reference_ID": "Executive_Management_supervisory"
+  },
+  "location": {
+    "id": "jabdjknekjwljmwl",
+    "descriptor": "New York_ Loc1",
+    "Location_ID": "New_York_site",
+    "country": {
+      "descriptor": "United States of America",
+      "ISO_3166-1_Alpha-3_Code": "USA"
+    }
+  },
+  "jobType": {
+    "descriptor": "Primary",
+    "Job_Type_Name_ID": "Primary"
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "total": 112,
+  "data": [
+    {
+      "id": "sadsdsa",
+      "descriptor": "Chief Financial Officer - Alex N.",
+      "worker": {
+        "id": "dgdgsdfws",
+        "descriptor": "Alex N."
+      },
+      "supervisoryOrganization": {
+        "id": "fsafaretfaesgafz",
+        "descriptor": "Executive Management - Example Organization",
+        "Organization_Reference_ID": "Executive_Management_supervisory"
+      },
+      "location": {
+        "id": "jabdjknekjwljmwl",
+        "descriptor": "New York_ Loc1",
+        "Location_ID": "New_York_site",
+        "country": {
+          "descriptor": "United States of America",
+          "ISO_3166-1_Alpha-3_Code": "USA"
+        }
+      },
+      "jobType": {
+        "descriptor": "Primary",
+        "Job_Type_Name_ID": "Primary"
+      }
+    },
+    {
+      "id": "fkewJLWJLQMLRFML",
+      "descriptor": "Director, HR Shared Services - Kai B. (On Leave)",
+      "worker": {
+        "id": "3aa5550b7fe348b98d7b5741afc65534",
+        "descriptor": "Dani R. (On Leave)"
+      },
+      "supervisoryOrganization": {
+        "id": "fsafaretfaesgafz",
+        "descriptor": "Human Resources (Dani R. (On Leave))",
+        "Organization_Reference_ID": "Human_Resources_supervisory"
+      },
+      "location": {
+        "id": "sfnknskfjsljmal",
+        "descriptor": "San Francisco",
+        "Location_ID": "San_Francisco_site",
+        "country": {
+          "descriptor": "United States of America",
+          "ISO_3166-1_Alpha-3_Code": "USA"
+        }
+      },
+      "jobType": {
+        "descriptor": "Primary",
+        "Job_Type_Name_ID": "Primary"
+      }
+    },
+    {
+      "id": "ngfmldmflsmlfd",
+      "descriptor": "Chief Operating Officer - Mahan K.",
+      "worker": {
+        "id": "ngfldjfldadwf4353",
+        "descriptor": "Mahan K."
+      },
+      "supervisoryOrganization": {
+        "id": "fsafaretfaesgafz",
+        "descriptor": "Executive Management - Example Organization",
+        "Organization_Reference_ID": "Executive_Management_supervisory"
+      },
+      "location": {
+        "id": "MBKNKLMLMMSD",
+        "descriptor": "Chicago",
+        "Location_ID": "Chicago_site",
+        "country": {
+          "descriptor": "United States of America",
+          "ISO_3166-1_Alpha-3_Code": "USA"
+        }
+      },
+      "jobType": {
+        "descriptor": "Primary",
+        "Job_Type_Name_ID": "Primary"
+      }
+    }
+  ]
+}

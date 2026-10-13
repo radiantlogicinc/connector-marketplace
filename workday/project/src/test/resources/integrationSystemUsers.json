@@ -1,0 +1,46 @@
+{
+  "Report_Entry": [
+    {
+      "creationDetails": "09/11/2007, 11:16:48.720 AM byABC/ xyz",
+      "id": "1234",
+      "isDisabled": "0",
+      "username": "wd-integration"
+    },
+    {
+      "creationDetails": "02/05/2008, 4:19:02.803 PM byABC/ xyz",
+      "id": "qke2h13eknwk",
+      "isDisabled": "0",
+      "username": "IS_EIBBonus"
+    },
+    {
+      "creationDetails": "02/05/2008, 4:22:20.511 PM byABC/ xyz",
+      "id": "12nwmndmew",
+      "isDisabled": "0",
+      "username": "IS_EIBMerit"
+    },
+    {
+      "creationDetails": "02/05/2008, 4:24:57.469 PM byABC/ xyz",
+      "id": "12wkqwnk",
+      "isDisabled": "0",
+      "username": "IS_EIBJournal"
+    },
+    {
+      "creationDetails": "02/05/2008, 4:26:29.551 PM byABC/ xyz",
+      "id": "12bjb21qnwms",
+      "isDisabled": "0",
+      "username": "IS_EIBBusPlan"
+    },
+    {
+      "creationDetails": "02/05/2008, 4:42:00.055 PM byABC/ xyz",
+      "id": "87yewihdsk",
+      "isDisabled": "0",
+      "username": "IS_EIBNewHireRpt"
+    },
+    {
+      "creationDetails": "05/16/2008, 5:16:33.276 PM byABC/ xyz",
+      "id": "asd090u9dosjk",
+      "isDisabled": "0",
+      "username": "IS_EIBBankStmt"
+    }
+  ]
+}

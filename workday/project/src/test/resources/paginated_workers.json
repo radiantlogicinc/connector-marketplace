@@ -1,0 +1,145 @@
+{
+  "total": 110,
+  "data": [
+    {
+      "id": "cc1rgdhdfxsdxgrsf0000",
+      "descriptor": "Bola T.",
+      "person": {
+        "id": "bdsjjsefsdf",
+        "email": "bola@example.com"
+      },
+      "primaryJob": {
+        "id": "asnbdbjagdjsahueduu",
+        "descriptor": "Vacation Planner - Bola T.",
+        "location": {
+          "id": "asgjwghfdkdsfnmds",
+          "descriptor": "London 01",
+          "Location_ID": "LOCATION-6-745",
+          "country": {
+            "descriptor": "United States of America",
+            "ISO_3166-1_Alpha-3_Code": "USA"
+          }
+        },
+        "supervisoryOrganization": {
+          "id": "dbmnbsajgdkfen,dsn,",
+          "descriptor": "Example Organization",
+          "Organization_Reference_ID": "SUPERVISORY_ORGANIZATION-6-TCR"
+        },
+        "jobType": {
+          "descriptor": "Primary",
+          "Job_Type_Name_ID": "Primary"
+        }
+      },
+      "workerType": {
+        "descriptor": "Employee",
+        "id": "sfdngsjdhskajfdk"
+      },
+      "workerId": "12345"
+    },
+    {
+      "id": "sdjfgsjffr",
+      "descriptor": "Kiran S.",
+      "person": {
+        "id": "zmcbsdkflsjfd",
+        "email": "kiran@example.com"
+      },
+      "primaryJob": {
+        "id": "cznbdmnfskjqwksm,qa",
+        "descriptor": "VP Engineering",
+        "jobType": {
+          "descriptor": "Primary",
+          "Job_Type_Name_ID": "Primary"
+        },
+        "location": {
+          "id": "fmsdbkhdlwem",
+          "descriptor": "London 01",
+          "Location_ID": "LOCATION-6-745",
+          "country": {
+            "descriptor": "United States of America",
+            "ISO_3166-1_Alpha-3_Code": "USA"
+          }
+        },
+        "supervisoryOrganization": {
+          "id": "asmfbkseflkmwef",
+          "descriptor": "Example Organization",
+          "Organization_Reference_ID": "SUPERVISORY_ORGANIZATION-88"
+        }
+      },
+      "workerType": {
+        "descriptor": "Employee",
+        "id": "msddfsfksadn"
+      },
+      "workerId": "33333"
+    },
+    {
+      "id": "zmfhjshfksfsds",
+      "descriptor": "Sasha M.",
+      "person": {
+        "id": "zmfhksjflsfmds",
+        "email": "sasha@example.com"
+      },
+      "primaryJob": {
+        "id": "sdfhsfksjfkfds",
+        "descriptor": "Analyst",
+        "jobType": {
+          "descriptor": "Primary",
+          "Job_Type_Name_ID": "Primary"
+        },
+        "location": {
+          "id": "smdfksf,msad",
+          "descriptor": "Chicago 01",
+          "Location_ID": "LOCATION-6-747",
+          "country": {
+            "descriptor": "United States of America",
+            "ISO_3166-1_Alpha-3_Code": "USA"
+          }
+        },
+        "supervisoryOrganization": {
+          "id": "smdfjshfksjf",
+          "descriptor": "Example Organization",
+          "Organization_Reference_ID": "SUPERVISORY_ORGANIZATION-6-gyurey4"
+        }
+      },
+      "workerType": {
+        "descriptor": "Employee",
+        "id": "msndhskd"
+      },
+      "workerId": "11111"
+    },
+    {
+      "id": "smfsnksdmflsm",
+      "descriptor": "Raha D.",
+      "person": {
+        "id": "cmdnnfsdn,sfms",
+        "email": "raha@example.com"
+      },
+      "primaryJob": {
+        "id": "smdfnksdfnsdm,",
+        "descriptor": "VP Sales",
+        "supervisoryOrganization": {
+          "id": "sbjdmsfnd,s",
+          "descriptor": "Example Organization",
+          "Organization_Reference_ID": "SUPERVISORY_ORGANIZATION-6-gsfyuwhedjsmn"
+        },
+        "location": {
+          "id": "cnmzcnsdk,dsn",
+          "descriptor": "Chicago 01",
+          "Location_ID": "LOCATION-6-747",
+          "country": {
+            "descriptor": "United States of America",
+            "ISO_3166-1_Alpha-3_Code": "USA"
+          }
+        },
+        "jobType": {
+          "descriptor": "Primary",
+          "Job_Type_Name_ID": "Primary"
+        }
+      },
+      "workerType": {
+        "descriptor": "Employee",
+        "id": "asmhksadnkdsf"
+      },
+      "workerId": "22222"
+    }
+  ]
+}
