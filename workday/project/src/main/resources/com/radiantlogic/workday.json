@@ -1,0 +1,127 @@
+{
+  "name": "Workday",
+  "description": "Connector for performing read operations against Workday workers, jobs, job postings, supervisory organizations, and security report data",
+  "backendCategory": "custom",
+  "userCreated": true,
+  "icon": "",
+  "isSchemaExtractable": false,
+  "meta": [
+    {
+      "name": "instance_name",
+      "description": "Unique instance name as part of base url",
+      "sectionName": "Properties",
+      "defaultValue": null,
+      "dataType": "STRING",
+      "isRequired": true,
+      "regex": null
+    },
+    {
+      "name": "tenant",
+      "description": "Tenant for token generation",
+      "sectionName": "Properties",
+      "defaultValue": null,
+      "dataType": "STRING",
+      "isRequired": true,
+      "regex": null
+    },
+    {
+      "name": "client_id",
+      "description": "Client Id for token generation",
+      "sectionName": "Properties",
+      "defaultValue": null,
+      "dataType": "STRING",
+      "isRequired": true,
+      "regex": null
+    },
+    {
+      "name": "username",
+      "description": "ISU Username for token generation",
+      "sectionName": "Properties",
+      "defaultValue": null,
+      "dataType": "STRING",
+      "isRequired": true,
+      "regex": null
+    },
+    {
+      "name": "private_key",
+      "description": "Private Key for token generation",
+      "sectionName": "Properties",
+      "defaultValue": null,
+      "dataType": "PASSWORD",
+      "isRequired": true,
+      "regex": null
+    },
+    {
+      "name": "page_size",
+      "description": "Please enter a page size between 1 and 100",
+      "sectionName": "Pagination",
+      "dataType": "NUMBER",
+      "isRequired": false,
+      "defaultValue": 100,
+      "regex": "/^(100|[1-9][0-9]?)$/"
+    },
+    {
+      "name": "report_username",
+      "description": "Username for reports",
+      "sectionName": "Properties",
+      "defaultValue": null,
+      "dataType": "STRING",
+      "isRequired": true,
+      "regex": null
+    },
+    {
+      "name": "report_password",
+      "description": "Password for reports",
+      "sectionName": "Properties",
+      "defaultValue": null,
+      "dataType": "PASSWORD",
+      "isRequired": true,
+      "regex": null
+    },
+    {
+      "name": "integration_system_users_report_url",
+      "description": "Integration System Users Report URL",
+      "sectionName": "Properties",
+      "defaultValue": null,
+      "dataType": "STRING",
+      "isRequired": true,
+      "regex": "/^https://.+$/i"
+    },
+    {
+      "name": "security_groups_report_url",
+      "description": "Security Groups Report URL",
+      "sectionName": "Properties",
+      "defaultValue": null,
+      "dataType": "STRING",
+      "isRequired": true,
+      "regex": "/^https://.+$/i"
+    },
+    {
+      "name": "security_groups_memberships_report_url",
+      "description": "Security Groups Memberships Report URL",
+      "sectionName": "Properties",
+      "defaultValue": null,
+      "dataType": "STRING",
+      "isRequired": true,
+      "regex": "/^https://.+$/i"
+    },
+    {
+      "name": "domains_report_url",
+      "description": "Domains Report URL",
+      "sectionName": "Properties",
+      "defaultValue": null,
+      "dataType": "STRING",
+      "isRequired": true,
+      "regex": "/^https://.+$/i"
+    },
+    {
+      "name": "business_processes_report_url",
+      "description": "Business Processes Report URL",
+      "sectionName": "Properties",
+      "defaultValue": null,
+      "dataType": "STRING",
+      "isRequired": true,
+      "regex": "/^https://.+$/i"
+    }
+  ]
+}

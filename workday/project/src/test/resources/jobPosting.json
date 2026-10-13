@@ -1,0 +1,42 @@
+{
+  "id": "1234",
+  "timeType": {
+    "id": "asfsadfdsf",
+    "descriptor": "Full time"
+  },
+  "spotlightJob": false,
+  "url": "https://instance.example.com/recruiting/xys/jashksdfhldsjf/job/XMLNAME-11-Admin_R-02574",
+  "startDate": "2026-04-11",
+  "jobDescription": "<p style=\"text-align:left\">&lt;img <span> <span>width</span><span>&#61;</span><span>&#34;</span><span>1</span><span>&#34;</span><span> </span><span>height</span><span>&#61;</span><span>&#34;</span><span>1&#34; style</span><span>&#61;</span><span>&#34;</span><span>display</span><span>:</span><span>none</span><span>;</span><span>&#34;</span>/&gt;</span></p><p style=\"text-align:left\">test</p>",
+  "company": {
+    "id": "afsdfdsfs",
+    "descriptor": "Example Organization"
+  },
+  "title": "11-Apr  Employment Admin",
+  "primaryLocation": {
+    "id": "adjjsabkdsbfkds",
+    "descriptor": "Chicago",
+    "country": {
+      "descriptor": "United States of America",
+      "alpha3Code": "USA"
+    },
+    "region": {
+      "descriptor": "Illinois",
+      "code": "IL"
+    }
+  },
+  "categories": [
+    {
+      "id": "afdsfdsfs",
+      "descriptor": "Example Group"
+    }
+  ],
+  "jobSite": {
+    "id": "fasfsdfdsgfd",
+    "descriptor": "External Site"
+  },
+  "jobType": {
+    "id": "afsjbsajkdshfk",
+    "descriptor": "Regular"
+  }
+}

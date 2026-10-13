@@ -1,0 +1,52 @@
+{
+  "Report_Entry": [
+    {
+      "description": "Provides access to general application navigation and dashboard features.",
+      "functionalAreas": "Core Platform; Employee Experience; Administration",
+      "id": "DMN000001",
+      "name": "Application Navigation"
+    },
+    {
+      "description": "Allows authorized users to view employee profile information.",
+      "functionalAreas": "Human Resources",
+      "id": "DMN000002",
+      "name": "Worker Data: Employee Profiles"
+    },
+    {
+      "description": "Provides access to configure employee profile templates, validation rules, and settings.",
+      "functionalAreas": "Human Resources",
+      "id": "DMN000003",
+      "name": "Set Up: Employee Profiles"
+    },
+    {
+      "description": "Allows users to initiate and monitor employee onboarding processes.",
+      "functionalAreas": "Talent Management",
+      "id": "DMN000004",
+      "name": "Process: Employee Onboarding"
+    },
+    {
+      "description": "Provides access to administrative configuration for business workflows and notifications.",
+      "functionalAreas": "System Administration",
+      "id": "DMN000005",
+      "name": "Workflow Administration"
+    },
+    {
+      "description": "Allows users to start and review employee performance evaluations.",
+      "functionalAreas": "Performance Management",
+      "id": "DMN000006",
+      "name": "Process: Performance Evaluations"
+    },
+    {
+      "description": "Provides access to compensation plans and salary review information.",
+      "functionalAreas": "Compensation",
+      "id": "DMN000007",
+      "name": "Worker Data: Compensation"
+    },
+    {
+      "description": "Allows configuration of recruiting pipelines, interview stages, and job requisitions.",
+      "functionalAreas": "Recruiting",
+      "id": "DMN000008",
+      "name": "Set Up: Recruiting"
+    }
+  ]
+}

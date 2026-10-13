@@ -1,0 +1,131 @@
+{
+  "total": 170,
+  "data": [
+    {
+      "id": "123444w43r",
+      "timeType": {
+        "id": "bjashdkashkjafsk",
+        "descriptor": "Full time"
+      },
+      "spotlightJob": false,
+      "url": "https://instance.example.com/recruiting/VTY/global-careers/job/Chicago/Customer-Manager--Media_R-02784",
+      "startDate": "2026-05-25",
+      "jobDescription": "<p>My company is awesome!! please apply and enjoy!</p><p></p><p>If you need any help in accomodations or interview please contact : 800-555-0100</p>Employee",
+      "company": {
+        "id": "jgefhsekfse",
+        "descriptor": "Example Organization"
+      },
+      "title": "Customer - Digital Media",
+      "primaryLocation": {
+        "id": "adjjsabkdsbfkds",
+        "descriptor": "Chicago",
+        "country": {
+          "descriptor": "United States of America",
+          "alpha3Code": "USA"
+        },
+        "region": {
+          "descriptor": "Illinois",
+          "code": "IL"
+        }
+      },
+      "categories": [
+        {
+          "id": "mdasbjbsakdnas,ndlsa",
+          "descriptor": "Executive"
+        }
+      ],
+      "jobSite": {
+        "id": "basnbjdsbkfndsl",
+        "descriptor": "Global Careers"
+      },
+      "jobType": {
+        "id": "14d042a4e2c34644993ec0b5b323ff4d",
+        "descriptor": "Casual"
+      }
+    },
+    {
+      "id": "1655172",
+      "timeType": {
+        "id": "sdjfsdkhkfdsjf",
+        "descriptor": "Full time"
+      },
+      "spotlightJob": false,
+      "url": "https://instance.example.com/recruiting/YHB/global-careers/job/San-Francisco/Software-Eng_R-02781",
+      "startDate": "2026-05-21",
+      "jobDescription": "<p>My company is awesome!! please apply and enjoy!</p><p></p><p>If you need any help in accomodations or interview please contact : 800-555-0101</p>Employee",
+      "company": {
+        "id": "absjbsaknsamdlsa",
+        "descriptor": "Test Sup Org"
+      },
+      "title": "Software Engineer III",
+      "primaryLocation": {
+        "id": "mbasjdh78w48734897923u",
+        "descriptor": "San Francisco",
+        "region": {
+          "descriptor": "California",
+          "code": "CA"
+        },
+        "country": {
+          "descriptor": "United States of America",
+          "alpha3Code": "USA"
+        }
+      },
+      "categories": [
+        {
+          "id": "gsajgduwsyr7843287329i",
+          "descriptor": "Product Development"
+        }
+      ],
+      "jobSite": {
+        "id": "bdsjguwytuwy3iuewi",
+        "descriptor": "Global Careers"
+      },
+      "jobType": {
+        "id": "dmshjhdskfjslj438u349",
+        "descriptor": "Regular"
+      }
+    },
+    {
+      "id": "7y832y4u342ihwejrnk",
+      "timeType": {
+        "id": "sbjdsmnfksdnfhwi323424",
+        "descriptor": "Full time"
+      },
+      "spotlightJob": false,
+      "url": "https://instance.example.com/recruiting/BHTY/global-careers/job/Zurich/Senior-AI-Architect-9-2",
+      "startDate": "2026-05-04",
+      "jobDescription": "<p>My company is awesome!! please apply and enjoy!</p><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p><h2><b>Lorem ipsum</b></h2><ul><li><p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p></li><li><p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p></li></ul>",
+      "company": {
+        "id": "jsgfjsdhfkewhjroih32i8y32uy239",
+        "descriptor": "Info Tech - 25"
+      },
+      "title": "Senior AI Architect",
+      "primaryLocation": {
+        "id": "32uy432iu4ikhrejnkjenkfr",
+        "descriptor": "Zurich",
+        "region": {
+          "descriptor": "Zurich",
+          "code": "ZH"
+        },
+        "country": {
+          "descriptor": "Switzerland",
+          "alpha3Code": "CHE"
+        }
+      },
+      "categories": [
+        {
+          "id": "fmsdbjfgjehiu43y8y2iu4234324",
+          "descriptor": "Information Technology"
+        }
+      ],
+      "jobSite": {
+        "id": "32uy4283uiwedj483y9823u04o2",
+        "descriptor": "Global Careers"
+      },
+      "jobType": {
+        "id": "fshdhfdsiy43788h32jdnjy8ewyeihndkw",
+        "descriptor": "Regular"
+      }
+    }
+  ]
+}

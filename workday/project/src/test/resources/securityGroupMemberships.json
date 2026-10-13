@@ -1,0 +1,65 @@
+{
+  "Report_Entry": [
+    {
+      "id": "SG000001",
+      "name": "Finance Administrators"
+    },
+    {
+      "id": "SG000002",
+      "members": "alex.admin / Alex Admin; bola.manager / Bola Manager; charlie.user / Charlie User; dana.analyst / Dana Analyst; hao.dev / Hao Developer; ira.hr / Ira HR; izumi.ops / Izumi Operations; jie.qa / Jie QA; kai.support / Kai Support; kalani.finance / Kalani Finance",
+      "name": "Corporate Security Group"
+    },
+    {
+      "id": "SG000003",
+      "name": "Engineering Team (Inactive)"
+    },
+    {
+      "id": "SG000004",
+      "name": "HR Reviewers"
+    },
+    {
+      "id": "SG000005",
+      "name": "Payroll Operators"
+    },
+    {
+      "id": "SG000006",
+      "members": "kim.lead / Kim Lead; kiran.dev / Kiran Developer; lee.ops / Lee Operations; lucian.hr / Lucian HR; luka.admin / Luka Admin",
+      "name": "IT Operations"
+    },
+    {
+      "id": "SG000007",
+      "name": "Recruitment Team"
+    },
+    {
+      "id": "SG000008",
+      "name": "Quality Assurance"
+    },
+    {
+      "id": "SG000009",
+      "members": "mahan.audit / Mahan Auditor; noam.finance / Noam Finance",
+      "name": "Audit Review Group"
+    },
+    {
+      "id": "SG000010",
+      "members": "alex.admin / Alex Admin; bola.manager / Bola Manager; nur.architect / Nur Architect; quinn.engineer / Quinn Engineer; raha.designer / Raha Designer; rosario.devops / Rosario DevOps; sasha.product / Sasha Product; tal.support / Tal Support; taylor.hr / Taylor HR; tristan.sales / Tristan Sales; yuri.marketing / Yuri Marketing; amal.finance / Amal Finance",
+      "name": "Enterprise Access Group"
+    },
+    {
+      "id": "SG000011",
+      "name": "All Employees"
+    },
+    {
+      "id": "SG000012",
+      "name": "All Managers"
+    },
+    {
+      "id": "SG000013",
+      "name": "All Contractors"
+    },
+    {
+      "id": "SG000014",
+      "members": "ariel.user / Ariel User; cruz.user / Cruz User; dani.user / Dani User; alex.user / Alex User; bola.user / Bola User; charlie.user / Charlie User; dana.user / Dana User; hao.user / Hao User",
+      "name": "Temporary Workforce"
+    }
+  ]
+}

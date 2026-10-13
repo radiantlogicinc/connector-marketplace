@@ -1,0 +1,45 @@
+{
+  "Report_Entry": [
+    {
+      "id": "23g23geu3",
+      "isInactive": "0",
+      "name": "User",
+      "type": "Adaptive Insights Security Group (Unconstrained)"
+    },
+    {
+      "id": "23rhewknw",
+      "isInactive": "0",
+      "name": "abc",
+      "scope": "Mixed",
+      "type": "Aggregation Security Group"
+    },
+    {
+      "id": "32r dwe m23",
+      "isInactive": "1",
+      "name": "ddd",
+      "scope": "Mixed",
+      "type": "Aggregation Security Group"
+    },
+    {
+      "id": "32e2nedmwn",
+      "isInactive": "0",
+      "name": "ccc",
+      "scope": "Mixed",
+      "type": "Aggregation Security Group"
+    },
+    {
+      "id": "23rnk3wenfm",
+      "isInactive": "0",
+      "name": "bbb",
+      "scope": "Mixed",
+      "type": "Aggregation Security Group"
+    },
+    {
+      "id": "23rmwfe",
+      "isInactive": "0",
+      "name": "aaa",
+      "scope": "Mixed",
+      "type": "Aggregation Security Group"
+    }
+  ]
+}

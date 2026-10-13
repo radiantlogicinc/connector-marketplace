@@ -1,0 +1,124 @@
+{
+  "Report_Entry": [
+    {
+      "description": "Assess My Team's Potential",
+      "functionalAreas": "Talent Pipeline; Performance Enablement; Career and Development Planning",
+      "id": "95680f9caedf100007f13a27e6fa0017",
+      "name": "Assess My Team's Potential"
+    },
+    {
+      "description": "Processes vendor contract renewal requests through the approval workflow.",
+      "functionalAreas": "Vendor Management",
+      "id": "22b3c4d5e6f7a8901122334455667788",
+      "name": "Vendor Contract Renewal"
+    },
+    {
+      "description": "Submits employee relocation requests for manager and HR approval.",
+      "functionalAreas": "Human Capital",
+      "id": "33c4d5e6f7a8b9012233445566778899",
+      "name": "Employee Relocation Request"
+    },
+    {
+      "description": "Generates monthly inventory reconciliation reports for warehouse operations.",
+      "functionalAreas": "Warehouse Management",
+      "id": "44d5e6f7a8b9c0123344556677889900",
+      "name": "Inventory Reconciliation"
+    },
+    {
+      "description": "Routes capital expenditure requests for executive approval.",
+      "functionalAreas": "Financial Planning",
+      "id": "55e6f7a8b9c0d1234455667788990011",
+      "name": "Capital Expenditure Approval"
+    },
+    {
+      "description": "Creates purchase order modification requests for procurement review.",
+      "functionalAreas": "Procurement",
+      "id": "66f7a8b9c0d1e2345566778899001122",
+      "name": "Purchase Order Modification"
+    },
+    {
+      "description": "Tracks employee certification renewal requests and approvals.",
+      "functionalAreas": "Compliance",
+      "id": "77a8b9c0d1e2f3456677889900112233",
+      "name": "Certification Renewal"
+    },
+    {
+      "description": "Generates customer refund approval requests for finance teams.",
+      "functionalAreas": "Accounts Receivable",
+      "id": "88b9c0d1e2f3a4567788990011223344",
+      "name": "Customer Refund Approval"
+    },
+    {
+      "description": "Initiates requests to update employee benefit selections.",
+      "functionalAreas": "Benefits Administration",
+      "id": "99c0d1e2f3a4b5678899001122334455",
+      "name": "Benefit Selection Update"
+    },
+    {
+      "description": "Processes business travel reimbursement requests.",
+      "functionalAreas": "Travel and Expense",
+      "id": "aac1d2e3f4a5b6789900112233445566",
+      "name": "Travel Reimbursement"
+    },
+    {
+      "description": "Creates supplier qualification review events before onboarding.",
+      "functionalAreas": "Supplier Qualification",
+      "id": "bbd2e3f4a5b6c7890011223344556677",
+      "name": "Supplier Qualification Review"
+    },
+    {
+      "description": "Routes project milestone completion requests for stakeholder approval.",
+      "functionalAreas": "Project Portfolio",
+      "id": "cce3f4a5b6c7d8901122334455667788",
+      "name": "Project Milestone Approval"
+    },
+    {
+      "description": "Generates annual budget allocation requests for department heads.",
+      "functionalAreas": "Budget Management",
+      "id": "ddf4a5b6c7d8e9012233445566778899",
+      "name": "Annual Budget Allocation"
+    },
+    {
+      "description": "Creates asset transfer requests between company locations.",
+      "functionalAreas": "Asset Tracking",
+      "id": "eea5b6c7d8e9f0123344556677889900",
+      "name": "Asset Transfer Request"
+    },
+    {
+      "description": "Processes employee overtime approval submissions.",
+      "functionalAreas": "Workforce Management",
+      "id": "ffb6c7d8e9f0a1234455667788990011",
+      "name": "Overtime Approval"
+    },
+    {
+      "description": "Initiates customer credit limit increase requests.",
+      "functionalAreas": "Credit Management",
+      "id": "00c7d8e9f0a1b2345566778899001122",
+      "name": "Credit Limit Increase"
+    },
+    {
+      "description": "Generates quality inspection reports for manufactured products.",
+      "functionalAreas": "Quality Assurance",
+      "id": "11d8e9f0a1b2c3456677889900112233",
+      "name": "Quality Inspection Report"
+    },
+    {
+      "description": "Routes software access requests through security approval workflows.",
+      "functionalAreas": "Identity and Access",
+      "id": "22e9f0a1b2c3d4567788990011223344",
+      "name": "System Access Request"
+    },
+    {
+      "description": "Creates service contract termination requests for customer accounts.",
+      "functionalAreas": "Service Management",
+      "id": "33f0a1b2c3d4e5678899001122334455",
+      "name": "Service Contract Termination"
+    },
+    {
+      "description": "Processes tax document submission events for compliance review.",
+      "functionalAreas": "Tax Management",
+      "id": "44a1b2c3d4e5f6789900112233445566",
+      "name": "Tax Document Submission"
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "total": 174,
+  "data": [
+    {
+      "id": "11",
+      "descriptor": "Human Resources (Jie D. (On Leave))",
+      "Organization_Reference_ID": "Human_Resources_supervisory",
+      "inactive": false,
+      "name": "Human Resources",
+      "managers": [
+        {
+          "id": "444",
+          "descriptor": "Jie G."
+        }
+      ]
+    },
+    {
+      "id": "12",
+      "descriptor": "Finance & Administration",
+      "Organization_Reference_ID": "Finance_Administration_supervisory",
+      "inactive": false,
+      "name": "Finance & Administration",
+      "managers": [
+        {
+          "id": "333",
+          "descriptor": "Jie B."
+        }
+      ]
+    },
+    {
+      "id": "13",
+      "descriptor": "Information Technology",
+      "Organization_Reference_ID": "Information_Technology_supervisory",
+      "inactive": false,
+      "name": "Information Technology"
+    },
+    {
+      "id": "14",
+      "descriptor": "Operations",
+      "Organization_Reference_ID": "Operations_supervisory",
+      "inactive": false,
+      "name": "Operations",
+      "managers": [
+        {
+          "id": "222",
+          "descriptor": "Mahan V."
+        }
+      ]
+    }
+  ]
+}

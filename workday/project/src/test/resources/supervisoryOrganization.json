@@ -1,0 +1,13 @@
+{
+  "id": "11",
+  "descriptor": "Human Resources (Jie A. (On Leave))",
+  "Organization_Reference_ID": "Human_Resources_supervisory",
+  "inactive": false,
+  "name": "Human Resources",
+  "managers": [
+    {
+      "id": "444",
+      "descriptor": "Jie G."
+    }
+  ]
+}
