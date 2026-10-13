@@ -1,7 +1,7 @@
 # Google Cloud Agents Connector for RadiantOne — User Guide
 
 **Product:** Google Cloud Agents Connector (custom connector)
-**Version:** 0.9.2 — **beta**
+**Version:** 0.9.4 — **beta**
 **Author / Publisher:** Radiant Logic
 
 > **Beta.** This connector has not yet completed official validation. Deploy it to a non-production
@@ -9,7 +9,7 @@
 > change; `1.0.0` is reserved for the first officially validated release.
 
 This is the complete, self-contained guide to the Google Cloud Agents Connector — a RadiantOne custom
-connector that brings **agentic AI** under Identity Observability (IDO) governance by exposing the AI
+connector that brings **agentic AI** under identity governance by exposing the AI
 agents hosted in your Google Cloud projects as LDAP identities.
 
 It is written for two audiences:
@@ -26,7 +26,7 @@ It is written for two audiences:
 4. [Configuration reference — all 26 properties](#4-configuration-reference--all-26-properties)
 5. [The agent data model](#5-the-agent-data-model)
 6. [Data model ↔ Google Cloud mapping](#6-data-model--google-cloud-mapping)
-7. [Keeping IDDM in sync](#7-keeping-iddm-in-sync)
+7. [Keeping RadiantOne in sync](#7-keeping-radiantone-in-sync)
 8. [Performance & scale](#8-performance--scale)
 9. [Logs & troubleshooting](#9-logs--troubleshooting)
 10. [Appendices](#10-appendices)
@@ -38,7 +38,7 @@ It is written for two audiences:
 ### 1.1 What this connector is
 
 A custom connector that makes the **AI agents hosted in your Google Cloud projects** visible inside
-IDDM as ordinary LDAP entries, so they can be governed like any other identity. It discovers agents
+Identity Data Management as ordinary LDAP entries, so they can be governed like any other identity. It discovers agents
 across five Google Cloud services, normalizes them to one provider-agnostic shape, and enriches each
 with the things a governance team actually needs: which model it uses, which tools it can call, which
 data it can reach, which identity it runs as, and who can invoke it.
@@ -105,7 +105,7 @@ Two further protections are deliberate and visible in the output:
 
 - **One Google Cloud credential per data source.** Multiple credentials mean multiple data sources.
 - **Many projects and locations per data source** — either listed explicitly or auto-discovered.
-- **Not a runtime monitor.** A scan is a point-in-time inventory; IDDM's own refresh schedule decides
+- **Not a runtime monitor.** A scan is a point-in-time inventory; the identity data management service's own refresh schedule decides
   how current it is.
 - **Not an invocation log.** The connector reads control-plane metadata, not conversations.
 
@@ -113,11 +113,11 @@ Two further protections are deliberate and visible in the output:
 
 | Fact | Value |
 |---|---|
-| **Connector type** | **SDK connector** — built on the IDDM Connector SDK 1.2.0. Not a legacy plugin: there is no fully-qualified class name to enter by hand. Configuration is **auto-populated on import** from the connector's bundled configuration descriptor. |
-| **Target application** | **IDDM.** The connector is deployed into IDDM and exposes agents as LDAP entries. The data it produces is designed to be consumed downstream by **IDO** (Identity Observability), whose connector mapping bridges the connector's `camelCase` attribute names to IDO's `snake_case` model. It is **not** installed into IDO directly. |
-| **Schema authoring** | **Used.** The connector declares its schema, so IDDM **auto-generates the data-source schema** when the data source is created. Do not hand-build the schema in the Control Panel, and do not import a schema file — there isn't one. The generated schema must match [§10.5](#105-schema-reference--vdagentidentity). |
-| **Object types exposed** | **One:** `vdAgentIdentity` (46 attributes; IDDM auto-prefixes entity names with `vd`). All five agent services are exposed as this single type, discriminated by `platform`. |
-| **Deployable artifact** | `google-cloud-agents-connector-0.9.2.jar` (about 11.8 MB), with all dependencies embedded. It is the only artifact; no thin JAR and no source distribution are published. |
+| **Connector type** | **SDK connector** — built on the Radiant Logic Connector SDK 1.2.0. Not a legacy plugin: there is no fully-qualified class name to enter by hand. Configuration is **auto-populated on import** from the connector's bundled configuration descriptor. |
+| **Target application** | **Identity Data Management.** The connector is deployed into it and exposes agents as LDAP entries. The data it produces is designed to be consumed downstream by the **identity graph**, whose connector mapping bridges the connector's `camelCase` attribute names to IDO's `snake_case` model. It is **not** installed into IDO directly. |
+| **Schema authoring** | **Used.** The connector declares its schema, so Identity Data Management **auto-generates the data-source schema** when the data source is created. Do not hand-build the schema in the Control Panel, and do not import a schema file — there isn't one. The generated schema must match [§10.5](#105-schema-reference--vdagentidentity). |
+| **Object types exposed** | **One:** `vdAgentIdentity` (46 attributes; the identity data management service auto-prefixes entity names with `vd`). All five agent services are exposed as this single type, discriminated by `platform`. |
+| **Deployable artifact** | `google-cloud-agents-connector-0.9.4.jar` (about 11.8 MB), with all dependencies embedded. It is the only artifact; no thin JAR and no source distribution are published. |
 
 **Supported LDAP operations:**
 
@@ -179,9 +179,9 @@ Two Google Cloud quirks show up in configuration and in logs:
 
 ### 3.1 Prerequisites
 
-- **IDDM 8.2.0 or later.**
-- Administrative access to the **IDDM Main Control Panel**.
-- One or more **Google Cloud projects** containing the agents you want to govern, reachable from IDDM
+- **Identity Data Management 8.2.0 or later.**
+- Administrative access to the **RadiantOne Main Control Panel**.
+- One or more **Google Cloud projects** containing the agents you want to govern, reachable from RadiantOne
   over HTTPS.
 - Permission in Google Cloud to enable APIs and create a service account, or a colleague who has it.
 
@@ -215,12 +215,12 @@ it, so you can grant only what you switch on.
 ```bash
 # 1. the service account
 gcloud iam service-accounts create iddm-agent-reader \
-  --display-name "IDDM agent inventory (read-only)" --project MY_PROJECT
+  --display-name "Agent inventory (read-only)" --project MY_PROJECT
 
 # 2. a least-privilege custom role (edit the permission list to match your enabled options)
 cat > iddm-agent-reader-role.yaml <<'YAML'
-title: "IDDM Agent Reader"
-description: "Read-only discovery of Google Cloud AI agents for the IDDM connector"
+title: "Agent Reader"
+description: "Read-only discovery of Google Cloud AI agents for the connector"
 stage: "GA"
 includedPermissions:
   - resourcemanager.projects.get
@@ -248,7 +248,7 @@ gcloud iam service-accounts keys create sa-key.json \
 > **Least privilege and project listing.** `resourcemanager.projects.list` is required **only** for
 > auto-discovery. If you list your projects explicitly in `gcpProjectIds` — the recommended production
 > setup — you do not need it, and test connection will not ask for it.
-
+>
 > **Missing permissions degrade, they do not break.** A permission you did not grant produces an
 > isolated per-source or per-entry failure recorded in the diagnostics
 > ([§9.2](#92-diagnostic-attributes)); the rest of the scan still completes. The Cloud Asset permission
@@ -273,16 +273,16 @@ The token scope in both modes is `https://www.googleapis.com/auth/cloud-platform
 > indentation with non-breaking spaces or prepend a byte-order mark — neither is valid JSON. The
 > connector normalizes both before parsing, so a mangled paste still works. If a key is rejected
 > anyway, the message names the reason: invalid JSON, or a missing client email.
-
+>
 > **Credentials are read once, at load time.** Editing them takes effect only after the connector is
-> reloaded or the IDDM service is restarted.
+> reloaded or the identity data management service is restarted.
 
-### 3.5 Deploy the JAR into IDDM
+### 3.5 Deploy the JAR into RadiantOne
 
-1. Download `google-cloud-agents-connector-0.9.2.jar` from the marketplace package.
-2. In the **IDDM Main Control Panel**, create a custom template from that JAR file. There is no need to
-   fill in template details: IDDM reads them from the connector itself.
-3. Reload or restart as your IDDM version requires.
+1. Download `google-cloud-agents-connector-0.9.4.jar` from the marketplace package.
+2. In the **RadiantOne Main Control Panel**, create a custom template from that JAR file. There is no need to
+   fill in template details: the system reads them from the connector itself.
+3. Reload or restart as your RadiantOne version requires.
 
 ### 3.6 Create the data source
 
@@ -294,9 +294,9 @@ The token scope in both modes is `https://www.googleapis.com/auth/cloud-platform
    to the regions you actually use. Both narrow the scan dramatically and remove the need for the
    project-listing permission.
 4. Switch off any agent source you do not use, and any enrichment whose permission you did not grant.
-5. Save. IDDM generates the schema at this point ([§1.7](#17-connector-type-target-application--supported-operations)).
+5. Save. The system generates the schema at this point ([§1.7](#17-connector-type-target-application--supported-operations)).
 
-> IDDM displays each property by its **uppercased name** (for example `GCPPROJECTIDS`) and shows the
+> The Main Control Panel displays each property by its **uppercased name** (for example `GCPPROJECTIDS`) and shows the
 > description as a **tooltip**. There is no separate display label.
 
 ### 3.7 First smoke test
@@ -314,13 +314,59 @@ The token scope in both modes is `https://www.googleapis.com/auth/cloud-platform
 > you upgrade the connector.** Any release that changes the attribute set or the property list requires
 > the administrator to **delete and re-create the data source** (or hand-edit the schema in the Control
 > Panel). This guide flags every such release explicitly. A release that
-> changes neither is a drop-in JAR replacement.
+> changes neither needs no recreate, but see the upgrade notes before replacing an installed JAR in place.
 
-The same one-shot reading applies to the connector's **configuration descriptor**, which IDDM parses when
-a **template** is created — including the marker that tells Identity Observability this connector is an
+The same one-shot reading applies to the connector's **configuration descriptor**, which the identity data management service parses when
+a **template** is created — including the marker that tells the identity graph this connector is an
 agent source. A release that changes the descriptor therefore needs the **template** re-imported from the
 new JAR, even when it needs no data-source recreate. The release notes say so per
 version in their upgrade notes.
+
+#### Upgrade notes
+
+One entry per release, keyed by the version you are upgrading **to**.
+
+##### 0.9.4
+
+**Agent status is now populated.** Earlier releases never emitted the agent `status` attribute, so it was
+absent from every entry. Each agent now reports a status — `PUBLISHED` for Vertex AI Agent Engine, Agent
+Builder and CX Agent Studio agents (a listed agent is a deployed one), `CREATED` for Dialogflow CX and ES
+agents, which expose no deployment signal — and the accompanying status reason says the value is derived,
+because Google Cloud exposes no lifecycle state for these agents.
+
+**No schema change.** The attribute set and the configuration properties are unchanged, so this release
+needs **no data-source recreate** for the schema's sake, and the status appears on the next scan.
+
+**Prefer a clean reinstall to a hot replacement of the JAR.** During validation of this release, replacing
+the JAR of an installed connector in place reported success, but the platform then refused every attempt to
+create a new data source of this type, with an internal error stating that a library class could not be
+found. The two JAR files had identical contents, so the cause was the in-place replacement, not the
+package; repeating the replacement did not clear it, and the platform was not restarted to test whether that
+would. Installing the same JAR on a platform that no longer held the connector worked normally. So:
+
+1. If you can, remove the data sources of this type and the installed connector, then install
+   the new JAR. **A removed data source loses its stored credential**, which only an administrator can
+   enter again in the Control Panel — have the service-account key or token ready.
+2. If you replace the JAR in place instead, upload it under the **same file name** as the installed one
+   (a different name installs a second connector next to the first), then confirm that **creating a data
+   source** and a scan still work. If creation fails with the error above, fall back to step 1.
+
+##### 0.9.3
+
+**Upgrade for the security fix.** This release fixes three vulnerabilities in third-party libraries
+that the previous release embeds: CVE-2026-53914 (CVSS 9.8) in the Kotlin standard library, and
+CVE-2026-54512 and CVE-2026-54513 (CVSS 8.1) in the Jackson data-binding library. None of the three
+was introduced by this release — each library was current when it was pinned and a vulnerability was
+published against it afterwards — so anyone still running the previous JAR is still running the
+affected versions. Nothing about the fix changes how the connector behaves.
+
+**Drop-in replacement.** Swap the JAR and restart; the data source, its stored credential, the naming
+context, the published object map and the identity graph proxy all survive. The collected attributes
+and the configuration properties are unchanged from the previous release, so **no data-source recreate and no
+credential re-entry**.
+
+This release adds the identity graph mapping as a shipped deliverable. If you already built a graph
+mapping for this connector by hand, compare it against the supplied one before replacing it.
 
 ---
 
@@ -462,7 +508,7 @@ that never happened.
 | `version` | Dialogflow ES API version | No other service exposes a version. |
 | `platform` / `kind` | constant per service | The discriminator and its sub-type. |
 | `tags` | Google Cloud labels | Promoted to a top-level attribute. |
-| `status` / `statusReason` | none | No service exposes a lifecycle state field. |
+| `status` / `statusReason` | derived | No service exposes a lifecycle state field; the status is derived from the agent being listed and the reason says so. |
 | `actionQuarantined` | none | Always `false`: a write-back control this read-only connector never sets. |
 | `statusChangedAt` / `statusChangedBy` | none | No status-transition signal exists. |
 | `createdAt` | creation time (Reasoning Engines, Agent Builder, CES); the create audit event (Dialogflow CX and ES) | Dialogflow needs `enableAuditHistory`. |
@@ -519,22 +565,22 @@ The first three answer "who can invoke this agent"; the last two answer "what ca
 
 ---
 
-## 7. Keeping IDDM in sync
+## 7. Keeping RadiantOne in sync
 
-The connector is a **pull-based inventory**. A scan is a point-in-time snapshot, and IDDM's own cache
+The connector is a **pull-based inventory**. A scan is a point-in-time snapshot, and the identity data management service's own cache
 refresh decides how current the view is.
 
 **How to keep it current**
 
 | Approach | How | Trade-off |
 |---|---|---|
-| **Periodic refresh** *(recommended)* | Configure IDDM's periodic refresh on the data source. | Simple and predictable. Freshness equals the refresh interval. |
+| **Periodic refresh** *(recommended)* | Configure the periodic refresh on the data source. | Simple and predictable. Freshness equals the refresh interval. |
 | **On-demand re-read** | Trigger a refresh of the data source when your own automation learns that agents changed. | Fresher, but each refresh is a full scan — size the interval against the scan cost in [§8](#8-performance--scale). |
 
 There is **no** connector-side incremental mode, no change stream and no per-entry refresh hook in this
 release: every scan reads the full configured scope. Two consequences worth planning for:
 
-- **Concurrent searches each run their own scan.** Two simultaneous IDDM searches double the API
+- **Concurrent searches each run their own scan.** Two simultaneous searches double the API
   volume; there is no shared in-flight result.
 - **Scan cost scales with scope, not with change.** Narrowing `gcpProjectIds` and `gcpLocations` is the
   single most effective way to make frequent refreshes affordable.
@@ -602,7 +648,7 @@ one response. That is also why paging cannot be supported. For very large estate
 | `ERROR` | scan-level failure (everything failed, so the search returns `UNAVAILABLE`), or a **truncated** result (pagination backstop, agent cap, scan deadline) |
 | `DEBUG` | per-request URLs, retries, page tokens, enrichment fan-out |
 
-Set both the IDDM server log level **and** the connector log level to `DEBUG` when diagnosing, or when
+Set both the RadiantOne server log level **and** the connector log level to `DEBUG` when diagnosing, or when
 running acceptance tests.
 
 ### 9.2 Diagnostic attributes
@@ -630,6 +676,7 @@ Source names you may see, and what each means:
 | `gcp:FetchAgentCard` | The configured card host did not serve a valid card. |
 | `gcp:Enrichment(<platform>)` | **An unexpected connector-side error** while enriching that entry. The entry is emitted with partial data. Report this — it indicates a defect, and the log carries the detail. |
 | `gcp:ListingTruncated` · `gcp:MaxAgentsReached` · `gcp:ScanDeadlineExceeded` | **The result set is incomplete.** Raise `gcpMaxAgents` or `gcpScanTimeoutMinutes`, or narrow the scope. |
+| `gcp:ListingCursorCycle` | **A listing could not complete**: Google Cloud re-served a page token, so the walk would never terminate. That source fails rather than returning a partial list a caller could read as complete. Not a permissions problem and not a configuration one — re-run the scan; if it persists, the listing is defective on the provider side. |
 
 ### 9.3 What test connection checks
 
@@ -662,7 +709,7 @@ correctly **succeeds**: the configuration works, and the scan legitimately finds
 | `gcp:AnalyzeIamPolicy` appears intermittently | Cloud Asset throttling. Expected; re-scan or disable the outbound walk. |
 | Scan takes far too long | Narrow `gcpProjectIds` and `gcpLocations`, raise `enrichmentThreads`, disable audit history. |
 | Schema does not match this document after an upgrade | The data source must be **deleted and re-created** ([§3.8](#38-upgrading--the-schema-recreate-rule)). |
-| Credential change appears to have no effect | Configuration is read at load time; reload the connector or restart IDDM. |
+| Credential change appears to have no effect | Configuration is read at load time; reload the connector or restart the identity data management service. |
 
 ---
 
@@ -708,8 +755,8 @@ Everything an administrator or integrator should know before drawing conclusions
 
 **Attributes Google Cloud does not expose (permanently absent):**
 
-- **`status` / `statusReason`** — absent on **every** entry. No agent service exposes a lifecycle state
-  field, so there is nothing to map. The same goes for `statusChangedAt` / `statusChangedBy`.
+- **`statusChangedAt` / `statusChangedBy`** — absent on **every** entry: no status-transition signal
+  exists. (`status` itself is derived — see the attribute reference.)
 - **`lastInvokedAt` / `lastInvokedBy`** — never populated. Invocation events are deliberately excluded
   from the audit query to bound its volume and cost.
 - **`intent`** — authored by IDO, never provider-sourced.
@@ -744,7 +791,7 @@ Everything an administrator or integrator should know before drawing conclusions
   because a credential embedded inside such a document cannot be redacted by key name.
 - **No paging, no writes, no streaming** ([§1.7](#17-connector-type-target-application--supported-operations)).
 - **Concurrent searches each run their own scan.** There is no shared in-flight result.
-- **Configuration is read once, at load time.** Reload the connector or restart IDDM after editing a
+- **Configuration is read once, at load time.** Reload the connector or restart the identity data management service after editing a
   data source.
 
 ### 10.4 Worked example — an extracted agent
@@ -962,7 +1009,7 @@ data store, the runtime identity, the inbound and outbound permission graph, and
 ### 10.5 Schema reference — `vdAgentIdentity`
 
 The connector exposes **one** object type, `vdAgentIdentity`, with **46 attributes**. The schema is
-auto-generated by IDDM when the data source is created
+auto-generated by the identity data management service when the data source is created
 ([§1.7](#17-connector-type-target-application--supported-operations)); **this table is the contract that
 generated schema must match.**
 
@@ -998,8 +1045,8 @@ generated schema must match.**
 
 | Attribute | Type | Write | Create | Platform | May be absent | Notes |
 |---|---|---|---|---|---|---|
-| `status` | STRING | RO | n/a | None | **Always** | No lifecycle-state field exists. |
-| `statusReason` | STRING | RO | n/a | None | **Always** | Same. |
+| `status` | STRING | RO | n/a | All | **Never** | Derived: published for Agent Engine, Agent Builder and CX Agent Studio, created for Dialogflow. |
+| `statusReason` | STRING | RO | n/a | All | **Never** | States that the status is derived, and why. |
 | `actionQuarantined` | BOOLEAN | RO | n/a | All | **Never** | Always `false`: a write-back control IDO sets; this connector never writes. |
 | `statusChangedAt` | STRING (ISO) | RO | n/a | None | **Always** | No status-transition signal. |
 | `statusChangedBy` | JSON object | RO | n/a | None | **Always** | Identity reference. |
@@ -1068,7 +1115,7 @@ configuration reasons rather than defects.
 | `gcpScanTimeoutMinutes` | large enough for the scan to finish (`0` = no deadline) | A deadline hit mid-scan truncates the count. |
 | Agent source options | **match what exists in the backend** — in particular set `enableCesAgentStudio=true` if the project has CES agents, or exclude them from your count | The expected count is the union of the **enabled** sources. |
 | All other enrichment options | leave at their defaults, plus `enableAuditHistory` if you want history attributes populated | So every attribute that *can* be populated is. |
-| IDDM server + connector log level | `DEBUG` | How entry-count and behavior claims are verified. |
+| RadiantOne server + connector log level | `DEBUG` | How entry-count and behavior claims are verified. |
 
 **Notes for the test engineer**
 
