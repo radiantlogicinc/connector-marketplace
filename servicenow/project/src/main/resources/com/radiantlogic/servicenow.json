@@ -1,0 +1,55 @@
+{
+  "name": "ServiceNow",
+  "description": "Connector for performing various operations against ServiceNow datasource.",
+  "backendCategory": "custom",
+  "userCreated": true,
+  "icon": "",
+  "isSchemaExtractable": false,
+  "meta": [
+    {
+      "name": "instance_name",
+      "description": "Unique instance name as part of base url",
+      "sectionName": "Properties",
+      "defaultValue": null,
+      "dataType": "STRING",
+      "isRequired": true,
+      "regex": null
+    },
+    {
+      "name": "client_id",
+      "description": "Client id for token generation",
+      "sectionName": "Properties",
+      "defaultValue": null,
+      "dataType": "STRING",
+      "isRequired": true,
+      "regex": null
+    },
+    {
+      "name": "client_secret",
+      "description": "Client secret for token generation",
+      "sectionName": "Properties",
+      "defaultValue": null,
+      "dataType": "PASSWORD",
+      "isRequired": true,
+      "regex": null
+    },
+    {
+      "name": "page_size",
+      "description": "Number of records to retrieve per API page when fetching various objects. Please enter a page size between 100 and 1000",
+      "sectionName": "Pagination",
+      "dataType": "NUMBER",
+      "isRequired": true,
+      "defaultValue": 100,
+      "regex": "/^(10[0-9]|1[1-9][0-9]|[2-9][0-9]{2}|1000)$/"
+    },
+    {
+      "name": "batch_size",
+      "description": "Number of parent objects whose related data (user roles, group users, group roles, role's child roles) are fetched in a single batch. Please enter a batch size between 1 and 50",
+      "sectionName": "Properties",
+      "dataType": "NUMBER",
+      "isRequired": true,
+      "defaultValue": 25,
+      "regex": "/^([1-9]|[1-4][0-9]|50)$/"
+    }
+  ]
+}

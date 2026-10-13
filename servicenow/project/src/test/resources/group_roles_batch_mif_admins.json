@@ -1,0 +1,12 @@
+{
+  "result": [
+    {
+      "role.name": "app_engine_admin",
+      "group.name": "MIF Admins"
+    },
+    {
+      "role.name": "activity_admin",
+      "group.name": "MIF Admins"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "result": [
+    {
+      "parent": "",
+      "manager": "",
+      "roles": "",
+      "sys_mod_count": "0",
+      "active": "true",
+      "description": "test desc",
+      "source": "test source",
+      "sys_updated_on": "2025-03-27 15:13:12",
+      "sys_tags": "",
+      "type": "458de4f067671300dbfdbb2d07415ad6",
+      "sys_id": "0762d92db72422103a858bbb4e11a928",
+      "sys_updated_by": "admin",
+      "cost_center": "",
+      "default_assignee": "",
+      "sys_created_on": "2025-03-27 15:13:12",
+      "name": "MIF Admins",
+      "exclude_manager": "false",
+      "email": "",
+      "include_members": "false",
+      "sys_created_by": "admin"
+    }
+  ]
+}

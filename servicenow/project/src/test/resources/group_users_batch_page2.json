@@ -1,0 +1,12 @@
+{
+  "result": [
+    {
+      "group.name": "MIF Admins",
+      "user.user_name": "ATF.User"
+    },
+    {
+      "group.name": "MIF Admins",
+      "user.user_name": "admin"
+    }
+  ]
+}

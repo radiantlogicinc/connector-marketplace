@@ -1,0 +1,18 @@
+{
+  "result": [
+    {
+      "grantable": "true",
+      "description": "Administrator role with full system access",
+      "elevated_privilege": "true",
+      "suffix": "admin",
+      "scoped_admin": "true",
+      "can_delegate": "true",
+      "includes_roles": "itil,user_admin",
+      "sys_id": "2831a114dbec0010b96edefd8a9619cf",
+      "federated_id": "YplUlUJD/cnpH1XnxQ1VOHIcBF+9HFyouumJht92Cxh=",
+      "name": "admin",
+      "sys_created_by": "system",
+      "sys_policy": "read"
+    }
+  ]
+}

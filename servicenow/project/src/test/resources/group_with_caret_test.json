@@ -1,0 +1,10 @@
+{
+  "result": [
+    {
+      "name": "group^test",
+      "description": "Test group with caret",
+      "active": "true",
+      "sys_id": "test_group_001"
+    }
+  ]
+}

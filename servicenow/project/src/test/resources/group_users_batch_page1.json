@@ -1,0 +1,12 @@
+{
+  "result": [
+    {
+      "group.name": "MIF Admins",
+      "user.user_name": "itil"
+    },
+    {
+      "group.name": "MIF Admins",
+      "user.user_name": "approver"
+    }
+  ]
+}

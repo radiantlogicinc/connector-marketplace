@@ -1,0 +1,16 @@
+{
+  "result": [
+    {
+      "role.name": "admin",
+      "user.user_name": "test_user_name"
+    },
+    {
+      "role.name": "itil",
+      "user.user_name": "dana"
+    },
+    {
+      "role.name": "user_admin",
+      "user.user_name": "kim"
+    }
+  ]
+}

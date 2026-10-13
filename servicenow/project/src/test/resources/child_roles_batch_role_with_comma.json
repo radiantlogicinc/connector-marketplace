@@ -1,0 +1,12 @@
+{
+  "result": [
+    {
+      "role.name": "role,test",
+      "contains.name": "admin^role"
+    },
+    {
+      "role.name": "role,test",
+      "contains.name": "user,admin"
+    }
+  ]
+}

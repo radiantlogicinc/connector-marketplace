@@ -1,0 +1,12 @@
+{
+  "result": [
+    {
+      "role.name": "user_admin",
+      "user.user_name": "kim"
+    },
+    {
+      "role.name": "security_admin",
+      "user.user_name": "kim"
+    }
+  ]
+}

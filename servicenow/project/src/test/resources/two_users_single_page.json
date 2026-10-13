@@ -1,0 +1,20 @@
+{
+  "result": [
+    {
+      "user_name": "test_user_name",
+      "first_name": "Test",
+      "last_name": "User",
+      "email": "test.user@example.com",
+      "active": "true",
+      "sys_id": "test_user_001"
+    },
+    {
+      "user_name": "dana",
+      "first_name": "Dana",
+      "last_name": "R.",
+      "email": "dana@example.com",
+      "active": "true",
+      "sys_id": "test_user_002"
+    }
+  ]
+}

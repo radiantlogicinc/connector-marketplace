@@ -1,0 +1,16 @@
+{
+  "result": [
+    {
+      "role.name": "parent_role_1",
+      "contains.name": "child_a"
+    },
+    {
+      "role.name": "parent_role_2",
+      "contains.name": "child_c"
+    },
+    {
+      "role.name": "parent_role_3",
+      "contains.name": "child_f"
+    }
+  ]
+}

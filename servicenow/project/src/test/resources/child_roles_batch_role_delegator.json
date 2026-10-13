@@ -1,0 +1,12 @@
+{
+  "result": [
+    {
+      "role.name": "role_delegator",
+      "contains.name": "admin"
+    },
+    {
+      "role.name": "role_delegator",
+      "contains.name": "user_admin"
+    }
+  ]
+}

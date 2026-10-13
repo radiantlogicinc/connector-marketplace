@@ -1,0 +1,10 @@
+{
+  "result": [
+    {
+      "name": "group^test,admin",
+      "description": "Test group with caret and comma",
+      "active": "true",
+      "sys_id": "test_group_003"
+    }
+  ]
+}

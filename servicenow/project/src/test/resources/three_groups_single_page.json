@@ -1,0 +1,22 @@
+{
+  "result": [
+    {
+      "name": "IT Support",
+      "description": "IT Support Team",
+      "active": "true",
+      "sys_id": "group_001"
+    },
+    {
+      "name": "HR Team",
+      "description": "Human Resources Team",
+      "active": "true",
+      "sys_id": "group_002"
+    },
+    {
+      "name": "Finance",
+      "description": "Finance Department",
+      "active": "true",
+      "sys_id": "group_003"
+    }
+  ]
+}

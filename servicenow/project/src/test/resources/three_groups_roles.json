@@ -1,0 +1,16 @@
+{
+  "result": [
+    {
+      "role.name": "app_engine_admin",
+      "group.name": "IT Support"
+    },
+    {
+      "role.name": "user_admin",
+      "group.name": "HR Team"
+    },
+    {
+      "role.name": "admin",
+      "group.name": "Finance"
+    }
+  ]
+}

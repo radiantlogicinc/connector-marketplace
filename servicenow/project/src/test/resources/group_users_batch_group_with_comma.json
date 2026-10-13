@@ -1,0 +1,12 @@
+{
+  "result": [
+    {
+      "group.name": "group,test",
+      "user.user_name": "user^admin"
+    },
+    {
+      "group.name": "group,test",
+      "user.user_name": "user,test"
+    }
+  ]
+}
