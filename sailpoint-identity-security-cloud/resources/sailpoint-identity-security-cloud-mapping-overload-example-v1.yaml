@@ -1,0 +1,37 @@
+#########################################################
+###
+### Pipeline configuration file for SailPoint
+###
+#########################################################
+
+version: v1
+templates:
+  - ref: functions_v1
+
+  - ref: sailpoint-identity-security-cloud-mapping-profile-v1
+    template-overload:
+      source-objects:
+        - name: sailpoint-source
+          datasource: sailpoint-proxy # your-real-datasource name
+        - name: sailpoint-account
+          datasource: sailpoint-proxy # your-real-datasource name
+        - name: sailpoint-roles
+          datasource: sailpoint-proxy # your-real-datasource name
+          meta-attributes:
+            - name: repositoryName
+              literal: SailPoint  # unique per SailPoint tenant
+            - name: repositoryDisplayname
+              literal: SailPoint 
+            - name: repositoryDescription
+              literal: This is the repository for SailPoint
+        - name: sailpoint-accessprofile
+          datasource: sailpoint-proxy # your-real-datasource name
+          meta-attributes:
+            - name: repositoryName
+              literal: SailPoint  # must be IDENTICAL to sailpoint-roles' value above
+            - name: repositoryDisplayname
+              literal: SailPoint 
+            - name: repositoryDescription
+              literal: This is the repository for SailPoint
+        - name: sailpoint-entitlement
+          datasource: sailpoint-proxy # your-real-datasource name
