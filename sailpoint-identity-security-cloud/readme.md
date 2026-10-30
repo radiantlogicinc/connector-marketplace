@@ -41,10 +41,10 @@ This section describes how the connector fits into RadiantOne Identity Data Plat
     <th scope="row" align="left">Supported versions</th><td>2.2.0 or later</td>
   </tr>
   <tr>
-    <th scope="row" align="left">Documentation</th><td>Not available</td>
+    <th scope="row" align="left">Documentation</th><td><a href="user-guide.md">User guide</a></td>
   </tr>
   <tr>
-    <th scope="row" align="left">Mapping profile</th><td>Not available</td>
+    <th scope="row" align="left">Mapping profile</th><td><a href="resources/sailpoint-identity-security-cloud-mapping-profile-v1.yaml"><code>sailpoint-identity-security-cloud-mapping-profile-v1.yaml</code></a></td>
   </tr>
   <tr>
     <th scope="row" align="left">Agentic source</th><td>No</td>
