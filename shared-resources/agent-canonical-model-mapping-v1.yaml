@@ -161,7 +161,7 @@ source-objects:
       - name: repository_family
         function: evaluateExpression
         fields:
-          - '"{repository_family.toUppercase()}"'
+          - '"{repository_family.toUpperCase()}"'
 
 # #########################################################
 # ###

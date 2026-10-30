@@ -1,0 +1,408 @@
+#########################################################
+###
+### Pipeline configuration template file for SailPoint
+### Version: 1
+###
+#########################################################
+
+version: v1
+
+#########################################################
+###
+### Source Object
+###
+#########################################################
+
+source-objects:
+  - name: sailpoint-source
+    datasource: sailpoint-proxy ## -- TO OVERWRITE  -- ##
+    object-name: vdSource
+    backend-attributes:
+      - name: description
+      - name: id
+      - name: name
+      - name: owner
+      - name: status
+      - name: type
+    meta-attributes:
+      - name: repositoryType
+        literal: Accounts
+      - name: repositoryFamily
+        literal: SailPoint
+      - name: resourceType
+        literal: IAM
+
+  - name: sailpoint-account
+    datasource: sailpoint-proxy ## -- TO OVERWRITE  -- ##
+    object-name: vdAccount
+    backend-attributes:
+      - name: id
+      - name: identityId
+      - name: sourceId
+      - name: sourceName
+      - name: name
+      - name: disabled
+    meta-attributes:
+      - name: repositoryFamily
+        literal: SailPoint
+      - name: repositoryType
+        literal: Accounts
+      - name: repositoryName
+        literal: SailPoint
+
+  - name: sailpoint-roles 
+    datasource: sailpoint-proxy ## -- TO OVERWRITE  -- ##
+    object-name: vdRole
+    backend-attributes:
+      - name: accessProfiles
+      - name: description
+      - name: enabled
+      - name: entitlements
+      - name: id
+      - name: name
+      - name: owner
+      - name: roleAssignedIdentities
+    meta-attributes:
+      - name: repositoryName
+        literal: SailPoint ## -- TO OVERWRITE  -- ##
+      - name: repositoryDisplayname
+        literal: SailPoint ## -- TO OVERWRITE  -- ##
+      - name: repositoryDescription
+        literal: This is the repository for SailPoint ## -- TO OVERWRITE  -- ##
+      - name: repositoryType
+        literal: Accounts
+      - name: repositoryFamily
+        literal: SailPoint
+      - name: permissionType
+        literal: Role
+      - name: resourceType
+        literal: IAM
+    computed-attributes:
+      - name: displayname
+        function: evaluateExpression
+        fields:
+            - '"{''Role '' + name}"'
+
+  - name: sailpoint-accessprofile  
+    datasource: sailpoint-proxy ## -- TO OVERWRITE  -- ##
+    object-name: vdAccessProfile
+    backend-attributes:
+      - name: description
+      - name: enabled
+      - name: entitlements
+      - name: id
+      - name: name
+      - name: owner
+      - name: source
+    meta-attributes:
+      - name: repositoryName
+        literal: SailPoint ## -- TO OVERWRITE  -- ##
+      - name: repositoryDisplayname
+        literal: SailPoint ## -- TO OVERWRITE  -- ##
+      - name: repositoryDescription
+        literal: This is the repository for SailPoint ## -- TO OVERWRITE  -- ##
+      - name: repositoryType
+        literal: Accounts
+      - name: repositoryFamily
+        literal: SailPoint
+      - name: permissionType
+        literal: AccessProfile
+      - name: resourceType
+        literal: IAM
+    computed-attributes:
+      - name: displayname
+        function: evaluateExpression
+        fields:
+            - '"{''Access Profile '' + name}"'
+
+  - name: sailpoint-entitlement    
+    datasource: sailpoint-proxy ## -- TO OVERWRITE  -- ##
+    object-name: vdEntitlement
+    backend-attributes:
+      - name: attribute
+      - name: attributes
+      - name: description
+      - name: directPermissions
+      - name: id
+      - name: name
+      - name: owner
+      - name: privileged
+      - name: source
+    meta-attributes:
+      - name: repositoryName
+        literal: SailPoint ## -- TO OVERWRITE  -- ##
+      - name: repositoryDisplayname
+        literal: SailPoint ## -- TO OVERWRITE  -- ##
+      - name: repositoryDescription
+        literal: This is the repository for SailPoint ## -- TO OVERWRITE  -- ##
+      - name: repositoryType
+        literal: Accounts
+      - name: repositoryFamily
+        literal: SailPoint
+      - name: permissionType
+        literal: Entitlement
+      - name: resourceType
+        literal: IAM
+    computed-attributes:
+      - name: displayname
+        function: evaluateExpression
+        fields:
+            - '"{''Entitlement '' + name}"'
+
+
+#########################################################
+### Derived Source Object
+#########################################################
+
+derived-source-objects:
+
+  - name: sailpoint-roles-identities   
+    derived-from: sailpoint-roles
+    iterate-json-attribute: roleAssignedIdentities
+    json-fields:
+      - name: id
+        alias: role_assigned_identities  
+    inherit-attributes:
+      - id                              
+
+  - name: sailpoint-roles-access-profile   
+    derived-from: sailpoint-roles
+    iterate-json-attribute: accessProfiles
+    json-fields:
+      - name: id
+        alias: access_profile_id
+    inherit-attributes:
+      - id
+
+  - name: sailpoint-roles-entitlement 
+    derived-from: sailpoint-roles
+    iterate-json-attribute: entitlements
+    json-fields:
+      - name: id
+        alias: entitlement_id
+    inherit-attributes:
+      - id
+
+  - name: sailpoint-access-profile-entitlements
+    derived-from: sailpoint-accessprofile
+    iterate-json-attribute: entitlements
+    json-fields:
+      - name: id
+        alias: entitlement_id
+    inherit-attributes:
+      - id
+
+  - name: sailpoint-entitlements-source
+    derived-from: sailpoint-entitlement
+    iterate-json-attribute: source
+    json-fields:
+      - name: id
+        alias: source_id
+      - name: name          
+        alias: source_name
+    inherit-attributes:
+      - id
+      - description
+      - name
+      - source
+      - permissionType
+      - resourceType
+    computed-attributes:
+      - name: displayname
+        function: evaluateExpression
+        fields:
+          - '"{''Entitlement '' + name}"'
+
+
+#########################################################
+###
+### Vertices
+###
+#########################################################
+
+vertices:
+
+  - name: rt_account
+    linkage:
+      - source-object-name: sailpoint-account
+        vertex-uid: identityId
+        properties:
+          - name: name
+            attribute-name: name
+          - name: displayname
+            attribute-name: name
+          - name: disabled
+            attribute-name: disabled
+          - name: identifier
+            attribute-name: identityId
+          - name: internal
+            attribute-name: id
+
+  - name: rt_permission
+    linkage:
+      - source-object-name: sailpoint-roles
+        vertex-uid: id
+        properties:
+          - name: name
+            attribute-name: name
+          - name: displayname
+            attribute-name: displayname
+          - name: type
+            attribute-name: permissionType
+          - name: family
+            attribute-name: repositoryFamily
+      - source-object-name: sailpoint-accessprofile
+        vertex-uid: id
+        properties:
+          - name: name
+            attribute-name: name
+          - name: displayname
+            attribute-name: displayname
+          - name: type
+            attribute-name: permissionType
+          - name: family
+            attribute-name: repositoryFamily
+      - source-object-name: sailpoint-entitlement
+        vertex-uid: id
+        properties:
+          - name: name
+            attribute-name: name
+          - name: displayname
+            attribute-name: displayname
+          - name: type
+            attribute-name: permissionType
+          - name: family
+            attribute-name: repositoryFamily
+
+  - name: rt_repository
+    linkage:
+      - source-object-name: sailpoint-source
+        vertex-uid: id
+        properties:
+          - name: name
+            attribute-name: name
+          - name: displayname
+            attribute-name: name
+          - name: description
+            attribute-name: description
+          - name: type
+            attribute-name: repositoryType
+          - name: family
+            attribute-name: repositoryFamily
+          - name: id
+            attribute-name: id
+            transient: true   
+
+  - name: rt_resource  
+    linkage:
+      - source-object-name: sailpoint-source
+        vertex-uid: id
+        properties:
+          - name: name
+            attribute-name: name
+          - name: displayname
+            attribute-name: name
+          - name: description
+            attribute-name: description
+          - name: type
+            attribute-name: type
+          - name: family
+            attribute-name: repositoryFamily
+      - source-object-name: sailpoint-roles
+        vertex-uid: repositoryName  
+        properties:
+          - name: name
+            attribute-name: repositoryName
+          - name: displayname
+            attribute-name: repositoryDisplayname
+          - name: description
+            attribute-name: repositoryDescription
+          - name: type
+            attribute-name: resourceType
+          - name: family
+            attribute-name: repositoryFamily
+      - source-object-name: sailpoint-accessprofile
+        vertex-uid: repositoryName
+        properties:
+          - name: name
+            attribute-name: repositoryName
+          - name: displayname
+            attribute-name: repositoryDisplayname
+          - name: description
+            attribute-name: repositoryDescription
+          - name: type
+            attribute-name: resourceType
+          - name: family
+            attribute-name: repositoryFamily
+
+
+###############################################
+### Edges
+###############################################
+
+edges:
+
+  - name: is_in_repository
+    source-vertex-name: rt_resource
+    target-vertex-name: rt_repository
+
+  - name: is_in_repository 
+    source-vertex-name: rt_account
+    target-vertex-name: rt_repository
+    rules:
+      - name: account_in_source_repository
+        event-sources: [sailpoint-account]
+        event-types: [INSERT, UPDATE, DELETE]
+        link-condition:
+          logical-operator: AND
+          predicates:
+            - field: id
+              operator: EQUALS
+              value: sourceId
+
+  - name: grants_right_to
+    source-vertex-name: rt_account
+    target-vertex-name: rt_permission
+    rules:
+      - name: identity_grants_role
+        event-sources: [sailpoint-roles-identities]
+        event-types: [INSERT, UPDATE, DELETE]
+        direct-link:
+          vertex-uid: role_assigned_identities
+
+  - name: belongs_to 
+    source-vertex-name: rt_permission 
+    target-vertex-name: rt_resource
+
+  - name: belongs_to 
+    source-vertex-name: rt_permission 
+    target-vertex-name: rt_resource
+    rules:
+      - name: entitlement_in_source
+        event-sources: [sailpoint-entitlements-source]
+        event-types: [INSERT, UPDATE, DELETE]
+        direct-link:
+          vertex-uid: source_id
+
+  - name: is_in_parent
+    source-vertex-name: rt_permission
+    target-vertex-name: rt_permission
+    rules:
+      - name: roles-access-profile 
+        event-sources: [sailpoint-roles-access-profile] 
+        event-types: [INSERT, UPDATE, DELETE]
+        event-vertex-role: TARGET 
+        direct-link:
+          vertex-uid: access_profile_id
+      - name: roles-entitlement
+        event-sources: [sailpoint-roles-entitlement]
+        event-types: [INSERT, UPDATE, DELETE]
+        event-vertex-role: TARGET
+        direct-link:
+          vertex-uid: entitlement_id
+      - name: access-profile-entitlement
+        event-sources: [sailpoint-access-profile-entitlements]
+        event-types: [INSERT, UPDATE, DELETE]
+        event-vertex-role: TARGET
+        direct-link:
+          vertex-uid: entitlement_id

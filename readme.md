@@ -25,6 +25,7 @@ The following table lists the available connectors, their type, and their latest
 | [Microsoft Azure AI Foundry](./microsoft-azure-ai-foundry) | SDK | 0.9.2 |
 | [Microsoft Entra ID](./microsoft-entra-id) | Classic | Not applicable |
 | [Okta](./okta) | Classic | Not applicable |
+| [SailPoint Identity Security Cloud](./sailpoint-identity-security-cloud) | SDK | 1.0.1 |
 | [ServiceNow](./servicenow) | SDK | 1.0.0 |
 | [Workday](./workday) | SDK | 1.0.0 |
 
