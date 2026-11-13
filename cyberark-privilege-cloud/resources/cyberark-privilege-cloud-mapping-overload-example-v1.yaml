@@ -8,7 +8,7 @@ version: v1
 templates:
   - ref: functions_v1
 
-  - ref: cyberark_v1
+  - ref: cyberark-privilege-cloud-mapping-profile-v1
     template-overload:
       source-objects:
         - name: cyberark-user

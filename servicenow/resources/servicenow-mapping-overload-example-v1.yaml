@@ -8,10 +8,10 @@ version: v1
 templates:
   - ref: functions_v1
 
-  - ref: servicenow_v1
+  - ref: servicenow-mapping-profile-v1
     template-overload:
       source-objects:
-        - name: servicenow-user
+        - name: servicenow
           datasource: servicenow-proxy  # your-real-datasource name
           meta-attributes:
             - name: repositoryName
