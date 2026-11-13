@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Xml>
+    <ORG Name="okta2">
+        <AccessMethod>PDM</AccessMethod>
+        <PDM>
+            <Name>okta2</Name>
+            <DataSource>
+                {AES}sMi5Mqzy/ZqrGwH2ewIujwc4ZwlGY4viDnsFCa9wRrnJqGejYMwOq0VUU6Gk5Lvt9eUPgg7zfywyhcdAmr8Og61DVzorj0NNLzSWoU9y02zrgz5DQ|P8=
+            </DataSource>
+            <DataSourceType>XML</DataSourceType>
+            <Tables>
+                <Table ID="apps">
+                    <Name>apps</Name>
+                    <LDAPObjectClass>oktaapp</LDAPObjectClass>
+                    <PrimaryKey>id</PrimaryKey>
+                    <CandidateKey>label</CandidateKey>
+                    <CandidateKeyName>app</CandidateKeyName>
+                    <BaseTable>apps</BaseTable>
+                    <Type>TABLE</Type>
+                    <Columns>
+                        <Column ID="accessibility-errorredirecturl">
+                            <Name>accessibility-errorredirecturl</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="accessibility-loginredirecturl">
+                            <Name>accessibility-loginredirecturl</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="accessibility-selfservice">
+                            <Name>accessibility-selfservice</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="created">
+                            <Name>created</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="features">
+                            <Name>features</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="id">
+                            <Name>id</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="label">
+                            <Name>label</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>0</Nullable>
+                            <Alias>displayName</Alias>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="lastupdated">
+                            <Name>lastupdated</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="name">
+                            <Name>name</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>0</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="signonmode">
+                            <Name>signonmode</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>0</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="status">
+                            <Name>status</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="visibility-autosubmittoolbar">
+                            <Name>visibility-autosubmittoolbar</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="visibility-hide-ios">
+                            <Name>visibility-hide-ios</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="visibility-hide-web">
+                            <Name>visibility-hide-web</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                    </Columns>
+                </Table>
+                <Table ID="groups">
+                    <Name>groups</Name>
+                    <LDAPObjectClass>oktagroup</LDAPObjectClass>
+                    <PrimaryKey>profile-name</PrimaryKey>
+                    <CandidateKey>profile-name</CandidateKey>
+                    <CandidateKeyName>group</CandidateKeyName>
+                    <BaseTable>groups</BaseTable>
+                    <Type>TABLE</Type>
+                    <Columns>
+                        <Column ID="created">
+                            <Name>created</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="id">
+                            <Name>id</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="lastmembershipupdated">
+                            <Name>lastmembershipupdated</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="lastupdated">
+                            <Name>lastupdated</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="member">
+                            <Name>member</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-description">
+                            <Name>profile-description</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-name">
+                            <Name>profile-name</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>0</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="type">
+                            <Name>type</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                    </Columns>
+                </Table>
+                <Table ID="users">
+                    <Name>users</Name>
+                    <LDAPObjectClass>oktauser</LDAPObjectClass>
+                    <PrimaryKey>profile-login</PrimaryKey>
+                    <CandidateKey>profile-login</CandidateKey>
+                    <CandidateKeyName>user</CandidateKeyName>
+                    <BaseTable>users</BaseTable>
+                    <Type>TABLE</Type>
+                    <Columns>
+                        <Column ID="activated">
+                            <Name>activated</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="created">
+                            <Name>created</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="id">
+                            <Name>id</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="lastlogin">
+                            <Name>lastlogin</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="lastupdated">
+                            <Name>lastupdated</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="password">
+                            <Name>password</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="passwordchanged">
+                            <Name>passwordchanged</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-city">
+                            <Name>profile-city</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-costcenter">
+                            <Name>profile-costcenter</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-countrycode">
+                            <Name>profile-countrycode</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-department">
+                            <Name>profile-department</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-displayname">
+                            <Name>profile-displayname</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-division">
+                            <Name>profile-division</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-email">
+                            <Name>profile-email</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>0</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-employeenumber">
+                            <Name>profile-employeenumber</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-firstname">
+                            <Name>profile-firstname</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>0</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-honorificprefix">
+                            <Name>profile-honorificprefix</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-honorificsuffix">
+                            <Name>profile-honorificsuffix</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-lastname">
+                            <Name>profile-lastname</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>0</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-locale">
+                            <Name>profile-locale</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-login">
+                            <Name>profile-login</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>0</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-manager">
+                            <Name>profile-manager</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-managerid">
+                            <Name>profile-managerid</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-middlename">
+                            <Name>profile-middlename</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-mobilephone">
+                            <Name>profile-mobilephone</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-nickname">
+                            <Name>profile-nickname</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-organization">
+                            <Name>profile-organization</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-postaladdress">
+                            <Name>profile-postaladdress</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-preferredlanguage">
+                            <Name>profile-preferredlanguage</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-primaryphone">
+                            <Name>profile-primaryphone</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-profileurl">
+                            <Name>profile-profileurl</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-state">
+                            <Name>profile-state</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-streetaddress">
+                            <Name>profile-streetaddress</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-timezone">
+                            <Name>profile-timezone</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-title">
+                            <Name>profile-title</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-usertype">
+                            <Name>profile-usertype</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="profile-zipcode">
+                            <Name>profile-zipcode</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="status">
+                            <Name>status</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="statuschanged">
+                            <Name>statuschanged</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                        <Column ID="transitioningtostatus">
+                            <Name>transitioningtostatus</Name>
+                            <Type>VARCHAR(80)</Type>
+                            <Nullable>1</Nullable>
+                            <Alias/>
+                            <DataType>12</DataType>
+                        </Column>
+                    </Columns>
+                </Table>
+            </Tables>
+        </PDM>
+    </ORG>
+</Xml>
