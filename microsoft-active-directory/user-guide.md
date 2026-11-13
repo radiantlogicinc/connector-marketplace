@@ -1,18 +1,18 @@
 # Active Directory pipeline configuration
 
-This document describes the RadiantOne IA graph pipeline that ingests Active Directory identity data into Identity Data Platform. It covers the membership model, configuration, vertices and edges, and release history. The pipeline is built using RadiantOne's IA graph pipeline templating system and reads AD's Users and Groups. It models AD group membership, including nested group-in-group membership, as a pure group hierarchy in the Identity Data Platform graph. The model has no permission or resource vertices.
+This document describes the pipeline that ingests Active Directory identity data into RadiantOne Identity Data Platform. It covers the membership model, configuration, vertices and edges, and release history. The pipeline reads AD's Users and Groups. It models AD group membership, including nested group-in-group membership, as a pure group hierarchy in the Identity Data Platform graph. The model has no permission or resource vertices.
 
-**Note: this is the first version of the pipeline configuration and it addresses only Users and Groups.**
+> This is the first version of the pipeline configuration, and it covers only users and groups.
 
-This pipeline ships as a reusable mapping profile (`active_directory_v1`). Deploy it and reference it from a mapping overload (see [Configuration walkthrough](#configuration-walkthrough)). For the connector's identity, supported versions, and data source properties, see the [readme](readme.md).
+This pipeline ships as a reusable mapping profile (`microsoft-active-directory-mapping-profile-v1`). Deploy it and reference it from a mapping overload (see the [Configuration walkthrough](#configuration-walkthrough) section of this document). For the connector's identity, supported versions, and data source properties, see the [readme](readme.md).
 
 ## Pipeline identity
 
-This section describes how the pipeline fits into RadiantOne: its identity, what it depends on, and the platform versions it's been verified against. Refer to the following tables for more details. A mapping profile isn't a connector, so it doesn't carry the connector identity tables that the readme does. Instead, the following tables cover what's relevant to a pipeline.
+This section describes how the pipeline fits into RadiantOne: its identity, what it depends on, and the platform versions it's been verified against. Refer to the following tables for more details. A mapping profile isn't a connector, so it doesn't carry the connector identity tables that the [readme](readme.md#connector-identity) does. Instead, the following tables cover what's relevant to a pipeline.
 
 <table>
   <tr>
-    <th scope="row" align="left">Name</th><td>Active Directory pipeline (<code>active_directory_v1</code>)</td>
+    <th scope="row" align="left">Name</th><td>Active Directory pipeline (<code>microsoft-active-directory-mapping-profile-v1</code>)</td>
   </tr>
   <tr>
     <th scope="row" align="left">Source system</th><td>Microsoft Active Directory</td>
@@ -37,20 +37,20 @@ This section describes how the pipeline fits into RadiantOne: its identity, what
 
 <table>
   <tr>
-    <th scope="row" align="left">Current deployment</th><td>Single-instance: one Active Directory domain per graph. <code>repositoryName</code>, <code>repositoryDisplayname</code>, and <code>repositoryDescription</code> are parameterized per-instance through <code>template-overload</code> (see <a href="#pipeline-configuration">Pipeline configuration</a>), so each AD domain can be given its own repository identity rather than colliding on the mapping profile's default <code>"Active Directory"</code> literal. Note that this alone does not make <code>active_directory_v1</code> safe to reference twice within the same overall mapping overload for two domains running side by side. Source-object names, rule names, and edge names would still collide across two instances of the same mapping profile unless <code>template-transformations</code> is also applied.</td>
+    <th scope="row" align="left">Current deployment</th><td>Single-instance: one Active Directory domain per graph. <code>repositoryName</code>, <code>repositoryDisplayname</code>, and <code>repositoryDescription</code> are parameterized per-instance through <code>template-overload</code> (see <a href="#pipeline-configuration">Pipeline configuration</a>), so each AD domain can be given its own repository identity rather than colliding on the mapping profile's default <code>"Active Directory"</code> literal. Note that this alone doesn't make <code>microsoft-active-directory-mapping-profile-v1</code> safe to reference twice within the same overall mapping overload for two domains running side by side. Source-object names, rule names, and edge names would still collide across two instances of the same mapping profile unless <code>template-transformations</code> is also applied.</td>
   </tr>
 </table>
 
-## Glossary
+## Terms
 
-**The two systems involved**
+### The two systems involved
 
 | Term | Plain-language meaning |
 | --- | --- |
 | **Active Directory (AD)** | Microsoft's on-premises directory service. It's the *source of truth* this pipeline reads from. It tracks domain Users and the Groups that Users (and other Groups) are members of. |
 | **RadiantOne Identity Data Platform** | The platform this pipeline runs on. Identity Data Management is the service that defines and runs pipelines (connectors, YAML configuration, ingestion). The identity observability graph and UI are where the resulting data lives and can be browsed. |
 
-**AD's own vocabulary**
+### AD's own vocabulary
 
 | Term | Plain-language meaning |
 | --- | --- |
@@ -63,25 +63,24 @@ So the real-world chain this pipeline currently represents is:
 
 ## Configuration walkthrough
 
-Complete steps in the following sections to configure RadiantOne.
+To configure RadiantOne, complete the steps in the following sections.
 
 ### Preconditions
 
-- An Active Directory data source already created and running in Identity Data Management (the built-in Active Directory data source type), pointed at the domain and successfully pulling data. This pipeline mapping profile only consumes what that data source exposes; it does not create or configure the data source itself (see the [readme](readme.md)).
-- The real Identity Data Management data source name on hand, to supply through `template-overload` when creating the mapping overload (see [Pipeline configuration](#pipeline-configuration)).
+- An Active Directory data source already created and running in your RadiantOne Identity Data Platform's Data Sync Config URL (the built-in Active Directory data source type), pointed at the domain and successfully pulling data. This pipeline mapping profile only consumes what that data source exposes; it does not create or configure the data source itself (see the [readme](readme.md)).
+- The real RadiantOne data source name on hand, to supply through `template-overload` when creating the mapping overload (see the [Pipeline configuration](#pipeline-configuration) section of this document).
 
-### Configure RadiantOne
+### Configure RadiantOne for identity observability
 
-1. Load the mapping profile (<a href="resources/microsoft-active-directory-mapping-profile-v1.yaml"><code>microsoft-active-directory-mapping-profile-v1.yaml</code></a>) as `active_directory_v1` in Identity Data Management, containing the full model described in this document: both `source-objects`, all `vertices`, and all `edges`. **The mapping profile file must never contain a `templates:` block**. Its content *is* what gets referenced by a mapping overload's `ref:`; a mapping profile cannot reference itself.
-2. Create a mapping overload that references the mapping profile through `ref: active_directory_v1` and supplies the real data source name through `template-overload` - see the example <a href="resources/microsoft-active-directory-mapping-overload-example-v1.yaml"><code>microsoft-active-directory-mapping-overload-example-v1.yaml</code></a>. For the full list of overridable properties, see the [Pipeline configuration](#pipeline-configuration) section.
-3. For a single-instance deployment (the current use case, no multiple AD domains coexisting in the same graph), override the repository identity alongside the data source:
+1. Load the mapping profile (<a href="resources/microsoft-active-directory-mapping-profile-v1.yaml"><code>microsoft-active-directory-mapping-profile-v1.yaml</code></a>) in **Identity Observability** > **Mapping Profiles** as `microsoft-active-directory-mapping-profile-v1`. The mapping profile contains the full model described in this document: both `source-objects`, all `vertices`, and all `edges`. **The mapping profile file must never contain a `templates:` block**. Its content *is* what gets referenced by a mapping overload's `ref:`; a mapping profile can't reference itself.
+2. Create a mapping overload that references the mapping profile through `ref: microsoft-active-directory-mapping-profile-v1` and supplies the real data source name through `template-overload`. For an example, see the <a href="resources/microsoft-active-directory-mapping-overload-example-v1.yaml"><code>microsoft-active-directory-mapping-overload-example-v1.yaml</code></a> file. For the full list of overridable properties, see the [Pipeline configuration](#pipeline-configuration) section of this document.
 
 > ```yaml
 > version: v1
 > templates:
 >   - ref: functions_v1
 >
->   - ref: active_directory_v1
+>   - ref: microsoft-active-directory-mapping-profile-v1
 >     template-overload:
 >       source-objects:
 >         - name: ad_users
@@ -106,9 +105,15 @@ Complete steps in the following sections to configure RadiantOne.
 >
 > Note: `datasource`, `repositoryName`, `repositoryDisplayname`, and `repositoryDescription` are all parameterized through `template-overload` here. The mapping profile still defines its own default literals for these fields (still carrying the `## -- TO OVERWRITE -- ##` markers). A mapping overload is expected to override them, as shown in the preceding example.
 
+3. Apply the mapping overload. No data reaches the graph until you apply it. To apply the mapping overload, follow these steps:
+    1. Go to **Identity Observability** > **Pipeline Configuration**.
+    2. Load the mapping overload that you created in step 2.
+    3. Apply the mapping overload.
+    4. Confirm that the pipeline reaches the running state, the processed-event count matches the entry count, and the rejected-event count doesn't increase.
+
 ## Membership model
 
-The chain described in the [Glossary](#glossary), Account → Group → (parent Group) → Repository, is modeled in the graph as follows:
+The chain described in the [Terms](#terms) section, Account → Group → (parent Group) → Repository, is modeled in the graph as follows:
 
 ```text
 Account            -is_in_group->       Group        (direct membership - dn = member match)
@@ -158,12 +163,12 @@ flowchart LR
 
 ## Pipeline configuration
 
-A mapping overload is intended to override the following properties on the mapping profile through `template-overload` (see the example in step 2 of [Configure RadiantOne](#configure-radiantone)):
+A mapping overload is intended to override the following properties on the mapping profile through `template-overload` (see the example in step 2 of the [Configure RadiantOne for identity observability](#configure-radiantone-for-identity-observability) section of this document):
 
 | Property | Required | Type | Allowed values | Description |
 | --- | :---: | --- | --- | --- |
-| `datasource` (on `ad_users`) | Yes | `string` | Any Identity Data Management data source name | Real data source backing the `user` feed. |
-| `datasource` (on `ad_groups`) | Yes | `string` | Any Identity Data Management data source name | Real data source backing the `group` feed. |
+| `datasource` (on `ad_users`) | Yes | `string` | Any RadiantOne data source name | Real data source backing the `user` feed. |
+| `datasource` (on `ad_groups`) | Yes | `string` | Any RadiantOne data source name | Real data source backing the `group` feed. |
 | `repositoryName` (on `ad_users`) | Yes | `string` | Any string, unique per AD domain | Identifies this domain's shared `rt_repository` node. Must be set to the identical value as the matching `repositoryName` override on `ad_groups` below; it's the vertex-uid both source-objects resolve to the same repository node through. |
 | `repositoryName` (on `ad_groups`) | Yes | `string` | Any string, unique per AD domain | Must be identical to the value used for `ad_users` above. |
 | `repositoryDisplayname` (on `ad_users`) | No | `string` | Any string | Friendly label for this domain's repository. |
@@ -203,11 +208,15 @@ The following table summarizes the mechanism used to create each edge in this pi
 
 ## Appendix A: Attribute reference
 
-This is a complete inventory of every field this pipeline reads from Active Directory, every literal/computed value it injects, and every property it writes onto the graph - gathered directly from the current mapping profile file.
+This is a complete inventory of every field this pipeline reads from Active Directory, every literal and computed value it injects, and every property it writes onto the graph - gathered directly from the current mapping profile file.
 
 ### Source-objects
 
-Fields read from Active Directory, and values injected:
+Fields read from Active Directory, and values injected. The **Kind** column uses the following values:
+
+- **backend attribute (real data)**: read from the connector's entry for that source object.
+- **meta-attribute (literal)**: a fixed value that the mapping profile injects, unless the mapping overload overrides it.
+- **computed attribute**: a value that the pipeline derives at ingestion time, rather than reading it from the connector, by applying a function to other fields.
 
 #### `ad_users` (reads AD's `user`)
 One record per AD user.

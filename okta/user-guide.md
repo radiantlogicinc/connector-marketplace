@@ -1,18 +1,18 @@
 # Okta pipeline configuration
 
-This document describes the RadiantOne IA graph pipeline that ingests Okta identity data into Identity Data Platform. It covers the membership model, configuration, vertices and edges, and release history. The pipeline is built using RadiantOne's IA graph pipeline templating system and reads Okta's Users and Groups. It models Okta group membership as a flat set of groups in the Identity Data Platform graph, with no permission or resource vertices.
+This document describes the pipeline that ingests Okta identity data into RadiantOne Identity Data Platform. It covers the membership model, configuration, vertices and edges, and release history. The pipeline reads Okta's Users and Groups. It models Okta group membership as a flat set of groups in the Identity Data Platform graph, with no permission or resource vertices.
 
 > This is the first version of the pipeline configuration and it addresses only Users and Groups.
 
-This pipeline ships as a reusable mapping profile (`okta_v1`). Deploy it and reference it from a mapping overload (see the [Configuration walkthrough](#configuration-walkthrough) section of this document). For the connector's identity, supported versions, and data source properties, see the [readme](readme.md).
+This pipeline ships as a reusable mapping profile (`okta-mapping-profile-v1`). Deploy it and reference it from a mapping overload (see the [Configuration walkthrough](#configuration-walkthrough) section of this document). For the connector's identity, supported versions, and data source properties, see the [readme](readme.md).
 
 ## Pipeline identity
 
-This section describes how the pipeline fits into RadiantOne: its identity, what it depends on, and the platform versions it's been verified against. Refer to the following tables for more details. A mapping profile isn't a connector, so it doesn't carry the connector identity tables that the readme does. Instead, the following tables cover what's relevant to a pipeline.
+This section describes how the pipeline fits into RadiantOne: its identity, what it depends on, and the platform versions it's been verified against. Refer to the following tables for more details. A mapping profile isn't a connector, so it doesn't carry the connector identity tables that the [readme](readme.md#connector-identity) does. Instead, the following tables cover what's relevant to a pipeline.
 
 <table>
   <tr>
-    <th scope="row" align="left">Name</th><td>Okta pipeline (<code>okta_v1</code>)</td>
+    <th scope="row" align="left">Name</th><td>Okta pipeline (<code>okta-mapping-profile-v1</code>)</td>
   </tr>
   <tr>
     <th scope="row" align="left">Source system</th><td>Okta</td>
@@ -37,11 +37,11 @@ This section describes how the pipeline fits into RadiantOne: its identity, what
 
 <table>
   <tr>
-    <th scope="row" align="left">Current deployment</th><td>Single-instance: one Okta tenant per graph. <code>repositoryName</code>, <code>repositoryDisplayname</code>, and <code>repositoryDescription</code> are parameterized per-instance through <code>template-overload</code> (see <a href="#pipeline-configuration">Pipeline configuration</a>), so each Okta tenant can be given its own repository identity rather than colliding on the mapping profile's default <code>Okta</code> literal. Note that this alone doesn't make <code>okta_v1</code> safe to reference twice within the same overall mapping overload for two tenants running side by side. Source-object names, rule names, and edge names would still collide across two instances of the same mapping profile unless <code>template-transformations</code> is also applied.</td>
+    <th scope="row" align="left">Current deployment</th><td>Single-instance: one Okta tenant per graph. <code>repositoryName</code>, <code>repositoryDisplayname</code>, and <code>repositoryDescription</code> are parameterized per-instance through <code>template-overload</code> (see <a href="#pipeline-configuration">Pipeline configuration</a>), so each Okta tenant can be given its own repository identity rather than colliding on the mapping profile's default <code>Okta</code> literal. Note that this alone doesn't make <code>okta-mapping-profile-v1</code> safe to reference twice within the same overall mapping overload for two tenants running side by side. Source-object names, rule names, and edge names would still collide across two instances of the same mapping profile unless <code>template-transformations</code> is also applied.</td>
   </tr>
 </table>
 
-## Glossary
+## Terms
 
 ### The two systems involved
 
@@ -66,23 +66,21 @@ To configure RadiantOne, complete the steps in the following sections.
 
 ### Configure RadiantOne for identity observability
 
-1. [Use the connector to create a naming context](readme.md#configure-radiantone) for connecting to Okta.
-2. Create a second proxy data source in Identity Data Management, of type **RadiantOne**, over the Okta data source's naming context. This pipeline mapping profile only consumes what that proxy data source exposes; it doesn't create or configure the data source itself.
-    - This isn't one of the [data source types that identity observability reads change events from directly](https://developer.radiantlogic.com/idm/v7.4/connector-properties-guide/configure-connector-types-and-properties/); the proxy lets identity observability observe Okta data the same way it observes any LDAP source. Identity observability reads change events through the proxy, never through the connector data source directly. To configure the proxy data source, follow these steps:
+1. [Use the connector to create a naming context](readme.md#configure-radiantone) for connecting to Okta, mount the data source under it, and publish every attribute. RadiantOne automatically configures the naming attribute, but you must explicitly publish the remaining attributes. Unpublished attributes are unavailable under the naming context, and graph mappings that reference them resolve to no value without reporting an error.
+2. Create a second proxy data source in your RadiantOne Identity Data Platform's Data Sync Config URL, of type **RadiantOne**, over the Okta data source's naming context. Identity observability reads change events through the proxy, never through the connector data source directly. To configure the proxy data source, follow these steps:
       1. From the Data Sources page, click **+ New source** and select the **RadiantOne** Data Source Type. Give it a descriptive name, since this is the name you'll supply through `template-overload` when creating the mapping overload, for example, `okta-proxy` (see the [Pipeline configuration](#pipeline-configuration) section of this document).
-      2. Enter the connection details and credentials for your Identity Data Management instance in **Host**, **Port**, **Bind DN**, and **Bind Password**.
+      2. Enter the connection details and credentials for your RadiantOne instance in **Host**, **Port**, **Bind DN**, and **Bind Password**.
       3. Set **Base DN** to the naming context where the Okta connector's data is exposed in the Directory Namespace (for example, `o=Okta`).
       4. Click **Test Connection**, then **Save** to create the data source.
-3. Load the mapping profile (<a href="resources/okta-mapping-profile-v1.yaml"><code>okta-mapping-profile-v1.yaml</code></a>) as `okta_v1` in Identity Data Management, containing the full model described in this document: all `source-objects`, `vertices`, and `edges`. **The mapping profile file must never contain a `templates:` block**. Its content is what gets referenced by a mapping overload's `ref:`; a mapping profile can't reference itself.
-4. Create a mapping overload that references the mapping profile through `ref: okta_v1` and supplies the real data source name through `template-overload` - see the example <a href="resources/okta-mapping-overload-example-v1.yaml"><code>okta-mapping-overload-example-v1.yaml</code></a>. For the full list of overridable properties, see the [Pipeline configuration](#pipeline-configuration) section of this document.
-5. For a single-instance deployment (the current use case, no multiple Okta tenants coexisting in the same graph), override the repository identity alongside the data source:
+3. Load the mapping profile (<a href="resources/okta-mapping-profile-v1.yaml"><code>okta-mapping-profile-v1.yaml</code></a>) in **Identity Observability** > **Mapping Profiles** as `okta-mapping-profile-v1`. The mapping profile contains the full model described in this document: all `source-objects`, `vertices`, and `edges`. **The mapping profile file must never contain a `templates:` block**. Its content is what gets referenced by a mapping overload's `ref:`; a mapping profile can't reference itself.
+4. Create a mapping overload that references the mapping profile through `ref: okta-mapping-profile-v1` and supplies the real data source name through `template-overload`.  For an example, see the <a href="resources/okta-mapping-overload-example-v1.yaml"><code>okta-mapping-overload-example-v1.yaml</code></a> file. For the full list of overridable properties, see the [Pipeline configuration](#pipeline-configuration) section of this document.
 
 > ```yaml
 > version: v1
 > templates:
 >   - ref: functions_v1
 >
->   - ref: okta_v1
+>   - ref: okta-mapping-profile-v1
 >     template-overload:
 >       source-objects:
 >         - name: okta-user
@@ -107,9 +105,15 @@ To configure RadiantOne, complete the steps in the following sections.
 >
 > Note: `datasource`, `repositoryName`, `repositoryDisplayname`, and `repositoryDescription` are all parameterized through `template-overload` here, on both source-objects. The mapping profile still defines its own default literals for these fields (still carrying the `## -- TO OVERWRITE -- ##` markers). A mapping overload is expected to override them, as shown in the preceding example.
 
+5. Apply the mapping overload. No data reaches the graph until you apply it. To apply the mapping overload, follow these steps:
+    1. Go to **Identity Observability** > **Pipeline Configuration**.
+    2. Load the mapping overload that you created in step 4.
+    3. Apply the mapping overload.
+    4. Confirm that the pipeline reaches the running state, the processed-event count matches the entry count, and the rejected-event count doesn't increase.
+
 ## Membership model
 
-The chain described in the [Glossary](#glossary), Account → Group → Repository, is modeled in the graph as follows:
+The chain described in the [Terms](#terms) section, Account → Group → Repository, is modeled in the graph as follows:
 
 ```text
 Account                     -is_in_group->        Group
@@ -161,8 +165,8 @@ A mapping overload is intended to override the following properties on the mappi
 
 | Property | Required | Type | Allowed values | Description |
 | --- | :---: | --- | --- | --- |
-| `datasource` (on `okta-user`) | Yes | `string` | Any Identity Data Management data source name | Real (RadiantOne proxy) data source backing the `oktauser` feed. |
-| `datasource` (on `okta-group`) | Yes | `string` | Any Identity Data Management data source name | Real (RadiantOne proxy) data source backing the `oktagroup` feed. |
+| `datasource` (on `okta-user`) | Yes | `string` | Any RadiantOne data source name | Real (RadiantOne proxy) data source backing the `oktauser` feed. |
+| `datasource` (on `okta-group`) | Yes | `string` | Any RadiantOne data source name | Real (RadiantOne proxy) data source backing the `oktagroup` feed. |
 | `repositoryName` (on `okta-user`) | Yes | `string` | Any string, unique per Okta tenant | Identifies this tenant's shared `rt_repository` node. Must be set to the identical value as the matching `repositoryName` override on `okta-group` below; it's the vertex-uid both source-objects resolve to the same repository node through. |
 | `repositoryName` (on `okta-group`) | Yes | `string` | Any string, unique per Okta tenant | Must be identical to the value used for `okta-user` above. |
 | `repositoryDisplayname` (on `okta-user`) | No | `string` | Any string | Friendly label for this tenant's repository. |
@@ -203,11 +207,15 @@ The following table summarizes the mechanism used to create each edge in this pi
 
 ## Appendix A: Attribute reference
 
-This is a complete inventory of every field this pipeline reads from Okta, every literal/computed value it injects, and every property it writes onto the graph - gathered directly from the current mapping profile file.
+This is a complete inventory of every field this pipeline reads from Okta, every literal and computed value it injects, and every property it writes onto the graph - gathered directly from the current mapping profile file.
 
 ### Source-objects
 
-Fields read from Okta, and values injected:
+Fields read from Okta, and values injected. The **Kind** column uses the following values:
+
+- **backend attribute (real data)**: read from the connector's entry for that source object.
+- **meta-attribute (literal)**: a fixed value that the mapping profile injects, unless the mapping overload overrides it.
+- **computed attribute**: a value that the pipeline derives at ingestion time, rather than reading it from the connector, by applying a function to other fields.
 
 #### `okta-user` (reads Okta's `oktauser`)
 

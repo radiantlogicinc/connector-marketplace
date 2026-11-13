@@ -1,18 +1,18 @@
 # CyberArk pipeline configuration
 
-This document describes the RadiantOne IA graph pipeline that ingests CyberArk identity data into Identity Data Platform. It covers the membership model, configuration, vertices and edges, and release history. The pipeline is built using RadiantOne's IA graph pipeline templating system and reads CyberArk's Users and Roles. It models CyberArk Role membership, including nested role-in-role membership, as a pure group hierarchy in the Identity Data Platform graph. The model has no permission or resource vertices.
+This document describes the pipeline that ingests CyberArk identity data into RadiantOne Identity Data Platform. It covers the membership model, configuration, vertices and edges, and release history. The pipeline reads CyberArk's Users and Roles. It models CyberArk Role membership, including nested role-in-role membership, as a pure group hierarchy in the Identity Data Platform graph. The model has no permission or resource vertices.
 
 > This is the first version of the pipeline configuration, and it covers only users and roles (as groups).
 
-This pipeline ships as a reusable mapping profile (`cyberark_v1`). Deploy it and reference it from a mapping overload (see the [Configuration walkthrough](#configuration-walkthrough) section of this document). For the connector's identity, supported versions, and data source properties, see the [readme](readme.md).
+This pipeline ships as a reusable mapping profile (`cyberark-privilege-cloud-mapping-profile-v1`). Deploy it and reference it from a mapping overload (see the [Configuration walkthrough](#configuration-walkthrough) section of this document). For the connector's identity, supported versions, and data source properties, see the [readme](readme.md).
 
 ## Pipeline identity
 
-This section describes how the pipeline fits into RadiantOne: its identity, what it depends on, and the platform versions it's been verified against. Refer to the following tables for more details. A mapping profile isn't a connector, so it doesn't carry the connector identity tables that the readme does. Instead, the following tables cover what's relevant to a pipeline.
+This section describes how the pipeline fits into RadiantOne: its identity, what it depends on, and the platform versions it's been verified against. Refer to the following tables for more details. A mapping profile isn't a connector, so it doesn't carry the connector identity tables that the [readme](readme.md#connector-identity) does. Instead, the following tables cover what's relevant to a pipeline.
 
 <table>
   <tr>
-    <th scope="row" align="left">Name</th><td>CyberArk pipeline (<code>cyberark_v1</code>)</td>
+    <th scope="row" align="left">Name</th><td>CyberArk pipeline (<code>cyberark-privilege-cloud-mapping-profile-v1</code>)</td>
   </tr>
   <tr>
     <th scope="row" align="left">Source system</th><td>CyberArk (Privileged Access Management)</td>
@@ -37,11 +37,11 @@ This section describes how the pipeline fits into RadiantOne: its identity, what
 
 <table>
   <tr>
-    <th scope="row" align="left">Current deployment</th><td>Single-instance: one CyberArk tenant per graph. <code>repositoryName</code>, <code>repositoryDisplayname</code>, and <code>repositoryDescription</code> are parameterized per-instance through <code>template-overload</code> (see <a href="#pipeline-configuration">Pipeline configuration</a>), so each CyberArk tenant can be given its own repository identity rather than colliding on the mapping profile's default <code>CyberArk</code> literal. Note that this alone doesn't make <code>cyberark_v1</code> safe to reference twice within the same overall mapping overload for two tenants running side by side. Source-object names, rule names, and edge names would still collide across two instances of the same mapping profile unless <code>template-transformations</code> is also applied.</td>
+    <th scope="row" align="left">Current deployment</th><td>Single-instance: one CyberArk tenant per graph. <code>repositoryName</code>, <code>repositoryDisplayname</code>, and <code>repositoryDescription</code> are parameterized per-instance through <code>template-overload</code> (see <a href="#pipeline-configuration">Pipeline configuration</a>), so each CyberArk tenant can be given its own repository identity rather than colliding on the mapping profile's default <code>CyberArk</code> literal. Note that this alone doesn't make <code>cyberark-privilege-cloud-mapping-profile-v1</code> safe to reference twice within the same overall mapping overload for two tenants running side by side. Source-object names, rule names, and edge names would still collide across two instances of the same mapping profile unless <code>template-transformations</code> is also applied.</td>
   </tr>
 </table>
 
-## Glossary
+## Terms
 
 ### The two systems involved
 
@@ -66,23 +66,21 @@ To configure RadiantOne, complete the steps in the following sections.
 
 ### Configure RadiantOne for identity observability
 
-1. [Use the connector to create a naming context](readme.md#configure-radiantone) for connecting to CyberArk.
-2. Create a second proxy data source in Identity Data Management, of type **RadiantOne**, over the CyberArk data source's naming context. This pipeline mapping profile only consumes what that proxy data source exposes; it doesn't create or configure the data source itself.
-    - This isn't one of the [data source types that identity observability reads change events from directly](https://developer.radiantlogic.com/idm/v7.4/connector-properties-guide/configure-connector-types-and-properties/); the proxy lets identity observability observe CyberArk data the same way it observes any LDAP source. Identity observability reads change events through the proxy, never directly through the connector data source. To configure the proxy data source, follow these steps:
+1. [Use the connector to create a naming context](readme.md#configure-radiantone) for connecting to CyberArk, mount the data source under it, and publish every attribute. RadiantOne automatically configures the naming attribute, but you must explicitly publish the remaining attributes. Unpublished attributes are unavailable under the naming context, and graph mappings that reference them resolve to no value without reporting an error.
+2. Create a second proxy data source in your RadiantOne Identity Data Platform's Data Sync Config URL, of type **RadiantOne**, over the CyberArk data source's naming context. Identity observability reads change events through the proxy, never through the connector data source directly. To configure the proxy data source, follow these steps:
       1. From the Data Sources page, click **+ New source** and select the **RadiantOne** Data Source Type. Give it a descriptive name, since this is the name you'll supply through `template-overload` when creating the mapping overload, for example, `cyberark-proxy` (see the [Pipeline configuration](#pipeline-configuration) section of this document).
-      2. Enter the connection details and credentials for your Identity Data Management instance in **Host**, **Port**, **Bind DN**, and **Bind Password**.
+      2. Enter the connection details and credentials for your RadiantOne instance in **Host**, **Port**, **Bind DN**, and **Bind Password**.
       3. Set **Base DN** to the naming context where the CyberArk connector's data is exposed in the Directory Namespace (for example, `o=cyberark`).
       4. Click **Test Connection**, then **Save** to create the data source.
-3. Load the mapping profile (<a href="resources/cyberark-privilege-cloud-mapping-profile-v1.yaml"><code>cyberark-privilege-cloud-mapping-profile-v1.yaml</code></a>) as `cyberark_v1` in Identity Data Management, containing the full model described in this document: both `source-objects`, all `vertices`, and all `edges`. **The mapping profile file must never contain a `templates:` block**. Its content is what gets referenced by a mapping overload's `ref:`; a mapping profile can't reference itself.
-4. Create a mapping overload that references the mapping profile through `ref: cyberark_v1` and supplies the real data source name through `template-overload` - see the example <a href="resources/cyberark-privilege-cloud-mapping-overload-example-v1.yaml"><code>cyberark-privilege-cloud-mapping-overload-example-v1.yaml</code></a>. For the full list of overridable properties, see the [Pipeline configuration](#pipeline-configuration) section of this document.
-5. For a single-instance deployment (the current use case, no multiple CyberArk tenants coexisting in the same graph), override the repository identity alongside the data source:
+3. Load the mapping profile (<a href="resources/cyberark-privilege-cloud-mapping-profile-v1.yaml"><code>cyberark-privilege-cloud-mapping-profile-v1.yaml</code></a>) in **Identity Observability** > **Mapping Profiles** as `cyberark-privilege-cloud-mapping-profile-v1`. The mapping profile contains the full model described in this document: both `source-objects`, all `vertices`, and all `edges`. **The mapping profile file must never contain a `templates:` block**. Its content is what gets referenced by a mapping overload's `ref:`; a mapping profile can't reference itself.
+4. Create a mapping overload that references the mapping profile through `ref: cyberark-privilege-cloud-mapping-profile-v1` and supplies the real data source name through `template-overload`. For an example, see the <a href="resources/cyberark-privilege-cloud-mapping-overload-example-v1.yaml"><code>cyberark-privilege-cloud-mapping-overload-example-v1.yaml</code></a> file. For the full list of overridable properties, see the [Pipeline configuration](#pipeline-configuration) section of this document.
 
 > ```yaml
 > version: v1
 > templates:
 >   - ref: functions_v1
 >
->   - ref: cyberark_v1
+>   - ref: cyberark-privilege-cloud-mapping-profile-v1
 >     template-overload:
 >       source-objects:
 >         - name: cyberark-user
@@ -107,9 +105,15 @@ To configure RadiantOne, complete the steps in the following sections.
 >
 > Note: `datasource`, `repositoryName`, `repositoryDisplayname`, and `repositoryDescription` are all parameterized through `template-overload` here. The mapping profile still defines its own default literals for these fields (still carrying the `## -- TO OVERWRITE -- ##` markers). A mapping overload is expected to override them, as shown in the preceding example.
 
+5. Apply the mapping overload. No data reaches the graph until you apply it. To apply the mapping overload, follow these steps:
+    1. Go to **Identity Observability** > **Pipeline Configuration**.
+    2. Load the mapping overload that you created in step 4.
+    3. Apply the mapping overload.
+    4. Confirm that the pipeline reaches the running state, the processed-event count matches the entry count, and the rejected-event count doesn't increase.
+
 ## Membership model
 
-The chain described in the [Glossary](#glossary), User → Role → (parent Role) → Repository, is modeled in the graph as follows:
+The chain described in the [Terms](#terms) section, User → Role → (parent Role) → Repository, is modeled in the graph as follows:
 
 ```text
 User            -is_in_group->       Role        (direct membership - "(User)" members)
@@ -163,8 +167,8 @@ A mapping overload is intended to override the following properties on the mappi
 
 | Property | Required | Type | Allowed values | Description |
 | --- | :---: | --- | --- | --- |
-| `datasource` (on `cyberark-user`) | Yes | `string` | Any Identity Data Management data source name | Real (RadiantOne proxy) data source backing the `vdUserck` feed. |
-| `datasource` (on `cyberark-role`) | Yes | `string` | Any Identity Data Management data source name | Real (RadiantOne proxy) data source backing the `vdRoleck` feed. |
+| `datasource` (on `cyberark-user`) | Yes | `string` | Any RadiantOne data source name | Real (RadiantOne proxy) data source backing the `vdUserck` feed. |
+| `datasource` (on `cyberark-role`) | Yes | `string` | Any RadiantOne data source name | Real (RadiantOne proxy) data source backing the `vdRoleck` feed. |
 | `repositoryName` (on `cyberark-user`) | Yes | `string` | Any string, unique per CyberArk tenant | Identifies this tenant's shared "CyberArk" `rt_repository` node. Must be set to the identical value as the matching `repositoryName` override on `cyberark-role` below; it's the vertex-uid both source-objects resolve to the same repository node through. |
 | `repositoryName` (on `cyberark-role`) | Yes | `string` | Any string, unique per CyberArk tenant | Must be identical to the value used for `cyberark-user` above. |
 | `repositoryDisplayname` (on `cyberark-user`) | No | `string` | Any string | Friendly label for the shared repository. |
@@ -204,11 +208,15 @@ The following table summarizes the mechanism used to create each edge in this pi
 
 ## Appendix A: Attribute reference
 
-This is a complete inventory of every field this pipeline reads from CyberArk, every literal/computed value it injects, and every property it writes onto the graph - gathered directly from the current mapping profile file.
+This is a complete inventory of every field this pipeline reads from CyberArk, every literal and computed value it injects, and every property it writes onto the graph - gathered directly from the current mapping profile file.
 
 ### Source-objects
 
-Fields read from CyberArk, and values injected:
+Fields read from CyberArk, and values injected. The **Kind** column uses the following values:
+
+- **backend attribute (real data)**: read from the connector's entry for that source object.
+- **meta-attribute (literal)**: a fixed value that the mapping profile injects, unless the mapping overload overrides it.
+- **computed attribute**: a value that the pipeline derives at ingestion time, rather than reading it from the connector, by applying a function to other fields.
 
 #### `cyberark-user` (reads CyberArk's `vdUserck`)
 
@@ -279,7 +287,7 @@ Properties written to the graph:
 | `name` | `Name` | |
 | `displayname` | `Name` | |
 | `description` | `Description` | |
-| `object_guid` | `ID` | The role's own id, kept as a secondary property alongside the vertex-uid |
+| `object_guid` | `ID` | The role's own id, kept as a secondary property alongside the vertex-uid. |
 | `member_identifier` | `MemberIdentifier` | Marked `transient: true`. Drives both `is_in_group` rules - as the matched value on the account-membership edge, and as the matched value on the role-nesting edge. |
 
 #### `rt_repository`
